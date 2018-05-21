@@ -1,0 +1,880 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pulse2percept.api &mdash; pulse2percept 0.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pulse2percept 0.4.3 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pulse2percept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pulse2percept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pulse2percept.api</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pulse2percept.api</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">six</span>
+
+<span class="kn">from</span> <span class="nn">pulse2percept</span> <span class="k">import</span> <span class="p">(</span><span class="n">utils</span><span class="p">,</span> <span class="n">retina</span><span class="p">,</span> <span class="n">implants</span><span class="p">,</span> <span class="n">stimuli</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Simulation"><a class="viewcode-back" href="../../reference/pulse2percept.api.html#pulse2percept.Simulation">[docs]</a><span class="k">class</span> <span class="nc">Simulation</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Simulation.__init__"><a class="viewcode-back" href="../../reference/pulse2percept.api.html#pulse2percept.Simulation.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">implant</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;joblib&#39;</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="s1">&#39;threading&#39;</span><span class="p">,</span>
+                 <span class="n">use_jit</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generates a simulation framework</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        implant : implants.ElectrodeArray</span>
+<span class="sd">            An implants.ElectrodeArray object that describes the implant.</span>
+<span class="sd">        engine : str, optional, default: &#39;joblib&#39;</span>
+<span class="sd">            Which computational back end to use:</span>
+<span class="sd">            - &#39;serial&#39;: Single-core computation</span>
+<span class="sd">            - &#39;joblib&#39;: Parallelization via joblib (requires `pip install</span>
+<span class="sd">                        joblib`)</span>
+<span class="sd">            - &#39;dask&#39;: Parallelization via dask (requires `pip install dask`).</span>
+<span class="sd">                      Dask backend can be specified via `threading`.</span>
+<span class="sd">        scheduler : str, optional, default: &#39;threading&#39;</span>
+<span class="sd">            Which scheduler to use (irrelevant for &#39;serial&#39; engine):</span>
+<span class="sd">            - &#39;threading&#39;: a scheduler backed by a thread pool</span>
+<span class="sd">            - &#39;multiprocessing&#39;: a scheduler backed by a process pool</span>
+<span class="sd">        use_jit : bool, optional, default: True</span>
+<span class="sd">            Whether to use just-in-time (JIT) compilation to speed up</span>
+<span class="sd">            computation.</span>
+<span class="sd">        n_jobs : int, optional, default: -1</span>
+<span class="sd">            Number of cores (threads) to run the model on in parallel.</span>
+<span class="sd">            Specify -1 to use as many cores as available.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">implant</span><span class="p">,</span> <span class="n">implants</span><span class="o">.</span><span class="n">ElectrodeArray</span><span class="p">):</span>
+            <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;`implant` must be of type implants.ElectrodeArray&quot;</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">implant</span> <span class="o">=</span> <span class="n">implant</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine</span> <span class="o">=</span> <span class="n">engine</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span> <span class="o">=</span> <span class="n">scheduler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">use_jit</span> <span class="o">=</span> <span class="n">use_jit</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span> <span class="o">=</span> <span class="n">n_jobs</span>
+
+        <span class="c1"># Optic fiber layer (OFL): After calling `set_optic_fiber_layer`, this</span>
+        <span class="c1"># variable will contain a `retina.Grid` object.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Ganglion cell layer (GCL): After calling `set_ganglion_cell_layer`,</span>
+        <span class="c1"># this variable will contain a `retina.TemporalModel` object.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gcl</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Simulation.set_optic_fiber_layer"><a class="viewcode-back" href="../../reference/pulse2percept.api.html#pulse2percept.Simulation.set_optic_fiber_layer">[docs]</a>    <span class="k">def</span> <span class="nf">set_optic_fiber_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampling</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">x_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                              <span class="n">n_axons</span><span class="o">=</span><span class="mi">501</span><span class="p">,</span> <span class="n">phi_range</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">),</span>
+                              <span class="n">n_rho</span><span class="o">=</span><span class="mi">801</span><span class="p">,</span> <span class="n">rho_range</span><span class="o">=</span><span class="p">(</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">),</span>
+                              <span class="n">loc_od</span><span class="o">=</span><span class="p">(</span><span class="mf">15.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">),</span>
+                              <span class="n">sensitivity_rule</span><span class="o">=</span><span class="s1">&#39;decay&#39;</span><span class="p">,</span> <span class="n">decay_const</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                              <span class="n">contribution_rule</span><span class="o">=</span><span class="s1">&#39;max&#39;</span><span class="p">,</span> <span class="n">powermean_exp</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                              <span class="n">datapath</span><span class="o">=</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="n">save_data</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets parameters of the optic fiber layer (OFL)</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        sampling : float, optional, default: 100 microns</span>
+<span class="sd">            Microns per grid cell.</span>
+<span class="sd">        x_range : (xlo, xhi)|None, default: None</span>
+<span class="sd">            Lower and upper bound of the retinal grid (microns) in horizontal</span>
+<span class="sd">            dimension. Either a tuple (xlo, xhi) or None. If None, the</span>
+<span class="sd">            generated grid will be just big enough to fit the implant.</span>
+<span class="sd">        y_range : (ylo, yhi)|None, default: None</span>
+<span class="sd">            Lower and upper bound of the retinal grid (microns) in vertical</span>
+<span class="sd">            dimension. Either a tuple (ylo, yhi) or None. If None, the</span>
+<span class="sd">            generated grid will be just big enough to fit the implant.</span>
+<span class="sd">        n_axons : int, optional, default: 501</span>
+<span class="sd">            The number of axons to generate. Their start orientations `phi0`</span>
+<span class="sd">            (in modified polar coordinates) will be sampled uniformly from</span>
+<span class="sd">            `phi_range`.</span>
+<span class="sd">        phi_range : (lophi, hiphi), optional, default: (-180, 180)</span>
+<span class="sd">            Range of angular positions of axon fibers at their starting points</span>
+<span class="sd">            (polar coordinates, degrees) to be sampled uniformly with `n_axons`</span>
+<span class="sd">            samples. Must be within [-180, 180].</span>
+<span class="sd">        n_rho: int, optional, default: 801</span>
+<span class="sd">            Number of sampling points along the radial axis(polar coordinates).</span>
+<span class="sd">        rho_range: (rho_min, rho_max), optional, default: (4.0, 45.0)</span>
+<span class="sd">            Lower and upper bounds for the radial position values(polar</span>
+<span class="sd">            coordinates).</span>
+<span class="sd">        loc_od: (x_od, y_od), optional, default: (15.5 1.5)</span>
+<span class="sd">            Location of the center of the optic disc (x, y) in Cartesian</span>
+<span class="sd">            coordinates. In a right (left) eye, we should have x &gt; 0 (x &lt; 0).</span>
+<span class="sd">        sensitivity_rule : {&#39;decay&#39;, &#39;Jeng2011&#39;}, optional, default: &#39;decay&#39;</span>
+<span class="sd">            This rule specifies how the activation of the axon differs as a</span>
+<span class="sd">            function of distance from the soma. The following options are</span>
+<span class="sd">            available:</span>
+<span class="sd">            - &#39;decay&#39;:</span>
+<span class="sd">                Axon sensitivity decays exponentially with distance. Specify</span>
+<span class="sd">                `decay_const` to change the steepness of the fall-off with</span>
+<span class="sd">                distance.</span>
+<span class="sd">            - &#39;Jeng2011&#39;:</span>
+<span class="sd">                Axon sensitivity peaks near the sodium band (50um from the</span>
+<span class="sd">                soma), then plateaus on the distal axon at roughly half of the</span>
+<span class="sd">                peak sensitivity (see Fig. 2 in [1]_).</span>
+<span class="sd">        contribution_rule : {&#39;max&#39;, &#39;sum&#39;, &#39;mean&#39;}, optional, default: &#39;max&#39;</span>
+<span class="sd">            This rule specifies how the activation thresholds across all axon</span>
+<span class="sd">            segments are combined to determine the contribution of the axon to</span>
+<span class="sd">            the current spread. The following options are available:</span>
+<span class="sd">            - &#39;max&#39;:</span>
+<span class="sd">                The axon&#39;s contribution to the current spread is equal to the</span>
+<span class="sd">                max. sensitivity across all axon segments.</span>
+<span class="sd">            - &#39;sum&#39;:</span>
+<span class="sd">                The axon&#39;s contribution to the current spread is equal to the</span>
+<span class="sd">                sum sensitivity across all axon segments.</span>
+<span class="sd">            - &#39;mean&#39;:</span>
+<span class="sd">                The axon&#39;s contribution to the current spread is equal to the</span>
+<span class="sd">                mean sensitivity across all axon segments. Specify</span>
+<span class="sd">                `powermean_exp` to change the exponent of the generalized</span>
+<span class="sd">                (power) mean, calculated as np.mean(x ** powermean_exp) **</span>
+<span class="sd">                (1.0 / powermean_exp). Default is 1, which is equal to the</span>
+<span class="sd">                arithmetic mean.</span>
+<span class="sd">        decay_const : float, optional, default: 2.0</span>
+<span class="sd">            When `sensitivity_rule` is set to &#39;decay&#39;, specifies the decay</span>
+<span class="sd">            constant of the exponential fall-off.</span>
+<span class="sd">        powermean_exp : float, optional, default: 1.0</span>
+<span class="sd">            When `sensitivity_rule` is set to &#39;mean&#39;, specifies the exponent of</span>
+<span class="sd">            the generalized (power) mean function. The power mean is calculated</span>
+<span class="sd">            as np.mean(x ** powermean_exp) ** (1.0 / powermean_exp).</span>
+<span class="sd">        datapath : str, default: current directory</span>
+<span class="sd">            Relative path where to look for existing retina files, and where to</span>
+<span class="sd">            store new retina files.</span>
+<span class="sd">        save_data : bool, default: True</span>
+<span class="sd">            Flag whether to save the data to a new retina file (True) or not</span>
+<span class="sd">            (False). The file name is automatically generated from all</span>
+<span class="sd">            specified input arguments.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        .. [1] J. Jeng, S. Tang, A. Molnar, N. J. Desai, and S. I. Fried, &quot;The</span>
+<span class="sd">           sodium channel band shapes the response to electric stimulation in</span>
+<span class="sd">           retinal ganglion cells&quot;, J Neural Eng 8 (036022), 2011.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># For auto-generated grids:</span>
+        <span class="n">round_to</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># round to nearest (microns)</span>
+        <span class="n">cspread</span> <span class="o">=</span> <span class="mi">500</span>  <span class="c1"># add padding for current spread (microns)</span>
+
+        <span class="k">if</span> <span class="n">x_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># No x ranges given: generate automatically to fit the implant</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">x_center</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="p">]</span>
+            <span class="n">xlo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">-</span> <span class="n">cspread</span><span class="p">)</span> <span class="o">/</span> <span class="n">round_to</span><span class="p">)</span> <span class="o">*</span> <span class="n">round_to</span>
+            <span class="n">xhi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span> <span class="o">+</span> <span class="n">cspread</span><span class="p">)</span> <span class="o">/</span> <span class="n">round_to</span><span class="p">)</span> <span class="o">*</span> <span class="n">round_to</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_range</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="n">xlo</span> <span class="o">=</span> <span class="n">x_range</span>
+            <span class="n">xhi</span> <span class="o">=</span> <span class="n">x_range</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">x_range</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x_range</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">x_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;x_range must be a tuple (xlo, xhi) where xlo &lt;= xhi.&quot;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+            <span class="n">xlo</span> <span class="o">=</span> <span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">xhi</span> <span class="o">=</span> <span class="n">x_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;x_range must be a tuple (xlo, xhi) or None.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">y_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># No y ranges given: generate automatically to fit the implant</span>
+            <span class="n">ys</span> <span class="o">=</span> <span class="p">[</span><span class="n">a</span><span class="o">.</span><span class="n">y_center</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="p">]</span>
+            <span class="n">ylo</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">floor</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span> <span class="o">-</span> <span class="n">cspread</span><span class="p">)</span> <span class="o">/</span> <span class="n">round_to</span><span class="p">)</span> <span class="o">*</span> <span class="n">round_to</span>
+            <span class="n">yhi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">ys</span><span class="p">)</span> <span class="o">+</span> <span class="n">cspread</span><span class="p">)</span> <span class="o">/</span> <span class="n">round_to</span><span class="p">)</span> <span class="o">*</span> <span class="n">round_to</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_range</span><span class="p">,</span> <span class="p">(</span><span class="nb">int</span><span class="p">,</span> <span class="nb">float</span><span class="p">)):</span>
+            <span class="n">ylo</span> <span class="o">=</span> <span class="n">y_range</span>
+            <span class="n">yhi</span> <span class="o">=</span> <span class="n">y_range</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">y_range</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">y_range</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;y_range must be a tuple (ylo, yhi) where ylo &lt;= yhi.&quot;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+            <span class="n">ylo</span> <span class="o">=</span> <span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">yhi</span> <span class="o">=</span> <span class="n">y_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;y_range must be a tuple (ylo, yhi) or None.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Generate the grid from the above specs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span> <span class="o">=</span> <span class="n">retina</span><span class="o">.</span><span class="n">Grid</span><span class="p">(</span><span class="n">x_range</span><span class="o">=</span><span class="p">(</span><span class="n">xlo</span><span class="p">,</span> <span class="n">xhi</span><span class="p">),</span> <span class="n">y_range</span><span class="o">=</span><span class="p">(</span><span class="n">ylo</span><span class="p">,</span> <span class="n">yhi</span><span class="p">),</span>
+                               <span class="n">eye</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="o">.</span><span class="n">eye</span><span class="p">,</span> <span class="n">sampling</span><span class="o">=</span><span class="n">sampling</span><span class="p">,</span>
+                               <span class="n">n_axons</span><span class="o">=</span><span class="n">n_axons</span><span class="p">,</span> <span class="n">phi_range</span><span class="o">=</span><span class="n">phi_range</span><span class="p">,</span>
+                               <span class="n">n_rho</span><span class="o">=</span><span class="n">n_rho</span><span class="p">,</span> <span class="n">rho_range</span><span class="o">=</span><span class="n">rho_range</span><span class="p">,</span>
+                               <span class="n">loc_od</span><span class="o">=</span><span class="n">loc_od</span><span class="p">,</span>
+                               <span class="n">sensitivity_rule</span><span class="o">=</span><span class="n">sensitivity_rule</span><span class="p">,</span>
+                               <span class="n">contribution_rule</span><span class="o">=</span><span class="n">contribution_rule</span><span class="p">,</span>
+                               <span class="n">decay_const</span><span class="o">=</span><span class="n">decay_const</span><span class="p">,</span>
+                               <span class="n">powermean_exp</span><span class="o">=</span><span class="n">powermean_exp</span><span class="p">,</span>
+                               <span class="n">datapath</span><span class="o">=</span><span class="n">datapath</span><span class="p">,</span> <span class="n">save_data</span><span class="o">=</span><span class="n">save_data</span><span class="p">,</span>
+                               <span class="n">engine</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span><span class="p">,</span>
+                               <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Simulation.set_ganglion_cell_layer"><a class="viewcode-back" href="../../reference/pulse2percept.api.html#pulse2percept.Simulation.set_ganglion_cell_layer">[docs]</a>    <span class="k">def</span> <span class="nf">set_ganglion_cell_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets parameters of the ganglion cell layer (GCL)</span>
+
+<span class="sd">        Select from pre-existing ganglion cell models or specify a custom one.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        model : str|retina.BaseModel</span>
+<span class="sd">            A custom ganglion cell model can be specified by passing an</span>
+<span class="sd">            instance of type `retina.BaseModel`. Else select from pre-existing</span>
+<span class="sd">            models:</span>
+
+<span class="sd">            - &#39;latest&#39;:</span>
+<span class="sd">                The latest temporal model for epiretinal and subretinal</span>
+<span class="sd">                arrays (experimental).</span>
+
+<span class="sd">                Additional keyword arguments:</span>
+
+<span class="sd">                - tau_gcl : float, optional, default: 45.25 ms</span>
+<span class="sd">                    Time decay constant for the fast leaky integrater of the</span>
+<span class="sd">                    ganglionc ell layer.</span>
+<span class="sd">                - tau_inl : float, optional, default: 18 ms</span>
+<span class="sd">                    Time decay constant for the fast leaky integrater of the</span>
+<span class="sd">                    inner nuclear layer (INL). It has been shown that even</span>
+<span class="sd">                    epiretinal arrays can activate bipolar cells (in the INL),</span>
+<span class="sd">                    which in turn influence GCL activity.</span>
+<span class="sd">                - tau_ca : float, optional, default: 45.25 ms</span>
+<span class="sd">                    Time decay constant for the charge accumulation.</span>
+<span class="sd">                - scale_ca : float, optional, default: 42.1</span>
+<span class="sd">                    Scaling factor applied to charge accumulation (used to be</span>
+<span class="sd">                    called epsilon).</span>
+<span class="sd">                - tau_slow : float, optional, default: 26.25 ms</span>
+<span class="sd">                    Time decay constant for the slow leaky integrator.</span>
+<span class="sd">                - scale_slow : float, optional, default: 1150.0</span>
+<span class="sd">                    Scaling factor applied to the output of the cascade, to</span>
+<span class="sd">                    make output values interpretable brightness values &gt;= 0.</span>
+<span class="sd">                - lweight : float, optional, default: 0.636</span>
+<span class="sd">                    Relative weight applied to responses from bipolar cells</span>
+<span class="sd">                    (weight of ganglion cells is 1).</span>
+<span class="sd">                - aweight : float, optional, default: 0.5</span>
+<span class="sd">                    Relative weight applied to anodic charges (weight of</span>
+<span class="sd">                    cathodic charges is 1).</span>
+<span class="sd">                - slope : float, optional, default: 3.0</span>
+<span class="sd">                    Slope of the logistic function in the stationary</span>
+<span class="sd">                    nonlinearity stage.</span>
+<span class="sd">                - shift : float, optional, default: 15.0</span>
+<span class="sd">                    Shift of the logistic function in the stationary</span>
+<span class="sd">                    nonlinearity stage.</span>
+
+<span class="sd">            - &#39;Nanduri2012&#39;:</span>
+<span class="sd">                A model of temporal sensitivity as described in [1]_.</span>
+
+<span class="sd">                Additional keyword arguments</span>
+<span class="sd">                ----------------------------</span>
+<span class="sd">                tsample : float, optional, default:</span>
+<span class="sd">                tau1 : float, optional, default: 0.42 / 1000 (seconds)</span>
+<span class="sd">                    Time decay constant for the fast leaky integrater of</span>
+<span class="sd">                    the ganglion cell layer (GCL).</span>
+<span class="sd">                tau2 : float, optional, default: 45.25 / 1000 (seconds)</span>
+<span class="sd">                    Time decay constant for the charge accumulation, has</span>
+<span class="sd">                    values between 38 - 57 ms.</span>
+<span class="sd">                tau3 : float, optional, default: 26.25 / 1000 (seconds)</span>
+<span class="sd">                    Time decay constant for the slow leaky integrator.</span>
+<span class="sd">                    Default: 26.25 / 1000 s.</span>
+<span class="sd">                eps : float, optional, default: 8.73</span>
+<span class="sd">                    Scaling factor applied to charge accumulation (used to</span>
+<span class="sd">                    be called epsilon).</span>
+<span class="sd">                asymptote : float, optional, default: 14.0</span>
+<span class="sd">                    Asymptote of the logistic function used in the</span>
+<span class="sd">                    stationary nonlinearity stage.</span>
+<span class="sd">                slope : float, optional, default: 3.0</span>
+<span class="sd">                    Slope of the logistic function in the stationary</span>
+<span class="sd">                    nonlinearity stage.</span>
+<span class="sd">                shift : float, optional, default: 16.0</span>
+<span class="sd">                    Shift of the logistic function in the stationary</span>
+<span class="sd">                    nonlinearity stage.</span>
+
+<span class="sd">            - &#39;Horsager2009&#39;:</span>
+<span class="sd">                A model of temporal sensitivity as described in [2]_.</span>
+
+<span class="sd">                Parameters</span>
+<span class="sd">                ----------</span>
+<span class="sd">                tsample : float, optional, default: 0.005 / 1000 seconds</span>
+<span class="sd">                    Sampling time step (seconds).</span>
+<span class="sd">                tau1 : float, optional, default: 0.42 / 1000 seconds</span>
+<span class="sd">                    Time decay constant for the fast leaky integrater of the</span>
+<span class="sd">                    ganglion cell layer (GCL).</span>
+<span class="sd">                tau2 : float, optional, default: 45.25 / 1000 seconds</span>
+<span class="sd">                    Time decay constant for the charge accumulation, has values</span>
+<span class="sd">                    between 38 - 57 ms.</span>
+<span class="sd">                tau3 : float, optional, default: 26.25 / 1000 seconds</span>
+<span class="sd">                    Time decay constant for the slow leaky integrator.</span>
+<span class="sd">                    Default: 26.25 / 1000 s.</span>
+<span class="sd">                eps : float, optional, default: 8.73</span>
+<span class="sd">                    Scaling factor applied to charge accumulation (used to be</span>
+<span class="sd">                    called epsilon).</span>
+<span class="sd">                beta : float, optional, default: 3.43</span>
+<span class="sd">                    Power nonlinearity applied after half-rectification. The</span>
+<span class="sd">                    original model used two different values, depending on</span>
+<span class="sd">                    whether an experiment is at threshold (`beta`=3.43) or</span>
+<span class="sd">                    above threshold (`beta`=0.83).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        .. [1] D. Nanduri, I. Fine, A. Horsager, G. M. Boynton, M. S. Humayun,</span>
+<span class="sd">               R. Greenberg, J. D. Weiland, &quot;Frequency and Amplitude Modulation</span>
+<span class="sd">               Have Different Effects on the Percepts Elicited by Retinal</span>
+<span class="sd">               Stimulation&quot;, Investigative Ophthalmology &amp; Visual Science 53,</span>
+<span class="sd">               205-214, 2012.</span>
+<span class="sd">        .. [2] A. Horsager, S. H. Greenwald, J. D. Weiland, M. S. Humayun,</span>
+<span class="sd">               R. J. Greenberg, M. J. McMahon, G. M. Boynton, and I. Fine,</span>
+<span class="sd">               &quot;Predicting visual sensitivity in retinal prosthesis patients&quot;,</span>
+<span class="sd">               Investigative Ophthalmology &amp; Visual Science, 50(4):1483, 2009.</span>
+
+
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">model_not_found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+            <span class="c1"># If `model` is a string, choose from existing models</span>
+            <span class="k">if</span> <span class="n">model</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">==</span> <span class="s1">&#39;latest&#39;</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting up latest model.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gcl</span> <span class="o">=</span> <span class="n">retina</span><span class="o">.</span><span class="n">TemporalModel</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;nanduri&#39;</span><span class="p">,</span> <span class="s1">&#39;nanduri2012&#39;</span><span class="p">]:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting up Nanduri (2012) &quot;</span>
+                                                  <span class="s2">&quot;model.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gcl</span> <span class="o">=</span> <span class="n">retina</span><span class="o">.</span><span class="n">Nanduri2012</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">model</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;horsager&#39;</span><span class="p">,</span> <span class="s1">&#39;horsager2009&#39;</span><span class="p">]:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting up Horsager &quot;</span>
+                                                  <span class="s2">&quot;(2009) model.&quot;</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">gcl</span> <span class="o">=</span> <span class="n">retina</span><span class="o">.</span><span class="n">Horsager2009</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">model_not_found</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">retina</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
+            <span class="c1"># If `model` is not a string, must be of type BaseModel</span>
+            <span class="n">debug_str</span> <span class="o">=</span> <span class="s2">&quot;Setting up </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="n">model</span><span class="o">.</span><span class="vm">__module__</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">debug_str</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gcl</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">model_not_found</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="k">if</span> <span class="n">model_not_found</span><span class="p">:</span>
+            <span class="n">err_str</span> <span class="o">=</span> <span class="s2">&quot;Model &#39;</span><span class="si">%s</span><span class="s2">&#39; not found. Choose from: &quot;</span> <span class="o">%</span> <span class="n">model</span>
+            <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">retina</span><span class="o">.</span><span class="n">SUPPORTED_TEMPORAL_MODELS</span><span class="p">)</span>
+            <span class="n">err_str</span> <span class="o">+=</span> <span class="s2">&quot; or provide your own retina.BaseModel instance.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err_str</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_set_layers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets up all layers whose setters have not been called by the user</span>
+
+<span class="sd">        This function makes sure all necessary parts of the simulation are</span>
+<span class="sd">        initialized before transforming stimuli to percepts.</span>
+<span class="sd">        Layers not initialized by the user will simply be initialized with</span>
+<span class="sd">        default argument values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_optic_fiber_layer</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gcl</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_ganglion_cell_layer</span><span class="p">(</span><span class="s1">&#39;latest&#39;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Simulation.pulse2percept"><a class="viewcode-back" href="../../reference/pulse2percept.api.html#pulse2percept.Simulation.pulse2percept">[docs]</a>    <span class="k">def</span> <span class="nf">pulse2percept</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stim</span><span class="p">,</span> <span class="n">t_percept</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
+                      <span class="n">layers</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;OFL&#39;</span><span class="p">,</span> <span class="s1">&#39;GCL&#39;</span><span class="p">,</span> <span class="s1">&#39;INL&#39;</span><span class="p">]):</span>
+        <span class="sd">&quot;&quot;&quot;Transforms an input stimulus to a percept</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stim : utils.TimeSeries|list|dict</span>
+<span class="sd">            There are several ways to specify an input stimulus:</span>
+
+<span class="sd">            - For a single-electrode array, pass a single pulse train; i.e.,</span>
+<span class="sd">              a single utils.TimeSeries object.</span>
+<span class="sd">            - For a multi-electrode array, pass a list of pulse trains; i.e.,</span>
+<span class="sd">              one pulse train per electrode.</span>
+<span class="sd">            - For a multi-electrode array, specify all electrodes that should</span>
+<span class="sd">              receive non-zero pulse trains by name.</span>
+<span class="sd">        t_percept : float, optional, default: inherit from `stim` object</span>
+<span class="sd">            The desired time sampling of the output (seconds).</span>
+<span class="sd">        tol : float, optional, default: 0.05</span>
+<span class="sd">            Ignore pixels whose effective current is smaller than a fraction</span>
+<span class="sd">            `tol` of the max value.</span>
+<span class="sd">        layers : list, optional, default: [&#39;OFL&#39;, &#39;GCL&#39;, &#39;INL&#39;]</span>
+<span class="sd">            A list of retina layers to simulate (order does not matter):</span>
+<span class="sd">            - &#39;OFL&#39;: Includes the optic fiber layer in the simulation.</span>
+<span class="sd">                     If omitted, the tissue activation map will not account</span>
+<span class="sd">                     for axon streaks.</span>
+<span class="sd">            - &#39;GCL&#39;: Includes the ganglion cell layer in the simulation.</span>
+<span class="sd">            - &#39;INL&#39;: Includes the inner nuclear layer in the simulation.</span>
+<span class="sd">                     If omitted, bipolar cell activity does not contribute</span>
+<span class="sd">                     to ganglion cell activity.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        A utils.TimeSeries object whose data container comprises the predicted</span>
+<span class="sd">        brightness over time at each retinal location (x, y), with the last</span>
+<span class="sd">        dimension of the container representing time (t).</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Simulate a single-electrode array:</span>
+
+<span class="sd">        &gt;&gt;&gt; import pulse2percept as p2p</span>
+<span class="sd">        &gt;&gt;&gt; implant = p2p.implants.ElectrodeArray(&#39;subretinal&#39;, 0, 0, 0)</span>
+<span class="sd">        &gt;&gt;&gt; stim = p2p.stimuli.PulseTrain(tsample=5e-6, freq=50, amp=20)</span>
+<span class="sd">        &gt;&gt;&gt; sim = p2p.Simulation(implant)</span>
+<span class="sd">        &gt;&gt;&gt; percept = sim.pulse2percept(stim)  # doctest: +SKIP</span>
+
+<span class="sd">        Simulate an Argus I array centered on the fovea, where a single</span>
+<span class="sd">        electrode is being stimulated (&#39;C3&#39;):</span>
+
+<span class="sd">        &gt;&gt;&gt; import pulse2percept as p2p</span>
+<span class="sd">        &gt;&gt;&gt; implant = p2p.implants.ArgusI()</span>
+<span class="sd">        &gt;&gt;&gt; stim = {&#39;C3&#39;: stimuli.PulseTrain(tsample=5e-6, freq=50,</span>
+<span class="sd">        ...                                              amp=20)}</span>
+<span class="sd">        &gt;&gt;&gt; sim = p2p.Simulation(implant)</span>
+<span class="sd">        &gt;&gt;&gt; resp = sim.pulse2percept(stim, implant)  # doctest: +SKIP</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting pulse2percept...&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get a flattened, all-uppercase list of layers</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">layers</span><span class="p">])</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">layers</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">l</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">])</span>
+
+        <span class="c1"># Make sure all specified layers exist</span>
+        <span class="n">not_supported</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">l</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">retina</span><span class="o">.</span><span class="n">SUPPORTED_LAYERS</span>
+                                  <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">not_supported</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">layers</span><span class="p">[</span><span class="n">not_supported</span><span class="p">])</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Specified layer </span><span class="si">%s</span><span class="s2"> not supported. &quot;</span> <span class="o">%</span> <span class="n">msg</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;Choose from </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">retina</span><span class="o">.</span><span class="n">SUPPORTED_LAYERS</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># Set up all layers that haven&#39;t been set up yet</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_set_layers</span><span class="p">()</span>
+
+        <span class="c1"># Parse `stim` (either single pulse train or a list/dict of pulse</span>
+        <span class="c1"># trains), and generate a list of pulse trains, one for each electrode</span>
+        <span class="n">pt_list</span> <span class="o">=</span> <span class="n">stimuli</span><span class="o">.</span><span class="n">parse_pulse_trains</span><span class="p">(</span><span class="n">stim</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="p">)</span>
+        <span class="n">pt_data</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="n">pt_list</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">allclose</span><span class="p">([</span><span class="n">p</span><span class="o">.</span><span class="n">tsample</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">pt_list</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">gcl</span><span class="o">.</span><span class="n">tsample</span><span class="p">):</span>
+            <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;For now, all pulse trains must have the same sampling &quot;</span>
+            <span class="n">e_s</span> <span class="o">+=</span> <span class="s2">&quot;time step as the ganglion cell layer. In the future, &quot;</span>
+            <span class="n">e_s</span> <span class="o">+=</span> <span class="s2">&quot;this requirement might be relaxed.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+
+        <span class="c1"># Tissue activation maps: If OFL is simulated, includes axon streaks.</span>
+        <span class="k">if</span> <span class="s1">&#39;OFL&#39;</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+            <span class="n">ecs</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">electrode_ecs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_</span><span class="p">,</span> <span class="n">ecs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">electrode_ecs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="p">)</span>
+
+        <span class="c1"># Calculate the max of every current spread map</span>
+        <span class="n">lmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="n">ecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="s1">&#39;INL&#39;</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+            <span class="n">lmax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ecs</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;GCL&#39;</span> <span class="ow">or</span> <span class="s1">&#39;OFL&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+            <span class="n">lmax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">ecs</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># `ecs_list` is a pixel by `n` list where `n` is the number of layers</span>
+        <span class="c1"># being simulated. Each value in `ecs_list` is the current contributed</span>
+        <span class="c1"># by each electrode for that spatial location</span>
+        <span class="n">ecs_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">idx_list</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">xx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">gridx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">yy</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">gridx</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="c1"># If any of the used current spread maps at [yy, xx] are above</span>
+                <span class="c1"># tolerance, we need to process that pixel</span>
+                <span class="n">process_pixel</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="s1">&#39;INL&#39;</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+                    <span class="c1"># For this pixel: Check if the ecs in any layer is large</span>
+                    <span class="c1"># enough compared to the max across pixels within the layer</span>
+                    <span class="n">process_pixel</span> <span class="o">|=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">ecs</span><span class="p">[</span><span class="n">yy</span><span class="p">,</span> <span class="n">xx</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;=</span>
+                                            <span class="n">tol</span> <span class="o">*</span> <span class="n">lmax</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:])</span>
+                <span class="k">if</span> <span class="p">(</span><span class="s1">&#39;GCL&#39;</span> <span class="ow">or</span> <span class="s1">&#39;OFL&#39;</span><span class="p">)</span> <span class="ow">in</span> <span class="n">layers</span><span class="p">:</span>
+                    <span class="n">process_pixel</span> <span class="o">|=</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">ecs</span><span class="p">[</span><span class="n">yy</span><span class="p">,</span> <span class="n">xx</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;=</span>
+                                            <span class="n">tol</span> <span class="o">*</span> <span class="n">lmax</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+
+                <span class="k">if</span> <span class="n">process_pixel</span><span class="p">:</span>
+                    <span class="n">ecs_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ecs</span><span class="p">[</span><span class="n">yy</span><span class="p">,</span> <span class="n">xx</span><span class="p">])</span>
+                    <span class="n">idx_list</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">yy</span><span class="p">,</span> <span class="n">xx</span><span class="p">])</span>
+
+        <span class="n">s_info</span> <span class="o">=</span> <span class="s2">&quot;tol=</span><span class="si">%.1f%%</span><span class="s2">, </span><span class="si">%d</span><span class="s2">/</span><span class="si">%d</span><span class="s2"> px selected&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tol</span> <span class="o">*</span> <span class="mi">100</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">ecs_list</span><span class="p">),</span>
+                                                    <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">ecs</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">s_info</span><span class="p">)</span>
+
+        <span class="n">sr_list</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parfor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gcl</span><span class="o">.</span><span class="n">model_cascade</span><span class="p">,</span>
+                               <span class="n">ecs_list</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span>
+                               <span class="n">engine</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">scheduler</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span><span class="p">,</span>
+                               <span class="n">func_args</span><span class="o">=</span><span class="p">[</span><span class="n">pt_data</span><span class="p">,</span> <span class="n">layers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_jit</span><span class="p">])</span>
+        <span class="n">bm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">gridx</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span>
+                      <span class="p">(</span><span class="n">sr_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">))</span>
+        <span class="n">idxer</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">idx_list</span><span class="p">)[:,</span> <span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="n">bm</span><span class="p">[</span><span class="n">idxer</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">sr</span><span class="o">.</span><span class="n">data</span> <span class="k">for</span> <span class="n">sr</span> <span class="ow">in</span> <span class="n">sr_list</span><span class="p">]</span>
+        <span class="n">percept</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">(</span><span class="n">sr_list</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">tsample</span><span class="p">,</span> <span class="n">bm</span><span class="p">)</span>
+
+        <span class="c1"># It is possible to specify an additional sampling rate for the</span>
+        <span class="c1"># percept: If different from the input sampling rate, need to resample.</span>
+        <span class="k">if</span> <span class="n">t_percept</span> <span class="o">!=</span> <span class="n">percept</span><span class="o">.</span><span class="n">tsample</span><span class="p">:</span>
+            <span class="n">percept</span> <span class="o">=</span> <span class="n">percept</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">t_percept</span><span class="p">)</span>
+
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Done.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">percept</span></div>
+
+<div class="viewcode-block" id="Simulation.plot_fundus"><a class="viewcode-back" href="../../reference/pulse2percept.api.html#pulse2percept.Simulation.plot_fundus">[docs]</a>    <span class="k">def</span> <span class="nf">plot_fundus</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n_axons</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">upside_down</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                    <span class="n">annotate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Plot the implant on the retinal surface akin to a fundus photopgraph</span>
+<span class="sd">        This function plots an electrode array on top of the axon streak map</span>
+<span class="sd">        of the retina, akin to a fundus photograph. A blue rectangle highlights</span>
+<span class="sd">        the area of the retinal surface that is being simulated.</span>
+<span class="sd">        If `stim` is passed, activated electrodes will be highlighted.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        stim : utils.TimeSeries|list|dict, optional</span>
+<span class="sd">            An input stimulus, as passed to ``p2p.pulse2percept``. If given,</span>
+<span class="sd">            activated electrodes will be highlighted in the plot.</span>
+<span class="sd">            Default: None</span>
+<span class="sd">        ax : matplotlib.axes._subplots.AxesSubplot, optional</span>
+<span class="sd">            A Matplotlib axes object. If None given, a new one will be created.</span>
+<span class="sd">            Default: None</span>
+<span class="sd">        n_axons : int, optional, default: 100</span>
+<span class="sd">            Number of axons to plot.</span>
+<span class="sd">        upside_down : bool, optional, default: False</span>
+<span class="sd">            Flag whether to plot the retina upside-down, such that the upper</span>
+<span class="sd">            half of the plot corresponds to the upper visual field. In general,</span>
+<span class="sd">            inferior retina == upper visual field (and superior == lower).</span>
+<span class="sd">        annotate : bool, optional, default: True</span>
+<span class="sd">            Flag whether to annotate the four retinal quadrants</span>
+<span class="sd">            (inferior/superior x temporal/nasal).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Returns a handle to the created figure (`fig`) and axes element (`ax`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Optic fiber layer already set via  ``set_optic_fiber_layer``</span>
+            <span class="n">phi_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">phi_range</span>
+            <span class="n">n_rho</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">n_rho</span>
+            <span class="n">rho_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">rho_range</span>
+            <span class="n">loc_od</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">loc_od</span>
+            <span class="n">x_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">x_range</span>
+            <span class="n">y_range</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ofl</span><span class="o">.</span><span class="n">y_range</span>
+            <span class="n">plot_patch</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Optic fiber layer not set (call ``set_optic_fiber_layer``).&quot;</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; Using default values.&quot;</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="n">phi_range</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">180.0</span><span class="p">,</span> <span class="mf">180.0</span><span class="p">)</span>
+            <span class="n">n_rho</span> <span class="o">=</span> <span class="mi">801</span>
+            <span class="n">rho_range</span> <span class="o">=</span> <span class="p">(</span><span class="mf">4.0</span><span class="p">,</span> <span class="mf">45.0</span><span class="p">)</span>
+            <span class="n">loc_od</span> <span class="o">=</span> <span class="p">(</span><span class="mf">15.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">)</span>
+            <span class="n">plot_patch</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="c1"># No axes object given: create</span>
+            <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+            <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+
+        <span class="c1"># Matplotlib&lt;2 compatibility</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;set_facecolor&#39;</span><span class="p">):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_facecolor</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s1">&#39;set_axis_bgcolor&#39;</span><span class="p">):</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_bgcolor</span><span class="p">(</span><span class="s1">&#39;black&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Draw axon pathways: Need to regenerate because parfor returns axons</span>
+        <span class="c1"># out of orders - random sample doesn&#39;t look neat. Use the same</span>
+        <span class="c1"># settings as in the OFL, but with a smaller `n_axons`:</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">*</span><span class="n">phi_range</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">n_axons</span><span class="p">)</span>
+        <span class="n">func_kwargs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;n_rho&#39;</span><span class="p">:</span> <span class="n">n_rho</span><span class="p">,</span> <span class="s1">&#39;loc_od&#39;</span><span class="p">:</span> <span class="n">loc_od</span><span class="p">,</span>
+                       <span class="s1">&#39;rho_range&#39;</span><span class="p">:</span> <span class="n">rho_range</span><span class="p">,</span> <span class="s1">&#39;eye&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="o">.</span><span class="n">eye</span><span class="p">}</span>
+        <span class="n">axon_bundles</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">parfor</span><span class="p">(</span><span class="n">retina</span><span class="o">.</span><span class="n">jansonius2009</span><span class="p">,</span> <span class="n">phi</span><span class="p">,</span>
+                                    <span class="n">func_kwargs</span><span class="o">=</span><span class="n">func_kwargs</span><span class="p">,</span>
+                                    <span class="n">engine</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">engine</span><span class="p">,</span> <span class="n">n_jobs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span>
+                                    <span class="n">scheduler</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scheduler</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">bundle</span> <span class="ow">in</span> <span class="n">axon_bundles</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">retina</span><span class="o">.</span><span class="n">dva2ret</span><span class="p">(</span><span class="n">bundle</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]),</span> <span class="n">retina</span><span class="o">.</span><span class="n">dva2ret</span><span class="p">(</span><span class="n">bundle</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]),</span>
+                    <span class="n">c</span><span class="o">=</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+
+        <span class="c1"># Draw in the the retinal patch we&#39;re simulating.</span>
+        <span class="c1"># This defines the size of our &quot;percept&quot; image below.</span>
+        <span class="k">if</span> <span class="n">plot_patch</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">matplotlib</span> <span class="k">import</span> <span class="n">patches</span>
+            <span class="n">patch</span> <span class="o">=</span> <span class="n">patches</span><span class="o">.</span><span class="n">Rectangle</span><span class="p">((</span><span class="n">x_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">y_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                                      <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">x_range</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">y_range</span><span class="p">),</span>
+                                      <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_patch</span><span class="p">(</span><span class="n">patch</span><span class="p">)</span>
+
+        <span class="c1"># Highlight location of stimulated electrodes</span>
+        <span class="k">if</span> <span class="n">stim</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">stim</span><span class="p">:</span>
+                <span class="n">el</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">el</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">el</span><span class="o">.</span><span class="n">x_center</span><span class="p">,</span> <span class="n">el</span><span class="o">.</span><span class="n">y_center</span><span class="p">,</span> <span class="s1">&#39;oy&#39;</span><span class="p">,</span>
+                            <span class="n">markersize</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">el</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Plot all electrodes and their label</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="o">.</span><span class="n">electrodes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">annotate</span><span class="p">:</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">x_center</span> <span class="o">+</span> <span class="mi">100</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">y_center</span> <span class="o">+</span> <span class="mi">50</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">x_center</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">y_center</span><span class="p">,</span> <span class="s1">&#39;ow&#39;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">radius</span><span class="p">))</span>
+
+        <span class="c1"># Plot the location of the array&#39;s tack and annotate it</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="o">.</span><span class="n">tack</span><span class="p">:</span>
+            <span class="n">tx</span><span class="p">,</span> <span class="n">ty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="o">.</span><span class="n">tack</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">ty</span><span class="p">,</span> <span class="s1">&#39;ow&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">annotate</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">upside_down</span><span class="p">:</span>
+                    <span class="n">offset</span> <span class="o">=</span> <span class="mi">100</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">offset</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span>
+                <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">tx</span><span class="p">,</span> <span class="n">ty</span> <span class="o">+</span> <span class="n">offset</span><span class="p">,</span> <span class="s1">&#39;tack&#39;</span><span class="p">,</span>
+                        <span class="n">horizontalalignment</span><span class="o">=</span><span class="s1">&#39;center&#39;</span><span class="p">,</span>
+                        <span class="n">verticalalignment</span><span class="o">=</span><span class="s1">&#39;top&#39;</span><span class="p">,</span>
+                        <span class="n">color</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="s1">&#39;large&#39;</span><span class="p">)</span>
+
+        <span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span> <span class="o">=</span> <span class="n">retina</span><span class="o">.</span><span class="n">dva2ret</span><span class="p">([</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">15</span><span class="p">])</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s1">&#39;equal&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x (microns)&#39;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="n">ymin</span><span class="p">,</span> <span class="n">ymax</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y (microns)&#39;</span><span class="p">)</span>
+        <span class="n">eyestr</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;LE&#39;</span><span class="p">:</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;RE&#39;</span><span class="p">:</span> <span class="s1">&#39;right&#39;</span><span class="p">}</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1"> in </span><span class="si">%s</span><span class="s1"> eye&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="p">,</span> <span class="n">eyestr</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">implant</span><span class="o">.</span><span class="n">eye</span><span class="p">]))</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">annotate</span><span class="p">:</span>
+            <span class="c1"># Annotate the four retinal quadrants near the corners of the plot:</span>
+            <span class="c1"># superior/inferior x temporal/nasal</span>
+            <span class="n">topbottom</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;top&#39;</span><span class="p">,</span> <span class="s1">&#39;bottom&#39;</span><span class="p">]</span>
+            <span class="n">temporalnasal</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;temporal&#39;</span><span class="p">,</span> <span class="s1">&#39;nasal&#39;</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">upside_down</span><span class="p">:</span>
+                <span class="n">topbottom</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;bottom&#39;</span><span class="p">,</span> <span class="s1">&#39;top&#39;</span><span class="p">]</span>
+                <span class="n">temporalnasal</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;nasal&#39;</span><span class="p">,</span> <span class="s1">&#39;temporal&#39;</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">yy</span><span class="p">,</span> <span class="n">valign</span><span class="p">,</span> <span class="n">si</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">ymax</span><span class="p">,</span> <span class="n">ymin</span><span class="p">],</span> <span class="n">topbottom</span><span class="p">,</span>
+                                      <span class="p">[</span><span class="s1">&#39;superior&#39;</span><span class="p">,</span> <span class="s1">&#39;inferior&#39;</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">xx</span><span class="p">,</span> <span class="n">halign</span><span class="p">,</span> <span class="n">tn</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="n">xmin</span><span class="p">,</span> <span class="n">xmax</span><span class="p">],</span> <span class="p">[</span><span class="s1">&#39;left&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">],</span>
+                                          <span class="n">temporalnasal</span><span class="p">):</span>
+                    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">xx</span><span class="p">,</span> <span class="n">yy</span><span class="p">,</span> <span class="n">si</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span> <span class="n">tn</span><span class="p">,</span>
+                            <span class="n">color</span><span class="o">=</span><span class="s1">&#39;black&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span>
+                            <span class="n">horizontalalignment</span><span class="o">=</span><span class="n">halign</span><span class="p">,</span>
+                            <span class="n">verticalalignment</span><span class="o">=</span><span class="n">valign</span><span class="p">,</span>
+                            <span class="n">backgroundcolor</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">))</span>
+
+        <span class="c1"># Need to flip y axis to have upper half == upper visual field</span>
+        <span class="k">if</span> <span class="n">upside_down</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">invert_yaxis</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span></div></div>
+
+
+<div class="viewcode-block" id="get_brightest_frame"><a class="viewcode-back" href="../../reference/pulse2percept.api.html#pulse2percept.get_brightest_frame">[docs]</a><span class="k">def</span> <span class="nf">get_brightest_frame</span><span class="p">(</span><span class="n">percept</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns the brightest frame of a percept</span>
+
+<span class="sd">    This function returns the frame of a percept (brightness over time) that</span>
+<span class="sd">    contains the brightest pixel.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    percept : TimeSeries</span>
+<span class="sd">        The brightness movie as a TimeSeries object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">frame</span> <span class="o">=</span> <span class="n">percept</span><span class="o">.</span><span class="n">max_frame</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">frame</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Michael Beyeler, Ariel Rokem, Geoff Boynton, and Ione Fine, The University of Washington.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.4.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

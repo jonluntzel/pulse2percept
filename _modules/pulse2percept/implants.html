@@ -1,0 +1,910 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pulse2percept.implants &mdash; pulse2percept 0.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pulse2percept 0.4.3 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pulse2percept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pulse2percept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pulse2percept.implants</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pulse2percept.implants</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*implants -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">Functions for creating retinal implants</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">pulse2percept</span> <span class="k">import</span> <span class="n">utils</span>
+
+
+<span class="n">SUPPORTED_IMPLANT_TYPES</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;epiretinal&#39;</span><span class="p">,</span> <span class="s1">&#39;subretinal&#39;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Electrode"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.Electrode">[docs]</a><span class="k">class</span> <span class="nc">Electrode</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Electrode.__init__"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.Electrode.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etype</span><span class="p">,</span> <span class="n">radius</span><span class="p">,</span> <span class="n">x_center</span><span class="p">,</span> <span class="n">y_center</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an electrode on the retina</span>
+
+<span class="sd">        This function creates a disk electrode of type `etype` and places it</span>
+<span class="sd">        on the retina at location (`xs`, `ys`) in microns. The electrode has</span>
+<span class="sd">        radius `radius` (microns) and sits a distance `height` away from the</span>
+<span class="sd">        retinal surface.</span>
+<span class="sd">        The coordinate system is anchored around the fovea at (0, 0).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        etype : str</span>
+<span class="sd">            Electrode type, {&#39;epiretinal&#39;, &#39;subretinal&#39;}</span>
+<span class="sd">        radius : float</span>
+<span class="sd">            The radius of the electrode (in microns).</span>
+<span class="sd">        x_center : float</span>
+<span class="sd">            The x coordinate of the electrode center (in microns) from the</span>
+<span class="sd">            fovea.</span>
+<span class="sd">        y_center : float</span>
+<span class="sd">            The y location of the electrode (in microns) from the fovea</span>
+<span class="sd">        height : float</span>
+<span class="sd">            The height of the electrode from the retinal surface:</span>
+
+<span class="sd">            - epiretinal array: distance to the ganglion layer</span>
+<span class="sd">            - subretinal array: distance to the bipolar layer</span>
+<span class="sd">        name : string</span>
+<span class="sd">            Electrode name</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">radius</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+        <span class="k">assert</span> <span class="n">height</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">etype</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">SUPPORTED_IMPLANT_TYPES</span><span class="p">:</span>
+            <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;Acceptable values for `etype` are: &quot;</span>
+            <span class="n">e_s</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SUPPORTED_IMPLANT_TYPES</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">etype</span> <span class="o">=</span> <span class="n">etype</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">radius</span> <span class="o">=</span> <span class="n">radius</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x_center</span> <span class="o">=</span> <span class="n">x_center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_center</span> <span class="o">=</span> <span class="n">y_center</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">height</span></div>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">info_s</span> <span class="o">=</span> <span class="s2">&quot;Electrode(</span><span class="si">%s</span><span class="s2">, r=</span><span class="si">%.2f</span><span class="s2"> um, &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">etype</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span>
+        <span class="n">info_s</span> <span class="o">+=</span> <span class="s2">&quot;(x,y) = (</span><span class="si">%.2f</span><span class="s2">, </span><span class="si">%.2f</span><span class="s2">) um, &quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_center</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_center</span><span class="p">)</span>
+        <span class="n">info_s</span> <span class="o">+=</span> <span class="s2">&quot;h=</span><span class="si">%.2f</span><span class="s2"> um, n=</span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">info_s</span>
+
+<div class="viewcode-block" id="Electrode.get_height"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.Electrode.get_height">[docs]</a>    <span class="k">def</span> <span class="nf">get_height</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the electrode-retina distance</span>
+
+<span class="sd">        For epiretinal electrodes, this returns the distance to the ganglion</span>
+<span class="sd">        cell layer.</span>
+<span class="sd">        For subretinal electrodes, this returns the distance to the bipolar</span>
+<span class="sd">        layer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">etype</span> <span class="o">==</span> <span class="s1">&#39;epiretinal&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_ofl</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">etype</span> <span class="o">==</span> <span class="s1">&#39;subretinal&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_inl</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown `etype`: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">etype</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Electrode.set_height"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.Electrode.set_height">[docs]</a>    <span class="k">def</span> <span class="nf">set_height</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Sets the electrode-to-retina distance</span>
+
+<span class="sd">        This function sets the electrode-to-retina distance according to</span>
+<span class="sd">        `height`. For an epiretinal device, we calculate the distance to</span>
+<span class="sd">        the ganglion cell layer (layer thickness depends on retinal location).</span>
+<span class="sd">        For a subretinal device, we calculate the distance to the bipolar</span>
+<span class="sd">        layer (layer thickness again depends on retinal location).</span>
+
+<span class="sd">        Estimates of layer thickness based on:</span>
+<span class="sd">        LoDuca et al. Am J. Ophthalmology 2011</span>
+<span class="sd">        Thickness Mapping of Retinal Layers by Spectral Domain Optical</span>
+<span class="sd">        Coherence Tomography</span>
+<span class="sd">        Note that this is for normal retinal, so may overestimate thickness.</span>
+<span class="sd">        Thickness from their paper (averaged across quadrants):</span>
+<span class="sd">            0-600 um radius (from fovea):</span>
+
+<span class="sd">            - Layer 1. (Nerve fiber layer) = 4</span>
+<span class="sd">            - Layer 2. (Ganglion cell bodies + inner plexiform) = 56</span>
+<span class="sd">            - Layer 3. (Bipolar bodies, inner nuclear layer) = 23</span>
+
+<span class="sd">          600-1550 um radius:</span>
+
+<span class="sd">            - Layer 1. 34</span>
+<span class="sd">            - Layer 2. 87</span>
+<span class="sd">            - Layer 3. 37.5</span>
+
+<span class="sd">          1550-3000 um radius:</span>
+<span class="sd">            - Layer 1. 45.5</span>
+<span class="sd">            - Layer 2. 58.2</span>
+<span class="sd">            - Layer 3. 30.75</span>
+
+<span class="sd">        We place our ganglion axon surface on the inner side of the nerve fiber</span>
+<span class="sd">        layer.</span>
+<span class="sd">        We place our bipolar surface 1/2 way through the inner nuclear layer.</span>
+<span class="sd">        So for an epiretinal array the bipolar layer is L1 + L2 + 0.5 * L3.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">fovdist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x_center</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_center</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fovdist</span> <span class="o">&lt;=</span> <span class="mi">600</span><span class="p">:</span>
+            <span class="c1"># Layer thicknesses given for 0-600 um distance (from fovea)</span>
+            <span class="n">th_ofl</span> <span class="o">=</span> <span class="mf">4.0</span>  <span class="c1"># nerve fiber layer</span>
+            <span class="n">th_gc</span> <span class="o">=</span> <span class="mf">56.0</span>  <span class="c1"># ganglion cell bodies + inner nuclear layer</span>
+            <span class="n">th_bp</span> <span class="o">=</span> <span class="mf">23.0</span>  <span class="c1"># bipolar bodies + inner nuclear layer</span>
+        <span class="k">elif</span> <span class="n">fovdist</span> <span class="o">&lt;=</span> <span class="mi">1550</span><span class="p">:</span>
+            <span class="c1"># Layer thicknesses given for 600-1550 um distance (from fovea)</span>
+            <span class="n">th_ofl</span> <span class="o">=</span> <span class="mf">34.0</span>
+            <span class="n">th_gc</span> <span class="o">=</span> <span class="mf">87.0</span>
+            <span class="n">th_bp</span> <span class="o">=</span> <span class="mf">37.5</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Layer thicknesses given for 1550-3000 um distance (from fovea)</span>
+            <span class="n">th_ofl</span> <span class="o">=</span> <span class="mf">45.5</span>
+            <span class="n">th_gc</span> <span class="o">=</span> <span class="mf">58.2</span>
+            <span class="n">th_bp</span> <span class="o">=</span> <span class="mf">30.75</span>
+            <span class="k">if</span> <span class="n">fovdist</span> <span class="o">&gt;</span> <span class="mi">3000</span><span class="p">:</span>
+                <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;Distance to fovea=</span><span class="si">%.0f</span><span class="s2"> &gt; 3000 um, &quot;</span> <span class="o">%</span> <span class="n">fovdist</span>
+                <span class="n">e_s</span> <span class="o">+=</span> <span class="s2">&quot;assuming same layer thicknesses as for 1550-3000 um &quot;</span>
+                <span class="n">e_s</span> <span class="o">+=</span> <span class="s2">&quot;distance.&quot;</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">etype</span> <span class="o">==</span> <span class="s1">&#39;epiretinal&#39;</span><span class="p">:</span>
+            <span class="c1"># This is simply the electrode-retina distance</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h_ofl</span> <span class="o">=</span> <span class="n">height</span>
+
+            <span class="c1"># All the way through the ganglion cell layer, inner plexiform</span>
+            <span class="c1"># layer, and halfway through the inner nuclear layer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h_inl</span> <span class="o">=</span> <span class="n">height</span> <span class="o">+</span> <span class="n">th_ofl</span> <span class="o">+</span> <span class="n">th_gc</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">th_bp</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">etype</span> <span class="o">==</span> <span class="s1">&#39;subretinal&#39;</span><span class="p">:</span>
+            <span class="c1"># Starting from the outer plexiform layer, go halfway through the</span>
+            <span class="c1"># inner nuclear layer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h_inl</span> <span class="o">=</span> <span class="n">height</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">th_bp</span>
+
+            <span class="c1"># Starting from the outer plexiform layer, all the way through the</span>
+            <span class="c1"># inner nuclear layer, inner plexiform layer, and ganglion cell</span>
+            <span class="c1"># layer</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">h_ofl</span> <span class="o">=</span> <span class="n">height</span> <span class="o">+</span> <span class="n">th_bp</span> <span class="o">+</span> <span class="n">th_gc</span> <span class="o">+</span> <span class="n">th_ofl</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown `etype`: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">etype</span><span class="p">)</span></div>
+    <span class="n">height</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_height</span><span class="p">,</span> <span class="n">set_height</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Electrode.current_spread"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.Electrode.current_spread">[docs]</a>    <span class="k">def</span> <span class="nf">current_spread</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">14000</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mf">1.69</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">        The current spread due to a current pulse through an electrode,</span>
+<span class="sd">        reflecting the fall-off of the current as a function of distance from</span>
+<span class="sd">        the electrode center. This can be calculated for any layer in the</span>
+<span class="sd">        retina.</span>
+<span class="sd">        Based on equation 2 in Nanduri et al [1].</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xg : array</span>
+<span class="sd">            x-coordinates of the retinal grid</span>
+<span class="sd">        yg : array</span>
+<span class="sd">            y-coordinates of the retinal grid</span>
+<span class="sd">        layer: str</span>
+<span class="sd">            Layer for which to calculate the current spread:</span>
+
+<span class="sd">            - &#39;OFL&#39;: optic fiber layer, ganglion axons</span>
+<span class="sd">            - &#39;INL&#39;: inner nuclear layer, containing the bipolars</span>
+<span class="sd">        alpha : float</span>
+<span class="sd">            A constant to do with the spatial fall-off.</span>
+
+<span class="sd">        n : float</span>
+<span class="sd">            A constant to do with the spatial fall-off (Default: 1.69, based</span>
+<span class="sd">            on Ahuja et al. [2]  An In Vitro Model of a Retinal Prosthesis.</span>
+<span class="sd">            Ashish K. Ahuja, Matthew R. Behrend, Masako Kuroda, Mark S.</span>
+<span class="sd">            Humayun, and James D. Weiland (2008). IEEE Trans Biomed Eng 55.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">xg</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_center</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">yg</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_center</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="c1"># current values on the retina due to array being above the retinal</span>
+        <span class="c1"># surface</span>
+        <span class="k">if</span> <span class="s1">&#39;OFL&#39;</span> <span class="ow">in</span> <span class="n">layer</span><span class="p">:</span>  <span class="c1"># optic fiber layer, ganglion axons</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_ofl</span>
+            <span class="c1"># actual distance from the electrode edge</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="p">((</span><span class="n">r</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_ofl</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
+        <span class="k">elif</span> <span class="s1">&#39;INL&#39;</span> <span class="ow">in</span> <span class="n">layer</span><span class="p">:</span>  <span class="c1"># inner nuclear layer, containing the bipolars</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_inl</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="p">((</span><span class="n">r</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">h_inl</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**.</span><span class="mi">5</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Layer </span><span class="si">%s</span><span class="s2"> not found. Acceptable values for `layer` are &quot;</span> \
+                <span class="s2">&quot;&#39;OFL&#39; or &#39;INL&#39;.&quot;</span> <span class="o">%</span> <span class="n">layer</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+        <span class="n">cspread</span> <span class="o">=</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">/</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">h</span> <span class="o">**</span> <span class="n">n</span><span class="p">))</span>
+        <span class="n">cspread</span><span class="p">[</span><span class="n">r</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">/</span>
+                                    <span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">d</span><span class="p">[</span><span class="n">r</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span><span class="p">]</span> <span class="o">**</span> <span class="n">n</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">cspread</span></div>
+
+<div class="viewcode-block" id="Electrode.receptive_field"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.Electrode.receptive_field">[docs]</a>    <span class="k">def</span> <span class="nf">receptive_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">xg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">rftype</span><span class="o">=</span><span class="s1">&#39;square&#39;</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;An electrode&#39;s receptive field</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        xg : array_like</span>
+<span class="sd">            Array of all x coordinates</span>
+<span class="sd">        yg : array_like</span>
+<span class="sd">            Array of all y coordinates</span>
+<span class="sd">        rftype : {&#39;square&#39;, &#39;gaussian&#39;}</span>
+<span class="sd">            The type of receptive field.</span>
+<span class="sd">            - &#39;square&#39;: A simple square box receptive field with side length</span>
+<span class="sd">                        `size`.</span>
+<span class="sd">            - &#39;gaussian&#39;: A Gaussian receptive field where the weight drops off</span>
+<span class="sd">                          as a function of distance from the electrode center.</span>
+<span class="sd">                          The standard deviation of the Gaussian is `size`.</span>
+<span class="sd">        size : float, optional</span>
+<span class="sd">            Parameter describing the size of the receptive field. For square</span>
+<span class="sd">            receptive fields, this corresponds to the side length of the</span>
+<span class="sd">            square.</span>
+<span class="sd">            For Gaussian receptive fields, this corresponds to the standard</span>
+<span class="sd">            deviation of the Gaussian.</span>
+<span class="sd">            Default: Twice the electrode radius.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">size</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">size</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">radius</span>
+
+        <span class="k">if</span> <span class="n">rftype</span> <span class="o">==</span> <span class="s1">&#39;square&#39;</span><span class="p">:</span>
+            <span class="c1"># Create a map of the retina for each electrode</span>
+            <span class="c1"># where it&#39;s 1 under the electrode, 0 elsewhere</span>
+            <span class="n">rf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">xg</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+            <span class="n">ind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">((</span><span class="n">xg</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_center</span> <span class="o">-</span> <span class="p">(</span><span class="n">size</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">&amp;</span>
+                           <span class="p">(</span><span class="n">xg</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_center</span> <span class="o">+</span> <span class="p">(</span><span class="n">size</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">&amp;</span>
+                           <span class="p">(</span><span class="n">yg</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_center</span> <span class="o">-</span> <span class="p">(</span><span class="n">size</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">&amp;</span>
+                           <span class="p">(</span><span class="n">yg</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_center</span> <span class="o">+</span> <span class="p">(</span><span class="n">size</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)))</span>
+            <span class="n">rf</span><span class="p">[</span><span class="n">ind</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">elif</span> <span class="n">rftype</span> <span class="o">==</span> <span class="s1">&#39;gaussian&#39;</span><span class="p">:</span>
+            <span class="c1"># Create a map of the retina where the weight drops of as a</span>
+            <span class="c1"># function of distance from the electrode center</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="p">(</span><span class="n">xg</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x_center</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">yg</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y_center</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+            <span class="n">rf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">dist</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">size</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+            <span class="n">rf</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">rf</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;Acceptable values for `rftype` are &#39;square&#39; or &#39;gaussian&#39;&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">rf</span></div></div>
+
+
+<div class="viewcode-block" id="ElectrodeArray"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ElectrodeArray">[docs]</a><span class="k">class</span> <span class="nc">ElectrodeArray</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ElectrodeArray.__init__"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ElectrodeArray.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">etype</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">hs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eye</span><span class="o">=</span><span class="s1">&#39;RE&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an ElectrodeArray on the retina</span>
+<span class="sd">        This function creates an electrode array of type `etype` and places it</span>
+<span class="sd">        on the retina. Lists should specify, for each electrode, its size</span>
+<span class="sd">        (`radii`), location on the retina (`xs` and `ys`), distance to the</span>
+<span class="sd">        retina (height, `hs`), and a string identifier (`names`, optional).</span>
+<span class="sd">        Array location should be given in microns, where the fovea is located</span>
+<span class="sd">        at (0, 0).</span>
+<span class="sd">        Single electrodes in the array can be addressed by index (integer)</span>
+<span class="sd">        or name.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        radii : array_like</span>
+<span class="sd">            List of electrode radii.</span>
+<span class="sd">        xs : array_like</span>
+<span class="sd">            List of x-coordinates for the center of the electrodes (microns).</span>
+<span class="sd">        ys : array_like</span>
+<span class="sd">            List of y-coordinates for the center of the electrodes (microns).</span>
+<span class="sd">        hs : float | array_like, optional, default: 0</span>
+<span class="sd">            List of electrode heights (distance from the retinal surface).</span>
+<span class="sd">        names : array_like, optional, default: None</span>
+<span class="sd">            List of names (string identifiers) for each eletrode.</span>
+<span class="sd">        eye : {&#39;LE&#39;, &#39;RE&#39;}, optional, default: &#39;RE&#39;</span>
+<span class="sd">            Eye in which array is implanted.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        A single epiretinal electrode called &#39;A1&#39;, with radius 100um, sitting</span>
+<span class="sd">        at retinal location (0, 0), 10um away from the retina:</span>
+<span class="sd">        &gt;&gt;&gt; from pulse2percept import implants</span>
+<span class="sd">        &gt;&gt;&gt; implant0 = implants.ElectrodeArray(&#39;epiretinal&#39;, 100, 0, 0, hs=10,</span>
+<span class="sd">        ...                                    names=&#39;A1&#39;)</span>
+
+<span class="sd">        Get access to the electrode with name &#39;A1&#39; in the first array:</span>
+<span class="sd">        &gt;&gt;&gt; my_electrode = implant0[&#39;A1&#39;]</span>
+
+<span class="sd">        An array with two electrodes of size 100um, one sitting at</span>
+<span class="sd">        (-100, -100), the other sitting at (0, 0), with 0 distance from the</span>
+<span class="sd">        retina, of type &#39;subretinal&#39;:</span>
+<span class="sd">        &gt;&gt;&gt; implant1 = implants.ElectrodeArray(&#39;subretinal&#39;, [100, 100],</span>
+<span class="sd">        ...                                    [-100, 0], [-100, 0], hs=[0, 0])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">etype</span> <span class="o">=</span> <span class="n">etype</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eye</span> <span class="o">=</span> <span class="n">eye</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">electrodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_electrodes</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_electrodes</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">hs</span><span class="p">,</span> <span class="n">names</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;ElectrodeArray(</span><span class="si">%s</span><span class="s2">, num_electrodes=</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">etype</span><span class="p">,</span>
+                                                          <span class="bp">self</span><span class="o">.</span><span class="n">num_electrodes</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ElectrodeArray.add_electrode"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ElectrodeArray.add_electrode">[docs]</a>    <span class="k">def</span> <span class="nf">add_electrode</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">electrode</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds an electrode to an ElectrodeArray object</span>
+<span class="sd">        This function adds a single electrode to an existing ElectrodeArray</span>
+<span class="sd">        object. The electrode must have the same type as the array</span>
+<span class="sd">        (see implants.SUPPORTED_IMPLANT_TYPES).</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        electrode : implants.Electrode</span>
+<span class="sd">            An electrode object specifying type, size, and location of the</span>
+<span class="sd">            electrode on the retina.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">electrode</span><span class="p">,</span> <span class="n">Electrode</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`electrode` must be of type retina.Electrode.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">electrode</span><span class="o">.</span><span class="n">etype</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">etype</span><span class="p">:</span>
+            <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;Added electrode must be of same type as the existing&quot;</span>
+            <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;array (</span><span class="si">%s</span><span class="s2">).&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">etype</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_electrodes</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">electrodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">electrode</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="ElectrodeArray.add_electrodes"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ElectrodeArray.add_electrodes">[docs]</a>    <span class="k">def</span> <span class="nf">add_electrodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radii</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">hs</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Adds electrodes to an ElectrodeArray object</span>
+<span class="sd">        This function adds one or more electrodes to an existing ElectrodeArray</span>
+<span class="sd">        object. Lists should specify, for each electrode to be added, the size</span>
+<span class="sd">        (`radii`), location on the retina (`xs` and `ys`), distance to the</span>
+<span class="sd">        retina (height, `hs`), and a string identifier (`names`, optional).</span>
+<span class="sd">        Array location should be given in microns, where the fovea is located</span>
+<span class="sd">        at (0, 0).</span>
+<span class="sd">        Single electrodes in the array can be addressed by index (integer)</span>
+<span class="sd">        or name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        radii : array_like</span>
+<span class="sd">            List of electrode radii.</span>
+<span class="sd">        xs : array_like</span>
+<span class="sd">            List of x-coordinates for the center of the electrodes (microns).</span>
+<span class="sd">        ys : array_like</span>
+<span class="sd">            List of y-coordinates for the center of the electrodes (microns).</span>
+<span class="sd">        hs : float | array_like, optional, default: 0</span>
+<span class="sd">            List of electrode heights (distance from the retinal surface).</span>
+<span class="sd">        names : array_like, optional, default: None</span>
+<span class="sd">            List of names (string identifiers) for each eletrode.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Adding a single electrode of radius 50um sitting at (0, 0) to an</span>
+<span class="sd">        existing ElectrodeArray object:</span>
+<span class="sd">        &gt;&gt;&gt; implant = ElectrodeArray(&#39;epiretinal&#39;, 100, 100, 100)</span>
+<span class="sd">        &gt;&gt;&gt; implant.add_electrodes(50, 0, 0)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Make it so the method can accept either floats, lists, or</span>
+        <span class="c1"># numpy arrays, and `zip` works regardless.</span>
+        <span class="n">radii</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">radii</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">xs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xs</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">ys</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ys</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">names</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">str</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">hs</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">hs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">hs</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># All electrodes have the same height</span>
+            <span class="n">hs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">radii</span><span class="p">)</span> <span class="o">*</span> <span class="n">hs</span>
+
+        <span class="k">assert</span> <span class="n">radii</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">xs</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">ys</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">hs</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="k">if</span> <span class="n">names</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">radii</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="c1"># If not every electrode has a name, replace with None&#39;s</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">radii</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">radii</span><span class="p">,</span> <span class="n">xs</span><span class="p">,</span> <span class="n">ys</span><span class="p">,</span> <span class="n">hs</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_electrode</span><span class="p">(</span><span class="n">Electrode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">etype</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">electrodes</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the electrode specified by `item`</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        item : int|string</span>
+<span class="sd">            If `item` is an integer, returns the `item`-th electrode in the</span>
+<span class="sd">            array. If `item` is a string, returns the electrode with string</span>
+<span class="sd">            identifier `item`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Is `item` an integer?</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">electrodes</span><span class="p">[</span><span class="n">item</span><span class="p">]</span>
+        <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+            <span class="c1"># If `item` is a valid string identifier, return valid index.</span>
+            <span class="c1"># Else return None</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">electrodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_index</span><span class="p">(</span><span class="n">item</span><span class="p">)]</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">IndexError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">None</span>
+
+<div class="viewcode-block" id="ElectrodeArray.get_index"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ElectrodeArray.get_index">[docs]</a>    <span class="k">def</span> <span class="nf">get_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Returns the index of an electrode called `name`</span>
+<span class="sd">        This function searches the electrode array for an electrode with</span>
+<span class="sd">        string identifier `name`. If found, the index of that electrode is</span>
+<span class="sd">        returned, else None.</span>
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            An electrode name (string identifier).</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        A valid electrode index or None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Is `name` a valid electrode name?</span>
+        <span class="c1"># Iterate through electrodes to find a matching name. Shuffle list</span>
+        <span class="c1"># to reduce time complexity of average lookup.</span>
+        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">el</span> <span class="ow">in</span> <span class="n">utils</span><span class="o">.</span><span class="n">traverse_randomly</span><span class="p">(</span><span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">electrodes</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">el</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="n">name</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">idx</span>
+
+        <span class="c1"># Worst case O(n): name could not be found.</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="ElectrodeArray.get_eye"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ElectrodeArray.get_eye">[docs]</a>    <span class="k">def</span> <span class="nf">get_eye</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eye</span></div>
+
+<div class="viewcode-block" id="ElectrodeArray.set_eye"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ElectrodeArray.set_eye">[docs]</a>    <span class="k">def</span> <span class="nf">set_eye</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eye</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">eye</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;re&#39;</span><span class="p">,</span> <span class="s1">&#39;right&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_eye</span> <span class="o">=</span> <span class="s1">&#39;RE&#39;</span>
+        <span class="k">elif</span> <span class="n">eye</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;l&#39;</span><span class="p">,</span> <span class="s1">&#39;le&#39;</span><span class="p">,</span> <span class="s1">&#39;left&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_eye</span> <span class="o">=</span> <span class="s1">&#39;LE&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown eye &#39;</span><span class="si">%s</span><span class="s2">&#39;. Choose from &#39;LE&#39;, &#39;RE&#39;.&quot;</span><span class="p">)</span></div>
+
+    <span class="n">eye</span> <span class="o">=</span> <span class="nb">property</span><span class="p">(</span><span class="n">get_eye</span><span class="p">,</span> <span class="n">set_eye</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ArgusI"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ArgusI">[docs]</a><span class="k">class</span> <span class="nc">ArgusI</span><span class="p">(</span><span class="n">ElectrodeArray</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArgusI.__init__"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ArgusI.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">eye</span><span class="o">=</span><span class="s1">&#39;RE&#39;</span><span class="p">,</span>
+                 <span class="n">use_legacy_names</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an ArgusI array on the retina</span>
+<span class="sd">        This function creates an ArgusI array and places it on the retina</span>
+<span class="sd">        such that the center of the array is located at</span>
+<span class="sd">        [`x_center`, `y_center`] (microns) and the array is rotated by</span>
+<span class="sd">        rotation angle `rot` (radians).</span>
+<span class="sd">        The array is oriented in the visual field as shown in Fig. 1 of</span>
+<span class="sd">        Horsager et al. (2009); that is, if placed in (0,0), the top two</span>
+<span class="sd">        rows will lie in the lower retina (upper visual field):</span>
+<span class="sd">        .. raw:: html</span>
+<span class="sd">          &lt;pre&gt;</span>
+<span class="sd">            y       A1 B1 C1 D1                     260 520 260 520</span>
+<span class="sd">            ^       A2 B2 C2 D2   where electrode   520 260 520 260</span>
+<span class="sd">            |       A3 B3 C3 D3   diameters are:    260 520 260 520</span>
+<span class="sd">            --&gt;x    A4 B4 C4 D4                     520 260 520 260</span>
+<span class="sd">          &lt;/pre&gt;</span>
+<span class="sd">        Electrode order is: A1, B1, C1, D1, A2, B2, ..., D4.</span>
+<span class="sd">        If `use_legacy_names` is True, electrode order is: L6, L2, M8, M4, ...</span>
+<span class="sd">        An electrode can be addressed by index (integer) or name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x_center : float, optional, default: 0</span>
+<span class="sd">            x coordinate of the array center (um)</span>
+<span class="sd">        y_center : float, optional, default: 0</span>
+<span class="sd">            y coordinate of the array center (um)</span>
+<span class="sd">        h : float || array_like, optional, default: 0</span>
+<span class="sd">            Distance of the array to the retinal surface (um). Either a list</span>
+<span class="sd">            with 16 entries or a scalar.</span>
+<span class="sd">        rot : float, optional, default: 0</span>
+<span class="sd">            Rotation angle of the array (rad). Positive values denote</span>
+<span class="sd">            counter-clock-wise (CCW) rotations in the retinal coordinate</span>
+<span class="sd">            system.</span>
+<span class="sd">        eye : {&#39;LE&#39;, &#39;RE&#39;}, optional, default: &#39;RE&#39;</span>
+<span class="sd">            Eye in which array is implanted.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create an ArgusI array centered on the fovea, at 100um distance from</span>
+<span class="sd">        the retina:</span>
+<span class="sd">        &gt;&gt;&gt; from pulse2percept import implants</span>
+<span class="sd">        &gt;&gt;&gt; argus = implants.ArgusI(x_center=0, y_center=0, h=100, rot=0)</span>
+
+<span class="sd">        Get access to electrode &#39;B1&#39;:</span>
+<span class="sd">        &gt;&gt;&gt; my_electrode = argus[&#39;B1&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Alternating electrode sizes, arranged in checkerboard pattern</span>
+        <span class="n">r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">260</span><span class="p">,</span> <span class="mi">520</span><span class="p">,</span> <span class="mi">260</span><span class="p">,</span> <span class="mi">520</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
+        <span class="n">r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">r_arr</span><span class="p">,</span> <span class="n">r_arr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">r_arr</span><span class="p">,</span> <span class="n">r_arr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span>
+                               <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Set left/right eye</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eye</span> <span class="o">=</span> <span class="n">eye</span>
+
+        <span class="c1"># In older papers, Argus I electrodes go by L and M</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">old_names</span> <span class="o">=</span> <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;L6&#39;</span><span class="p">,</span> <span class="s1">&#39;L2&#39;</span><span class="p">,</span> <span class="s1">&#39;M8&#39;</span><span class="p">,</span> <span class="s1">&#39;M4&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;L5&#39;</span><span class="p">,</span> <span class="s1">&#39;L1&#39;</span><span class="p">,</span> <span class="s1">&#39;M7&#39;</span><span class="p">,</span> <span class="s1">&#39;M3&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;L8&#39;</span><span class="p">,</span> <span class="s1">&#39;L4&#39;</span><span class="p">,</span> <span class="s1">&#39;M6&#39;</span><span class="p">,</span> <span class="s1">&#39;M2&#39;</span><span class="p">,</span>
+                                  <span class="s1">&#39;L7&#39;</span><span class="p">,</span> <span class="s1">&#39;L3&#39;</span><span class="p">,</span> <span class="s1">&#39;M5&#39;</span><span class="p">,</span> <span class="s1">&#39;M1&#39;</span><span class="p">]</span>
+        <span class="c1"># In newer papers, they go by A-D: A1, B1, C1, D1, A1, B2, ..., D4</span>
+        <span class="c1"># Shortcut: Use `chr` to go from int to char</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">new_names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+                          <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">65</span><span class="p">,</span> <span class="mi">69</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">use_legacy_names</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_names</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">names</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_names</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">h_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">h_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_arr</span><span class="p">):</span>
+                <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;If `h` is a list, it must have 16 entries.&quot;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># All electrodes have the same height</span>
+            <span class="n">h_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">r_arr</span><span class="p">)</span> <span class="o">*</span> <span class="n">h</span>
+
+        <span class="c1"># Equally spaced electrodes: n_rows x n_cols = 16</span>
+        <span class="n">e_spacing</span> <span class="o">=</span> <span class="mi">800</span>  <span class="c1"># um</span>
+        <span class="n">n_cols</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># number of electrodes horizontally (same vertically)</span>
+        <span class="n">x_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_cols</span><span class="p">)</span> <span class="o">*</span> <span class="n">e_spacing</span> <span class="o">-</span> <span class="p">(</span><span class="n">n_cols</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">e_spacing</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eye</span> <span class="o">==</span> <span class="s1">&#39;LE&#39;</span><span class="p">:</span>
+            <span class="c1"># Left eye: Need to invert x coordinates and rotation angle</span>
+            <span class="n">x_arr</span> <span class="o">=</span> <span class="n">x_arr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x_arr</span><span class="p">,</span> <span class="n">x_arr</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Rotation matrix</span>
+        <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rot</span><span class="p">),</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot</span><span class="p">),</span>
+                      <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rot</span><span class="p">)])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="c1"># Set the x, y location of the tack</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eye</span> <span class="o">==</span> <span class="s1">&#39;RE&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">n_cols</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">e_spacing</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="p">[(</span><span class="n">n_cols</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">e_spacing</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tack</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tack</span> <span class="o">+</span> <span class="p">[</span><span class="n">x_center</span><span class="p">,</span> <span class="n">y_center</span><span class="p">])</span>
+
+        <span class="c1"># Rotate the array</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x_arr</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_arr</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">R</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span>
+        <span class="n">x_arr</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">y_arr</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># Apply offset</span>
+        <span class="n">x_arr</span> <span class="o">+=</span> <span class="n">x_center</span>
+        <span class="n">y_arr</span> <span class="o">+=</span> <span class="n">y_center</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">etype</span> <span class="o">=</span> <span class="s1">&#39;epiretinal&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_electrodes</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">electrodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_arr</span><span class="p">,</span> <span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">h_arr</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_electrode</span><span class="p">(</span><span class="n">Electrode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">etype</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;ArgusI(</span><span class="si">%s</span><span class="s2">, num_electrodes=</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">etype</span><span class="p">,</span>
+                                                  <span class="bp">self</span><span class="o">.</span><span class="n">num_electrodes</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ArgusI.get_old_name"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ArgusI.get_old_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_old_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Look up the legacy name of a standard-named Argus I electrode&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">old_names</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">new_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">new_name</span><span class="p">)]</span></div>
+
+<div class="viewcode-block" id="ArgusI.get_new_name"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ArgusI.get_new_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_new_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">old_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Look up the standard name of a legacy-named Argus I electrode&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">new_names</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">old_names</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">old_name</span><span class="p">)]</span></div></div>
+
+
+<div class="viewcode-block" id="ArgusII"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ArgusII">[docs]</a><span class="k">class</span> <span class="nc">ArgusII</span><span class="p">(</span><span class="n">ElectrodeArray</span><span class="p">):</span>
+
+<div class="viewcode-block" id="ArgusII.__init__"><a class="viewcode-back" href="../../reference/pulse2percept.implants.html#pulse2percept.implants.ArgusII.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">y_center</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">rot</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">eye</span><span class="o">=</span><span class="s1">&#39;RE&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create an ArgusII array on the retina</span>
+<span class="sd">        This function creates an ArgusII array and places it on the retina</span>
+<span class="sd">        such that the center of the array is located at</span>
+<span class="sd">        [`x_center`, `y_center`] (microns) and the array is rotated by</span>
+<span class="sd">        rotation angle `rot` (radians).</span>
+<span class="sd">        The array is oriented upright in the visual field, such that an</span>
+<span class="sd">        array with center (0,0) has the top three rows lie in the lower</span>
+<span class="sd">        retina (upper visual field), as shown below:</span>
+<span class="sd">        .. raw:: html</span>
+<span class="sd">          &lt;pre&gt;</span>
+<span class="sd">                    A1 A2 A3 A4 A5 A6 A7 A8 A9 A10</span>
+<span class="sd">            y       B1 B2 B3 B4 B5 B6 B7 B8 B9 B10</span>
+<span class="sd">            ^       C1 C2 C3 C4 C5 C6 C7 C8 C9 C10</span>
+<span class="sd">            |       D1 D2 D3 D4 D5 D6 D7 D8 D9 D10</span>
+<span class="sd">            --&gt;x    E1 E2 E3 E4 E5 E6 E7 E8 E9 E10</span>
+<span class="sd">                    F1 F2 F3 F4 F5 F6 F7 F8 F9 F10</span>
+<span class="sd">          &lt;/pre&gt;</span>
+<span class="sd">        Electrode order is: A1, A2, ..., A10, B1, B2, ..., F10.</span>
+<span class="sd">        An electrode can be addressed by index (integer) or name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        x_center : float</span>
+<span class="sd">            x coordinate of the array center (um)</span>
+<span class="sd">        y_center : float</span>
+<span class="sd">            y coordinate of the array center (um)</span>
+<span class="sd">        h : float || array_like</span>
+<span class="sd">            Distance of the array to the retinal surface (um). Either a list</span>
+<span class="sd">            with 60 entries or a scalar.</span>
+<span class="sd">        rot : float</span>
+<span class="sd">            Rotation angle of the array (rad). Positive values denote</span>
+<span class="sd">            counter-clock-wise (CCW) rotations in the retinal coordinate</span>
+<span class="sd">            system.</span>
+<span class="sd">        eye : {&#39;LE&#39;, &#39;RE&#39;}, optional, default: &#39;RE&#39;</span>
+<span class="sd">            Eye in which array is implanted.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        Create an ArgusII array centered on the fovea, at 100um distance from</span>
+<span class="sd">        the retina:</span>
+<span class="sd">        &gt;&gt;&gt; from pulse2percept import implants</span>
+<span class="sd">        &gt;&gt;&gt; argus = implants.ArgusII(x_center=0, y_center=0, h=100, rot=0)</span>
+
+<span class="sd">        Get access to electrode &#39;E7&#39;:</span>
+<span class="sd">        &gt;&gt;&gt; my_electrode = argus[&#39;E7&#39;]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Electrodes are 200um in diameter</span>
+        <span class="n">r_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span> <span class="o">*</span> <span class="mf">100.0</span>
+
+        <span class="c1"># Set left/right eye</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eye</span> <span class="o">=</span> <span class="n">eye</span>
+
+        <span class="c1"># Standard ArgusII names: A1, A2, ..., A10, B1, ..., F10</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="nb">chr</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">65</span><span class="p">,</span> <span class="mi">71</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+            <span class="n">h_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">h</span><span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">h_arr</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">r_arr</span><span class="p">):</span>
+                <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;If `h` is a list, it must have 60 entries.&quot;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># All electrodes have the same height</span>
+            <span class="n">h_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">r_arr</span><span class="p">)</span> <span class="o">*</span> <span class="n">h</span>
+
+        <span class="c1"># Equally spaced electrodes: n_rows x n_cols = 60</span>
+        <span class="n">e_spacing</span> <span class="o">=</span> <span class="mi">525</span>  <span class="c1"># um</span>
+        <span class="n">n_cols</span> <span class="o">=</span> <span class="mi">10</span>  <span class="c1"># number of electrodes horizontally</span>
+        <span class="n">n_rows</span> <span class="o">=</span> <span class="mi">6</span>  <span class="c1"># number of electrodes vertically</span>
+        <span class="n">x_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_cols</span><span class="p">)</span> <span class="o">*</span> <span class="n">e_spacing</span> <span class="o">-</span> <span class="p">(</span><span class="n">n_cols</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">e_spacing</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eye</span> <span class="o">==</span> <span class="s1">&#39;LE&#39;</span><span class="p">:</span>
+            <span class="c1"># Left eye: Need to invert x coordinates and rotation angle</span>
+            <span class="n">x_arr</span> <span class="o">=</span> <span class="n">x_arr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">y_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n_rows</span><span class="p">)</span> <span class="o">*</span> <span class="n">e_spacing</span> <span class="o">-</span> <span class="p">(</span><span class="n">n_rows</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">e_spacing</span>
+        <span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="c1"># Rotation matrix</span>
+        <span class="n">rotmat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rot</span><span class="p">),</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot</span><span class="p">),</span>
+                           <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rot</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rot</span><span class="p">)])</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+
+        <span class="c1"># Set the x, y location of the tack</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eye</span> <span class="o">==</span> <span class="s1">&#39;RE&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">rotmat</span><span class="p">,</span> <span class="p">[</span><span class="o">-</span><span class="p">(</span><span class="n">n_cols</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">e_spacing</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">tack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">rotmat</span><span class="p">,</span> <span class="p">[(</span><span class="n">n_cols</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">+</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">*</span> <span class="n">e_spacing</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tack</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tack</span> <span class="o">+</span> <span class="p">[</span><span class="n">x_center</span><span class="p">,</span> <span class="n">y_center</span><span class="p">])</span>
+
+        <span class="c1"># Rotate the array</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">x_arr</span><span class="o">.</span><span class="n">flatten</span><span class="p">(),</span> <span class="n">y_arr</span><span class="o">.</span><span class="n">flatten</span><span class="p">()))</span>
+        <span class="n">xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">rotmat</span><span class="p">,</span> <span class="n">xy</span><span class="p">)</span>
+        <span class="n">x_arr</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">y_arr</span> <span class="o">=</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="c1"># Apply offset</span>
+        <span class="n">x_arr</span> <span class="o">+=</span> <span class="n">x_center</span>
+        <span class="n">y_arr</span> <span class="o">+=</span> <span class="n">y_center</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">etype</span> <span class="o">=</span> <span class="s1">&#39;epiretinal&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_electrodes</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">electrodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r_arr</span><span class="p">,</span> <span class="n">x_arr</span><span class="p">,</span> <span class="n">y_arr</span><span class="p">,</span> <span class="n">h_arr</span><span class="p">,</span> <span class="n">names</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_electrode</span><span class="p">(</span><span class="n">Electrode</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">etype</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;ArgusII(</span><span class="si">%s</span><span class="s2">, num_electrodes=</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">etype</span><span class="p">,</span>
+                                                   <span class="bp">self</span><span class="o">.</span><span class="n">num_electrodes</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Michael Beyeler, Ariel Rokem, Geoff Boynton, and Ione Fine, The University of Washington.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.4.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

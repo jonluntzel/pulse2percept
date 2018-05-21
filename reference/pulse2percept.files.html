@@ -1,0 +1,653 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>files &mdash; pulse2percept 0.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="pulse2percept 0.4.3 documentation" href="../index.html"/>
+        <link rel="up" title="API Reference" href="index.html"/>
+        <link rel="next" title="implants" href="pulse2percept.implants.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pulse2percept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.html"><code class="docutils literal"><span class="pre">pulse2percept</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.api.html"><code class="docutils literal"><span class="pre">api</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">files</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#find-files-like">find_files_like</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-video">load_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-video-framerate">load_video_framerate</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-video-generator">load_video_generator</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#load-video-metadata">load_video_metadata</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#save-video">save_video</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#save-video-sidebyside">save_video_sidebyside</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#set-skvideo-path">set_skvideo_path</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.implants.html"><code class="docutils literal"><span class="pre">implants</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.retina.html"><code class="docutils literal"><span class="pre">retina</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.stimuli.html"><code class="docutils literal"><span class="pre">stimuli</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pulse2percept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">API Reference</a> &raquo;</li>
+        
+      <li><code class="docutils literal"><span class="pre">files</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/pulse2percept.files.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pulse2percept.files">
+<span id="files"></span><h1><code class="xref py py-mod docutils literal"><span class="pre">files</span></code><a class="headerlink" href="#module-pulse2percept.files" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.files.find_files_like" title="pulse2percept.files.find_files_like"><code class="xref py py-obj docutils literal"><span class="pre">find_files_like</span></code></a>(datapath,&nbsp;pattern)</td>
+<td>Finds files in a folder whose name matches a pattern</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.files.load_video" title="pulse2percept.files.load_video"><code class="xref py py-obj docutils literal"><span class="pre">load_video</span></code></a>(filename[,&nbsp;as_timeseries,&nbsp;…])</td>
+<td>Loads a video from file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.files.load_video_framerate" title="pulse2percept.files.load_video_framerate"><code class="xref py py-obj docutils literal"><span class="pre">load_video_framerate</span></code></a>(filename[,&nbsp;…])</td>
+<td>Returns the video frame rate</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.files.load_video_generator" title="pulse2percept.files.load_video_generator"><code class="xref py py-obj docutils literal"><span class="pre">load_video_generator</span></code></a>(filename[,&nbsp;…])</td>
+<td>Returns a generator that can load a video from file frame-by-frame.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.files.load_video_metadata" title="pulse2percept.files.load_video_metadata"><code class="xref py py-obj docutils literal"><span class="pre">load_video_metadata</span></code></a>(filename[,&nbsp;ffmpeg_path,&nbsp;…])</td>
+<td>Returns a video files metadata</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.files.save_video" title="pulse2percept.files.save_video"><code class="xref py py-obj docutils literal"><span class="pre">save_video</span></code></a>(data,&nbsp;filename[,&nbsp;width,&nbsp;height,&nbsp;…])</td>
+<td>Saves a video to file.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.files.save_video_sidebyside" title="pulse2percept.files.save_video_sidebyside"><code class="xref py py-obj docutils literal"><span class="pre">save_video_sidebyside</span></code></a>(videofile,&nbsp;percept,&nbsp;…)</td>
+<td>Saves both an input video and the percept to file, side-by-side.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.files.set_skvideo_path" title="pulse2percept.files.set_skvideo_path"><code class="xref py py-obj docutils literal"><span class="pre">set_skvideo_path</span></code></a>([ffmpeg_path,&nbsp;libav_path])</td>
+<td>Sets the path to the FFMPEG and/or LibAV libraries.</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="find-files-like">
+<h2>find_files_like<a class="headerlink" href="#find-files-like" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.files.find_files_like">
+<code class="descclassname">pulse2percept.files.</code><code class="descname">find_files_like</code><span class="sig-paren">(</span><em>datapath</em>, <em>pattern</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/files.html#find_files_like"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.files.find_files_like" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds files in a folder whose name matches a pattern</p>
+<p>This function looks for files in folder <cite>datapath</cite> that match a regular
+expression <cite>pattern</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>datapath</strong> : str</p>
+<blockquote>
+<div><p>Path to search</p>
+</div></blockquote>
+<p><strong>pattern</strong> : str</p>
+<blockquote class="last">
+<div><p>A valid regular expression pattern</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p># Find all ‘.npz’ files in parent dir
+&gt;&gt;&gt; files = find_files_like(‘..’, ‘.*.npz$’)</p>
+</dd></dl>
+
+</div>
+<div class="section" id="load-video">
+<h2>load_video<a class="headerlink" href="#load-video" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.files.load_video">
+<code class="descclassname">pulse2percept.files.</code><code class="descname">load_video</code><span class="sig-paren">(</span><em>filename</em>, <em>as_timeseries=True</em>, <em>as_gray=False</em>, <em>ffmpeg_path=None</em>, <em>libav_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/files.html#load_video"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.files.load_video" title="Permalink to this definition">¶</a></dt>
+<dd><p>Loads a video from file.</p>
+<p>This function loads a video from file with the help of Scikit-Video, and
+returns the data either as a NumPy array (if <cite>as_timeseries</cite> is False)
+or as a <code class="docutils literal"><span class="pre">p2p.utils.TimeSeries</span></code> object (if <cite>as_timeseries</cite> is True).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Video file name</p>
+</div></blockquote>
+<p><strong>as_timeseries: bool, optional, default: True</strong></p>
+<blockquote>
+<div><p>If True, returns the data as a <code class="docutils literal"><span class="pre">p2p.utils.TimeSeries</span></code> object.</p>
+</div></blockquote>
+<p><strong>as_gray</strong> : bool, optional, default: False</p>
+<blockquote>
+<div><p>If True, loads only the luminance channel of the video.</p>
+</div></blockquote>
+<p><strong>ffmpeg_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to ffmpeg library.</p>
+</div></blockquote>
+<p><strong>libav_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to libav library.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>video</strong> : ndarray | p2p2.utils.TimeSeries</p>
+<blockquote class="last">
+<div><p>If <cite>as_timeseries</cite> is False, returns video data according to the
+Scikit-Video standard; that is, an ndarray of dimension (T, M, N, C),
+(T, M, N), (M, N, C), or (M, N), where T is the number of frames,
+M is the height, N is the width, and C is the number of channels (will
+be either 1 for grayscale or 3 for RGB).</p>
+<p>If <cite>as_timeseries</cite> is True, returns video data as a TimeSeries object
+of dimension (M, N, C), (M, N, T), (M, N, C), or (M, N).
+The sampling rate corresponds to 1 / frame rate.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Load a video as a <code class="docutils literal"><span class="pre">p2p.utils.TimeSeries</span></code> object:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skvideo</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">video</span> <span class="o">=</span> <span class="n">load_video</span><span class="p">(</span><span class="n">datasets</span><span class="o">.</span><span class="n">bikes</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">video</span><span class="o">.</span><span class="n">tsample</span>
+<span class="go">0.04</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">video</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(272, 640, 3, 250)</span>
+</pre></div>
+</div>
+<p>Load a video as a NumPy ndarray:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skvideo</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">video</span> <span class="o">=</span> <span class="n">load_video</span><span class="p">(</span><span class="n">datasets</span><span class="o">.</span><span class="n">bikes</span><span class="p">(),</span> <span class="n">as_timeseries</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">video</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(250, 272, 640, 3)</span>
+</pre></div>
+</div>
+<p>Load a video as a NumPy ndarray and convert to grayscale:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skvideo</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">video</span> <span class="o">=</span> <span class="n">load_video</span><span class="p">(</span><span class="n">datasets</span><span class="o">.</span><span class="n">bikes</span><span class="p">(),</span> <span class="n">as_timeseries</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">as_gray</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">video</span><span class="o">.</span><span class="n">shape</span>
+<span class="go">(250, 272, 640, 1)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="load-video-framerate">
+<h2>load_video_framerate<a class="headerlink" href="#load-video-framerate" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.files.load_video_framerate">
+<code class="descclassname">pulse2percept.files.</code><code class="descname">load_video_framerate</code><span class="sig-paren">(</span><em>filename</em>, <em>ffmpeg_path=None</em>, <em>libav_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/files.html#load_video_framerate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.files.load_video_framerate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the video frame rate</p>
+<p>This function returns the frame rate of the video, as given by its
+metadata field <a class="reference external" href="mailto:'&#37;&#52;&#48;r_frame_rate">‘<span>&#64;</span>r_frame_rate</a>’.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Video file name</p>
+</div></blockquote>
+<p><strong>ffmpeg_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to ffmpeg library.</p>
+</div></blockquote>
+<p><strong>libav_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to libav library.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>fps</strong> : float</p>
+<blockquote class="last">
+<div><p>Video frame rate (frames per second).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="load-video-generator">
+<h2>load_video_generator<a class="headerlink" href="#load-video-generator" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.files.load_video_generator">
+<code class="descclassname">pulse2percept.files.</code><code class="descname">load_video_generator</code><span class="sig-paren">(</span><em>filename</em>, <em>ffmpeg_path=None</em>, <em>libav_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/files.html#load_video_generator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.files.load_video_generator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a generator that can load a video from file frame-by-frame.</p>
+<p>This function returns a generator <cite>reader</cite> that can load a video from a
+file frame-by-frame. Every call to <cite>reader.nextFrame()</cite> will return a
+single frame of the video as a NumPy array with dimensions (M, N) or
+(M, N, C), where M is the height, N is the width, and C is the number of
+channels (will be either 1 for grayscale or 3 for RGB).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Video file name</p>
+</div></blockquote>
+<p><strong>ffmpeg_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to ffmpeg library.</p>
+</div></blockquote>
+<p><strong>libav_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to libav library.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>reader</strong> : skvideo.io.FFmpegReader | skvideo.io.LibAVReader</p>
+<blockquote class="last">
+<div><p>A Scikit-Video reader object</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">skvideo</span> <span class="k">import</span> <span class="n">datasets</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">reader</span> <span class="o">=</span> <span class="n">load_video_generator</span><span class="p">(</span><span class="n">datasets</span><span class="o">.</span><span class="n">bikes</span><span class="p">())</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">nextFrame</span><span class="p">():</span>
+<span class="gp">... </span>   <span class="k">pass</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="load-video-metadata">
+<h2>load_video_metadata<a class="headerlink" href="#load-video-metadata" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.files.load_video_metadata">
+<code class="descclassname">pulse2percept.files.</code><code class="descname">load_video_metadata</code><span class="sig-paren">(</span><em>filename</em>, <em>ffmpeg_path=None</em>, <em>libav_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/files.html#load_video_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.files.load_video_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns a video files metadata</p>
+<p>This function loads the  metadata of a video file, which is returned
+as a dict. Among the available information are the width and height
+of the video, the aspect ratio, the frame rate, the bit rate, and the
+duration.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Video file name</p>
+</div></blockquote>
+<p><strong>ffmpeg_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to ffmpeg library.</p>
+</div></blockquote>
+<p><strong>libav_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to libav library.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>metadata</strong> : dict</p>
+<blockquote class="last">
+<div><p>A dictionary containing all metadata.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="save-video">
+<h2>save_video<a class="headerlink" href="#save-video" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.files.save_video">
+<code class="descclassname">pulse2percept.files.</code><code class="descname">save_video</code><span class="sig-paren">(</span><em>data</em>, <em>filename</em>, <em>width=None</em>, <em>height=None</em>, <em>fps=30</em>, <em>ffmpeg_path=None</em>, <em>libav_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/files.html#save_video"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.files.save_video" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves a video to file.</p>
+<p>This function stores a NumPy ndarray to file using Scikit-Video.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>data</strong> : ndarray | p2p.utils.TimeSeries</p>
+<blockquote>
+<div><p>Video data as a NumPy ndarray must have dimension (T, M, N, C),
+(T, M, N), (M, N, C), or (M, N), where T is the number of frames,
+M is the height, N is the width, and C is the number of channels (must
+be either 1 for grayscale or 3 for RGB).</p>
+<p>Video data as a TimeSeries object must have dimension (M, N, C, T) or
+(M, N, T). The sampling step will be used as the video’s frame rate.</p>
+</div></blockquote>
+<p><strong>filename</strong> : str</p>
+<blockquote>
+<div><p>Video file name.</p>
+</div></blockquote>
+<p><strong>width</strong> : int, optional</p>
+<blockquote>
+<div><p>Desired width of the movie.
+Default: Automatically determined based on <cite>height</cite> (without changing
+the aspect ratio). If <cite>height</cite> is not given, the percept’s original
+width is used.</p>
+</div></blockquote>
+<p><strong>height</strong> : int, optional</p>
+<blockquote>
+<div><p>Desired height of the movie.
+Default: Automatically determined based on <cite>width</cite> (without changing
+the aspect ratio). If <cite>width</cite> is not given, the percept’s original
+height is used.</p>
+</div></blockquote>
+<p><strong>fps</strong> : int, optional, default: 30</p>
+<blockquote>
+<div><p>Desired frame rate of the video (frames per second).</p>
+</div></blockquote>
+<p><strong>ffmpeg_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to ffmpeg library.</p>
+</div></blockquote>
+<p><strong>libav_path</strong> : str, optional, default: system’s default path</p>
+<blockquote class="last">
+<div><p>Path to libav library.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>To distinguish between 3-D inputs of shape (T, M, N) and (M, N, C), the
+last dimension is checked: If it is small (&lt;= 4), it is most likely a
+color channel - hence the input is interpreted as (M, N, C).
+Else it is interpreted as (T, M, N).</p>
+</dd></dl>
+
+</div>
+<div class="section" id="save-video-sidebyside">
+<h2>save_video_sidebyside<a class="headerlink" href="#save-video-sidebyside" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.files.save_video_sidebyside">
+<code class="descclassname">pulse2percept.files.</code><code class="descname">save_video_sidebyside</code><span class="sig-paren">(</span><em>videofile</em>, <em>percept</em>, <em>savefile</em>, <em>fps=30</em>, <em>ffmpeg_path=None</em>, <em>libav_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/files.html#save_video_sidebyside"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.files.save_video_sidebyside" title="Permalink to this definition">¶</a></dt>
+<dd><p>Saves both an input video and the percept to file, side-by-side.</p>
+<p>This function creates a new video from an input video file and a
+<code class="docutils literal"><span class="pre">p2p.utils.TimeSeries</span></code> object, assuming they correspond to model
+input and model output, and plots them side-by-side.
+Both input video and percept are resampled according to <cite>fps</cite>.
+The percept is resized to match the height of the input video.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>videofile</strong> : str</p>
+<blockquote>
+<div><p>File name of input video.</p>
+</div></blockquote>
+<p><strong>percept</strong> : p2p.utils.TimeSeries</p>
+<blockquote>
+<div><p>A TimeSeries object with dimension (M, N, C, T) or (M, N, T), where
+T is the number of frames, M is the height, N is the width, and C is
+the number of channels.</p>
+</div></blockquote>
+<p><strong>savefile</strong> : str</p>
+<blockquote>
+<div><p>File name of output video.</p>
+</div></blockquote>
+<p><strong>fps</strong> : int, optional, default: 30</p>
+<blockquote>
+<div><p>Desired frame rate of output video.</p>
+</div></blockquote>
+<p><strong>ffmpeg_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to ffmpeg library.</p>
+</div></blockquote>
+<p><strong>libav_path</strong> : str, optional, default: system’s default path</p>
+<blockquote class="last">
+<div><p>Path to libav library.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="set-skvideo-path">
+<h2>set_skvideo_path<a class="headerlink" href="#set-skvideo-path" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.files.set_skvideo_path">
+<code class="descclassname">pulse2percept.files.</code><code class="descname">set_skvideo_path</code><span class="sig-paren">(</span><em>ffmpeg_path=None</em>, <em>libav_path=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/files.html#set_skvideo_path"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.files.set_skvideo_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the path to the FFMPEG and/or LibAV libraries.</p>
+<p>If scikit-video complains that either ffmpeg or libav cannot be found,
+you can set the path to the executables directly. On Unix, these binaries
+usually live in /usr/bin. On Windows, point to the directory that contains
+your ffmpeg.exe.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ffmpeg_path</strong> : str, optional, default: system’s default path</p>
+<blockquote>
+<div><p>Path to ffmpeg library.</p>
+</div></blockquote>
+<p><strong>libav_path</strong> : str, optional, default: system’s default path</p>
+<blockquote class="last">
+<div><p>Path to libav library.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="pulse2percept.implants.html" class="btn btn-neutral float-right" title="implants" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Michael Beyeler, Ariel Rokem, Geoff Boynton, and Ione Fine, The University of Washington.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.4.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

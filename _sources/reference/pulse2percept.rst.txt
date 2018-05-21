@@ -1,0 +1,32 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+:mod:`pulse2percept`
+====================
+.. automodule:: pulse2percept
+
+.. currentmodule:: pulse2percept
+.. autosummary::
+
+   Simulation
+   get_brightest_frame
+
+
+.. currentmodule:: pulse2percept
+
+
+:class:`Simulation`
+~~~~~~~~~~~~~~~~~~~
+
+
+.. autoclass:: Simulation
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+  .. automethod:: __init__
+
+get_brightest_frame
+~~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: get_brightest_frame
+

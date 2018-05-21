@@ -1,0 +1,718 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pulse2percept.files &mdash; pulse2percept 0.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pulse2percept 0.4.3 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pulse2percept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pulse2percept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pulse2percept.files</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pulse2percept.files</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">pulse2percept</span> <span class="k">import</span> <span class="n">utils</span>
+
+<span class="c1"># Rather than trying to import these all over, try once and then remember</span>
+<span class="c1"># by setting a flag.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">skimage</span>
+    <span class="kn">import</span> <span class="nn">skimage.transform</span> <span class="k">as</span> <span class="nn">sit</span>
+    <span class="kn">import</span> <span class="nn">skimage.color</span> <span class="k">as</span> <span class="nn">sic</span>
+    <span class="n">has_skimage</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+    <span class="c1"># Might also raise &quot;dict object has no attribute &#39;transform&#39;&quot;</span>
+    <span class="n">has_skimage</span> <span class="o">=</span> <span class="kc">False</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">skvideo</span>
+    <span class="kn">import</span> <span class="nn">skvideo.io</span> <span class="k">as</span> <span class="nn">svio</span>
+    <span class="n">skvideo</span><span class="o">.</span><span class="n">_HAS_AVCONV</span>
+    <span class="n">skvideo</span><span class="o">.</span><span class="n">_HAS_FFMPEG</span>
+    <span class="n">has_skvideo</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+    <span class="n">has_skvideo</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="set_skvideo_path"><a class="viewcode-back" href="../../reference/pulse2percept.files.html#pulse2percept.files.set_skvideo_path">[docs]</a><span class="k">def</span> <span class="nf">set_skvideo_path</span><span class="p">(</span><span class="n">ffmpeg_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libav_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Sets the path to the FFMPEG and/or LibAV libraries.</span>
+
+<span class="sd">    If scikit-video complains that either ffmpeg or libav cannot be found,</span>
+<span class="sd">    you can set the path to the executables directly. On Unix, these binaries</span>
+<span class="sd">    usually live in /usr/bin. On Windows, point to the directory that contains</span>
+<span class="sd">    your ffmpeg.exe.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    ffmpeg_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to ffmpeg library.</span>
+<span class="sd">    libav_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to libav library.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">libav_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">skvideo</span><span class="o">.</span><span class="n">setLibAVPath</span><span class="p">(</span><span class="n">libav_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">ffmpeg_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">skvideo</span><span class="o">.</span><span class="n">setFFmpegPath</span><span class="p">(</span><span class="n">ffmpeg_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="load_video_metadata"><a class="viewcode-back" href="../../reference/pulse2percept.files.html#pulse2percept.files.load_video_metadata">[docs]</a><span class="k">def</span> <span class="nf">load_video_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">ffmpeg_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libav_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a video files metadata</span>
+
+<span class="sd">    This function loads the  metadata of a video file, which is returned</span>
+<span class="sd">    as a dict. Among the available information are the width and height</span>
+<span class="sd">    of the video, the aspect ratio, the frame rate, the bit rate, and the</span>
+<span class="sd">    duration.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Video file name</span>
+<span class="sd">    ffmpeg_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to ffmpeg library.</span>
+<span class="sd">    libav_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to libav library.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    metadata : dict</span>
+<span class="sd">        A dictionary containing all metadata.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_skvideo</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You do not have scikit-video installed. &quot;</span>
+                          <span class="s2">&quot;You can install it via $ pip install sk-video.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set the path if necessary</span>
+    <span class="n">set_skvideo_path</span><span class="p">(</span><span class="n">ffmpeg_path</span><span class="p">,</span> <span class="n">libav_path</span><span class="p">)</span>
+
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">skvideo</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">ffprobe</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">metadata</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s1">&#39;File </span><span class="si">%s</span><span class="s1"> could not be found.&#39;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;video&#39;</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="load_video_framerate"><a class="viewcode-back" href="../../reference/pulse2percept.files.html#pulse2percept.files.load_video_framerate">[docs]</a><span class="k">def</span> <span class="nf">load_video_framerate</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">ffmpeg_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libav_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns the video frame rate</span>
+
+<span class="sd">    This function returns the frame rate of the video, as given by its</span>
+<span class="sd">    metadata field &#39;@r_frame_rate&#39;.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Video file name</span>
+<span class="sd">    ffmpeg_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to ffmpeg library.</span>
+<span class="sd">    libav_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to libav library.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    fps : float</span>
+<span class="sd">        Video frame rate (frames per second).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_skvideo</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You do not have scikit-video installed. &quot;</span>
+                          <span class="s2">&quot;You can install it via $ pip install sk-video.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set the path if necessary</span>
+    <span class="n">set_skvideo_path</span><span class="p">(</span><span class="n">ffmpeg_path</span><span class="p">,</span> <span class="n">libav_path</span><span class="p">)</span>
+
+    <span class="c1"># Load all metadata</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">load_video_metadata</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s1">&#39;@r_frame_rate&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">metadata</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s1">&#39;Meta data does not contain field @r_frame_rate.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Parse frame rate entry: It&#39;s a rational expression encoded as a string.</span>
+    <span class="c1"># Hence, split by &#39;/&#39; and to the divison by hand.</span>
+    <span class="n">str_fps</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;@r_frame_rate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">str_fps</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">str_fps</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="load_video"><a class="viewcode-back" href="../../reference/pulse2percept.files.html#pulse2percept.files.load_video">[docs]</a><span class="k">def</span> <span class="nf">load_video</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">as_timeseries</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">as_gray</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ffmpeg_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+               <span class="n">libav_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Loads a video from file.</span>
+
+<span class="sd">    This function loads a video from file with the help of Scikit-Video, and</span>
+<span class="sd">    returns the data either as a NumPy array (if `as_timeseries` is False)</span>
+<span class="sd">    or as a ``p2p.utils.TimeSeries`` object (if `as_timeseries` is True).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Video file name</span>
+<span class="sd">    as_timeseries: bool, optional, default: True</span>
+<span class="sd">        If True, returns the data as a ``p2p.utils.TimeSeries`` object.</span>
+<span class="sd">    as_gray : bool, optional, default: False</span>
+<span class="sd">        If True, loads only the luminance channel of the video.</span>
+<span class="sd">    ffmpeg_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to ffmpeg library.</span>
+<span class="sd">    libav_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to libav library.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    video : ndarray | p2p2.utils.TimeSeries</span>
+<span class="sd">        If `as_timeseries` is False, returns video data according to the</span>
+<span class="sd">        Scikit-Video standard; that is, an ndarray of dimension (T, M, N, C),</span>
+<span class="sd">        (T, M, N), (M, N, C), or (M, N), where T is the number of frames,</span>
+<span class="sd">        M is the height, N is the width, and C is the number of channels (will</span>
+<span class="sd">        be either 1 for grayscale or 3 for RGB).</span>
+
+<span class="sd">        If `as_timeseries` is True, returns video data as a TimeSeries object</span>
+<span class="sd">        of dimension (M, N, C), (M, N, T), (M, N, C), or (M, N).</span>
+<span class="sd">        The sampling rate corresponds to 1 / frame rate.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    Load a video as a ``p2p.utils.TimeSeries`` object:</span>
+
+<span class="sd">    &gt;&gt;&gt; from skvideo import datasets</span>
+<span class="sd">    &gt;&gt;&gt; video = load_video(datasets.bikes())</span>
+<span class="sd">    &gt;&gt;&gt; video.tsample</span>
+<span class="sd">    0.04</span>
+<span class="sd">    &gt;&gt;&gt; video.shape</span>
+<span class="sd">    (272, 640, 3, 250)</span>
+
+<span class="sd">    Load a video as a NumPy ndarray:</span>
+
+<span class="sd">    &gt;&gt;&gt; from skvideo import datasets</span>
+<span class="sd">    &gt;&gt;&gt; video = load_video(datasets.bikes(), as_timeseries=False)</span>
+<span class="sd">    &gt;&gt;&gt; video.shape</span>
+<span class="sd">    (250, 272, 640, 3)</span>
+
+<span class="sd">    Load a video as a NumPy ndarray and convert to grayscale:</span>
+
+<span class="sd">    &gt;&gt;&gt; from skvideo import datasets</span>
+<span class="sd">    &gt;&gt;&gt; video = load_video(datasets.bikes(), as_timeseries=False, as_gray=True)</span>
+<span class="sd">    &gt;&gt;&gt; video.shape</span>
+<span class="sd">    (250, 272, 640, 1)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_skvideo</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You do not have scikit-video installed. &quot;</span>
+                          <span class="s2">&quot;You can install it via $ pip install sk-video.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set the path if necessary</span>
+    <span class="n">set_skvideo_path</span><span class="p">(</span><span class="n">ffmpeg_path</span><span class="p">,</span> <span class="n">libav_path</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">skvideo</span><span class="o">.</span><span class="n">_HAS_FFMPEG</span><span class="p">:</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="s1">&#39;ffmpeg&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="s1">&#39;libav&#39;</span>
+    <span class="n">video</span> <span class="o">=</span> <span class="n">svio</span><span class="o">.</span><span class="n">vread</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">as_grey</span><span class="o">=</span><span class="n">as_gray</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Loaded video from file &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="n">d_s</span> <span class="o">=</span> <span class="s2">&quot;Loaded video has shape (T, M, N, C) = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">d_s</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">as_timeseries</span><span class="p">:</span>
+        <span class="c1"># TimeSeries has the time as the last dimensions: re-order dimensions,</span>
+        <span class="c1"># then squeeze out singleton dimensions</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">ndim</span><span class="p">),</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">video</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">video</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="n">axes</span><span class="p">))</span>
+        <span class="n">fps</span> <span class="o">=</span> <span class="n">load_video_framerate</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="n">d_s</span> <span class="o">=</span> <span class="s2">&quot;Reshaped video to shape (M, N, C, T) = &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">d_s</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">fps</span><span class="p">,</span> <span class="n">video</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Return as ndarray</span>
+        <span class="k">return</span> <span class="n">video</span></div>
+
+
+<div class="viewcode-block" id="load_video_generator"><a class="viewcode-back" href="../../reference/pulse2percept.files.html#pulse2percept.files.load_video_generator">[docs]</a><span class="k">def</span> <span class="nf">load_video_generator</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">ffmpeg_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libav_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns a generator that can load a video from file frame-by-frame.</span>
+
+<span class="sd">    This function returns a generator `reader` that can load a video from a</span>
+<span class="sd">    file frame-by-frame. Every call to `reader.nextFrame()` will return a</span>
+<span class="sd">    single frame of the video as a NumPy array with dimensions (M, N) or</span>
+<span class="sd">    (M, N, C), where M is the height, N is the width, and C is the number of</span>
+<span class="sd">    channels (will be either 1 for grayscale or 3 for RGB).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Video file name</span>
+<span class="sd">    ffmpeg_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to ffmpeg library.</span>
+<span class="sd">    libav_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to libav library.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    reader : skvideo.io.FFmpegReader | skvideo.io.LibAVReader</span>
+<span class="sd">        A Scikit-Video reader object</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; from skvideo import datasets</span>
+<span class="sd">    &gt;&gt;&gt; reader = load_video_generator(datasets.bikes())</span>
+<span class="sd">    &gt;&gt;&gt; for frame in reader.nextFrame():</span>
+<span class="sd">    ...    pass</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_skvideo</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You do not have scikit-video installed. &quot;</span>
+                          <span class="s2">&quot;You can install it via $ pip install sk-video.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set the path if necessary</span>
+    <span class="n">set_skvideo_path</span><span class="p">(</span><span class="n">ffmpeg_path</span><span class="p">,</span> <span class="n">libav_path</span><span class="p">)</span>
+
+    <span class="c1"># Try loading</span>
+    <span class="k">if</span> <span class="n">skvideo</span><span class="o">.</span><span class="n">_HAS_FFMPEG</span><span class="p">:</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">svio</span><span class="o">.</span><span class="n">FFmpegReader</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">skvideo</span><span class="o">.</span><span class="n">_HAS_AVCONV</span><span class="p">:</span>
+        <span class="n">reader</span> <span class="o">=</span> <span class="n">svio</span><span class="o">.</span><span class="n">LibAVReader</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You have neither ffmpeg nor libav (which comes &quot;</span>
+                          <span class="s2">&quot;with avprobe) installed.&quot;</span><span class="p">)</span>
+
+    <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Loaded video from file &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">reader</span></div>
+
+
+<div class="viewcode-block" id="save_video"><a class="viewcode-back" href="../../reference/pulse2percept.files.html#pulse2percept.files.save_video">[docs]</a><span class="k">def</span> <span class="nf">save_video</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+               <span class="n">ffmpeg_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libav_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Saves a video to file.</span>
+
+<span class="sd">    This function stores a NumPy ndarray to file using Scikit-Video.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : ndarray | p2p.utils.TimeSeries</span>
+<span class="sd">        Video data as a NumPy ndarray must have dimension (T, M, N, C),</span>
+<span class="sd">        (T, M, N), (M, N, C), or (M, N), where T is the number of frames,</span>
+<span class="sd">        M is the height, N is the width, and C is the number of channels (must</span>
+<span class="sd">        be either 1 for grayscale or 3 for RGB).</span>
+
+<span class="sd">        Video data as a TimeSeries object must have dimension (M, N, C, T) or</span>
+<span class="sd">        (M, N, T). The sampling step will be used as the video&#39;s frame rate.</span>
+<span class="sd">    filename : str</span>
+<span class="sd">        Video file name.</span>
+<span class="sd">    width : int, optional</span>
+<span class="sd">        Desired width of the movie.</span>
+<span class="sd">        Default: Automatically determined based on `height` (without changing</span>
+<span class="sd">        the aspect ratio). If `height` is not given, the percept&#39;s original</span>
+<span class="sd">        width is used.</span>
+<span class="sd">    height : int, optional</span>
+<span class="sd">        Desired height of the movie.</span>
+<span class="sd">        Default: Automatically determined based on `width` (without changing</span>
+<span class="sd">        the aspect ratio). If `width` is not given, the percept&#39;s original</span>
+<span class="sd">        height is used.</span>
+<span class="sd">    fps : int, optional, default: 30</span>
+<span class="sd">        Desired frame rate of the video (frames per second).</span>
+<span class="sd">    ffmpeg_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to ffmpeg library.</span>
+<span class="sd">    libav_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to libav library.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    To distinguish between 3-D inputs of shape (T, M, N) and (M, N, C), the</span>
+<span class="sd">    last dimension is checked: If it is small (&lt;= 4), it is most likely a</span>
+<span class="sd">    color channel - hence the input is interpreted as (M, N, C).</span>
+<span class="sd">    Else it is interpreted as (T, M, N).</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_skvideo</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You do not have scikit-video installed. &quot;</span>
+                          <span class="s2">&quot;You can install it via $ pip install sk-video.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_skimage</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You do not have scikit-image installed. &quot;</span>
+                          <span class="s2">&quot;You can install it via $ pip install scikit-image.&quot;</span><span class="p">)</span>
+
+    <span class="n">is_ndarray</span> <span class="o">=</span> <span class="n">is_timeseries</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="n">is_ndarray</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">):</span>
+        <span class="n">is_timeseries</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Data to be saved must be either a NumPy ndarray &#39;</span>
+                        <span class="s1">&#39;or a ``p2p.utils.TimeSeries`` object&#39;</span><span class="p">)</span>
+
+    <span class="c1"># Set the path if necessary, then choose backend</span>
+    <span class="n">set_skvideo_path</span><span class="p">(</span><span class="n">ffmpeg_path</span><span class="p">,</span> <span class="n">libav_path</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">skvideo</span><span class="o">.</span><span class="n">_HAS_FFMPEG</span><span class="p">:</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="s1">&#39;ffmpeg&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">backend</span> <span class="o">=</span> <span class="s1">&#39;libav&#39;</span>
+
+    <span class="k">if</span> <span class="n">is_ndarray</span><span class="p">:</span>
+        <span class="c1"># Use Scikit-Video utility to interpret dimensions and convert to</span>
+        <span class="c1"># (T, M, N, C)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">skvideo</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">vshape</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="n">oldheight</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">oldwidth</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">is_timeseries</span><span class="p">:</span>
+        <span class="c1"># Resample the percept to the given frame rate</span>
+        <span class="n">new_tsample</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">fps</span><span class="p">)</span>
+        <span class="n">d_s</span> <span class="o">=</span> <span class="s1">&#39;old: tsample=</span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">data</span><span class="o">.</span><span class="n">tsample</span>
+        <span class="n">d_s</span> <span class="o">+=</span> <span class="s1">&#39;, shape=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">d_s</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">new_tsample</span><span class="p">)</span>
+        <span class="n">d_s</span> <span class="o">=</span> <span class="s1">&#39;new: tsample=</span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">new_tsample</span>
+        <span class="n">d_s</span> <span class="o">+=</span> <span class="s1">&#39;, shape=&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">d_s</span><span class="p">)</span>
+        <span class="n">oldheight</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">oldwidth</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># Calculate the desired height and width</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">height</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">width</span><span class="p">:</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">oldheight</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="n">oldwidth</span>
+    <span class="k">elif</span> <span class="n">height</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">width</span><span class="p">:</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">height</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">oldheight</span> <span class="o">*</span> <span class="n">oldwidth</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">width</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">height</span><span class="p">:</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">width</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">oldwidth</span> <span class="o">*</span> <span class="n">oldheight</span><span class="p">)</span>
+    <span class="n">d_s</span> <span class="o">=</span> <span class="s2">&quot;Video scaled to (M, N, T) = (</span><span class="si">%d</span><span class="s2">, </span><span class="si">%d</span><span class="s2">, </span><span class="si">%d</span><span class="s2">).&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">length</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">d_s</span><span class="p">)</span>
+
+    <span class="c1"># Reshape and scale the data</span>
+    <span class="n">savedata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">length</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">is_ndarray</span><span class="p">:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">skimage</span><span class="o">.</span><span class="n">img_as_float</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">...</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">is_timeseries</span><span class="p">:</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">())</span>
+            <span class="n">frame</span> <span class="o">=</span> <span class="n">skimage</span><span class="o">.</span><span class="n">img_as_float</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span>
+
+        <span class="c1"># resize wants the data to be between 0 and 1</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">sic</span><span class="o">.</span><span class="n">gray2rgb</span><span class="p">(</span><span class="n">sit</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">),</span>
+                                        <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;reflect&#39;</span><span class="p">))</span>
+        <span class="n">savedata</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">frame</span> <span class="o">*</span> <span class="mf">255.0</span>
+
+    <span class="c1"># Set the input frame rate and frame size</span>
+    <span class="n">inputdict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">inputdict</span><span class="p">[</span><span class="s1">&#39;-r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fps</span><span class="p">))</span>
+    <span class="n">inputdict</span><span class="p">[</span><span class="s1">&#39;-s&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%d</span><span class="s1">x</span><span class="si">%d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">)</span>
+
+    <span class="c1"># Set the output frame rate</span>
+    <span class="n">outputdict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">outputdict</span><span class="p">[</span><span class="s1">&#39;-r&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">fps</span><span class="p">))</span>
+
+    <span class="c1"># Save data to file</span>
+    <span class="n">svio</span><span class="o">.</span><span class="n">vwrite</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">savedata</span><span class="p">,</span> <span class="n">inputdict</span><span class="o">=</span><span class="n">inputdict</span><span class="p">,</span> <span class="n">outputdict</span><span class="o">=</span><span class="n">outputdict</span><span class="p">,</span>
+                <span class="n">backend</span><span class="o">=</span><span class="n">backend</span><span class="p">)</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Saved video to file &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="n">filename</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="save_video_sidebyside"><a class="viewcode-back" href="../../reference/pulse2percept.files.html#pulse2percept.files.save_video_sidebyside">[docs]</a><span class="k">def</span> <span class="nf">save_video_sidebyside</span><span class="p">(</span><span class="n">videofile</span><span class="p">,</span> <span class="n">percept</span><span class="p">,</span> <span class="n">savefile</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+                          <span class="n">ffmpeg_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libav_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Saves both an input video and the percept to file, side-by-side.</span>
+
+<span class="sd">    This function creates a new video from an input video file and a</span>
+<span class="sd">    ``p2p.utils.TimeSeries`` object, assuming they correspond to model</span>
+<span class="sd">    input and model output, and plots them side-by-side.</span>
+<span class="sd">    Both input video and percept are resampled according to `fps`.</span>
+<span class="sd">    The percept is resized to match the height of the input video.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    videofile : str</span>
+<span class="sd">        File name of input video.</span>
+<span class="sd">    percept : p2p.utils.TimeSeries</span>
+<span class="sd">        A TimeSeries object with dimension (M, N, C, T) or (M, N, T), where</span>
+<span class="sd">        T is the number of frames, M is the height, N is the width, and C is</span>
+<span class="sd">        the number of channels.</span>
+<span class="sd">    savefile : str</span>
+<span class="sd">        File name of output video.</span>
+<span class="sd">    fps : int, optional, default: 30</span>
+<span class="sd">        Desired frame rate of output video.</span>
+<span class="sd">    ffmpeg_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to ffmpeg library.</span>
+<span class="sd">    libav_path : str, optional, default: system&#39;s default path</span>
+<span class="sd">        Path to libav library.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_skvideo</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You do not have scikit-video installed. &quot;</span>
+                          <span class="s2">&quot;You can install it via $ pip install sk-video.&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_skimage</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You do not have scikit-image installed. &quot;</span>
+                          <span class="s2">&quot;You can install it via $ pip install scikit-image.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">percept</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;`percept` must be of type p2p.utils.TimeSeries.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set the path if necessary</span>
+    <span class="n">set_skvideo_path</span><span class="p">(</span><span class="n">ffmpeg_path</span><span class="p">,</span> <span class="n">libav_path</span><span class="p">)</span>
+
+    <span class="c1"># Load video from file</span>
+    <span class="n">video</span> <span class="o">=</span> <span class="n">load_video</span><span class="p">(</span><span class="n">videofile</span><span class="p">,</span> <span class="n">as_timeseries</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ffmpeg_path</span><span class="o">=</span><span class="n">ffmpeg_path</span><span class="p">,</span>
+                       <span class="n">libav_path</span><span class="o">=</span><span class="n">libav_path</span><span class="p">)</span>
+
+    <span class="c1"># Re-sample time series to new frame rate</span>
+    <span class="n">new_tsample</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">fps</span><span class="p">)</span>
+    <span class="n">video</span> <span class="o">=</span> <span class="n">video</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">new_tsample</span><span class="p">)</span>
+    <span class="n">percept</span> <span class="o">=</span> <span class="n">percept</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">new_tsample</span><span class="p">)</span>
+
+    <span class="c1"># After re-sampling, both video and percept should have about the same</span>
+    <span class="c1"># length (up to some rounding error)</span>
+    <span class="n">combined_len</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">percept</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">percept</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Could not resample percept, len(video)=&#39;</span>
+                         <span class="s1">&#39;</span><span class="si">%d</span><span class="s1"> != len(percept)=</span><span class="si">%d</span><span class="s1">.&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                                                     <span class="n">percept</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span>
+
+    <span class="c1"># Up-scale percept to fit video dimensions</span>
+    <span class="n">pheight</span> <span class="o">=</span> <span class="n">video</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">pwidth</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">percept</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">percept</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">video</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="c1"># Show the two side-by-side</span>
+    <span class="n">combined</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">combined_len</span><span class="p">,</span> <span class="n">pheight</span><span class="p">,</span> <span class="n">video</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">pwidth</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
+    <span class="n">combined</span> <span class="o">=</span> <span class="n">combined</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">combined_len</span><span class="p">):</span>
+        <span class="n">vframe</span> <span class="o">=</span> <span class="n">skimage</span><span class="o">.</span><span class="n">img_as_float</span><span class="p">(</span><span class="n">video</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">])</span>
+        <span class="n">pframe</span> <span class="o">=</span> <span class="n">percept</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">percept</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+        <span class="n">pframe</span> <span class="o">=</span> <span class="n">skimage</span><span class="o">.</span><span class="n">img_as_float</span><span class="p">(</span><span class="n">pframe</span><span class="p">)</span>
+        <span class="n">pframe</span> <span class="o">=</span> <span class="n">sic</span><span class="o">.</span><span class="n">gray2rgb</span><span class="p">(</span><span class="n">sit</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">pframe</span><span class="p">,</span> <span class="p">(</span><span class="n">pheight</span><span class="p">,</span> <span class="n">pwidth</span><span class="p">),</span>
+                                         <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;reflect&#39;</span><span class="p">))</span>
+        <span class="n">combined</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">vframe</span><span class="p">,</span> <span class="n">pframe</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">save_video</span><span class="p">(</span><span class="n">combined</span><span class="p">,</span> <span class="n">savefile</span><span class="p">,</span> <span class="n">fps</span><span class="o">=</span><span class="n">fps</span><span class="p">,</span> <span class="n">ffmpeg_path</span><span class="o">=</span><span class="n">ffmpeg_path</span><span class="p">,</span>
+               <span class="n">libav_path</span><span class="o">=</span><span class="n">libav_path</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="find_files_like"><a class="viewcode-back" href="../../reference/pulse2percept.files.html#pulse2percept.files.find_files_like">[docs]</a><span class="k">def</span> <span class="nf">find_files_like</span><span class="p">(</span><span class="n">datapath</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Finds files in a folder whose name matches a pattern</span>
+
+<span class="sd">    This function looks for files in folder `datapath` that match a regular</span>
+<span class="sd">    expression `pattern`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    datapath : str</span>
+<span class="sd">        Path to search</span>
+<span class="sd">    pattern : str</span>
+<span class="sd">        A valid regular expression pattern</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    # Find all &#39;.npz&#39; files in parent dir</span>
+<span class="sd">    &gt;&gt;&gt; files = find_files_like(&#39;..&#39;, &#39;.*\.npz$&#39;)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># No need to import these at module level</span>
+    <span class="kn">from</span> <span class="nn">os</span> <span class="k">import</span> <span class="n">listdir</span>
+    <span class="kn">import</span> <span class="nn">re</span>
+
+    <span class="c1"># Traverse file list and look for `pattern`</span>
+    <span class="n">filenames</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">listdir</span><span class="p">(</span><span class="n">datapath</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+            <span class="n">filenames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">filenames</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Michael Beyeler, Ariel Rokem, Geoff Boynton, and Ione Fine, The University of Washington.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.4.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

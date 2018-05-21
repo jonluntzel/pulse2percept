@@ -1,0 +1,1633 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>retina &mdash; pulse2percept 0.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="pulse2percept 0.4.3 documentation" href="../index.html"/>
+        <link rel="up" title="API Reference" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pulse2percept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.html"><code class="docutils literal"><span class="pre">pulse2percept</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.api.html"><code class="docutils literal"><span class="pre">api</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.files.html"><code class="docutils literal"><span class="pre">files</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.implants.html"><code class="docutils literal"><span class="pre">implants</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">retina</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basemodel"><code class="docutils literal"><span class="pre">BaseModel</span></code></a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#grid"><code class="docutils literal"><span class="pre">Grid</span></code></a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#horsager2009"><code class="docutils literal"><span class="pre">Horsager2009</span></code></a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#nanduri2012"><code class="docutils literal"><span class="pre">Nanduri2012</span></code></a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#temporalmodel"><code class="docutils literal"><span class="pre">TemporalModel</span></code></a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#axon-contribution">axon_contribution</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#axon-dist-from-soma">axon_dist_from_soma</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#dva2ret">dva2ret</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#find-closest-axon">find_closest_axon</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jansonius">jansonius</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#jansonius2009">jansonius2009</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#make-axon-map">make_axon_map</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ret2dva">ret2dva</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.stimuli.html"><code class="docutils literal"><span class="pre">stimuli</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pulse2percept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">API Reference</a> &raquo;</li>
+        
+      <li><code class="docutils literal"><span class="pre">retina</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/pulse2percept.retina.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pulse2percept.retina">
+<span id="retina"></span><h1><code class="xref py py-mod docutils literal"><span class="pre">retina</span></code><a class="headerlink" href="#module-pulse2percept.retina" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.BaseModel" title="pulse2percept.retina.BaseModel"><code class="xref py py-obj docutils literal"><span class="pre">BaseModel</span></code></a>(**kwargs)</td>
+<td>Abstract base class for all models of temporal sensitivity.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.Grid" title="pulse2percept.retina.Grid"><code class="xref py py-obj docutils literal"><span class="pre">Grid</span></code></a>([x_range,&nbsp;y_range,&nbsp;eye,&nbsp;sampling,&nbsp;…])</td>
+<td>Represent the retinal coordinate frame</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.Horsager2009" title="pulse2percept.retina.Horsager2009"><code class="xref py py-obj docutils literal"><span class="pre">Horsager2009</span></code></a>(**kwargs)</td>
+<td>Model of temporal sensitivity (Horsager et al.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.Nanduri2012" title="pulse2percept.retina.Nanduri2012"><code class="xref py py-obj docutils literal"><span class="pre">Nanduri2012</span></code></a>(**kwargs)</td>
+<td>Model of temporal sensitivity (Nanduri et al.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.TemporalModel" title="pulse2percept.retina.TemporalModel"><code class="xref py py-obj docutils literal"><span class="pre">TemporalModel</span></code></a>(**kwargs)</td>
+<td>Latest edition of the temporal sensitivity model (experimental)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.axon_contribution" title="pulse2percept.retina.axon_contribution"><code class="xref py py-obj docutils literal"><span class="pre">axon_contribution</span></code></a>(axon_dist,&nbsp;current_spread)</td>
+<td>Determines the contribution of a single axon to the current map</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.axon_dist_from_soma" title="pulse2percept.retina.axon_dist_from_soma"><code class="xref py py-obj docutils literal"><span class="pre">axon_dist_from_soma</span></code></a>(axon,&nbsp;xg,&nbsp;yg[,&nbsp;tree])</td>
+<td>Calculates the distance to soma for every axon segment</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.dva2ret" title="pulse2percept.retina.dva2ret"><code class="xref py py-obj docutils literal"><span class="pre">dva2ret</span></code></a>(r_deg)</td>
+<td>Converts visual angles (deg) into retinal distances (um)</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.find_closest_axon" title="pulse2percept.retina.find_closest_axon"><code class="xref py py-obj docutils literal"><span class="pre">find_closest_axon</span></code></a>(pos_xy,&nbsp;axon_bundles)</td>
+<td>Finds the closest axon to a 2D point</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.jansonius" title="pulse2percept.retina.jansonius"><code class="xref py py-obj docutils literal"><span class="pre">jansonius</span></code></a>([num_cells,&nbsp;num_samples,&nbsp;center,&nbsp;…])</td>
+<td><strong>Deprecated function</strong>. Use <code class="docutils literal"><span class="pre">p2p.retina.jansonius2009</span></code> instead.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.jansonius2009" title="pulse2percept.retina.jansonius2009"><code class="xref py py-obj docutils literal"><span class="pre">jansonius2009</span></code></a>(phi0[,&nbsp;n_rho,&nbsp;rho_range,&nbsp;eye,&nbsp;…])</td>
+<td>Grows a single axon bundle based on the model by Jansonius et al.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.make_axon_map" title="pulse2percept.retina.make_axon_map"><code class="xref py py-obj docutils literal"><span class="pre">make_axon_map</span></code></a>(xg,&nbsp;yg,&nbsp;jan_x,&nbsp;jan_y[,&nbsp;…])</td>
+<td><strong>Deprecated function</strong>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.ret2dva" title="pulse2percept.retina.ret2dva"><code class="xref py py-obj docutils literal"><span class="pre">ret2dva</span></code></a>(r_um)</td>
+<td>Converts retinal distances (um) to visual angles (deg)</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="basemodel">
+<h2><a class="reference internal" href="#pulse2percept.retina.BaseModel" title="pulse2percept.retina.BaseModel"><code class="xref py py-class docutils literal"><span class="pre">BaseModel</span></code></a><a class="headerlink" href="#basemodel" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pulse2percept.retina.BaseModel">
+<em class="property">class </em><code class="descclassname">pulse2percept.retina.</code><code class="descname">BaseModel</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#BaseModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.BaseModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Abstract base class for all models of temporal sensitivity.</p>
+<p>This class provides a standard template for all models of temporal
+sensitivity.</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.BaseModel.model_cascade" title="pulse2percept.retina.BaseModel.model_cascade"><code class="xref py py-obj docutils literal"><span class="pre">model_cascade</span></code></a>(in_arr,&nbsp;pt_list,&nbsp;layers,&nbsp;use_jit)</td>
+<td>Abstract base ganglion cell model</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.BaseModel.set_kwargs" title="pulse2percept.retina.BaseModel.set_kwargs"><code class="xref py py-obj docutils literal"><span class="pre">set_kwargs</span></code></a>(warn_inexistent,&nbsp;**kwargs)</td>
+<td>Overwrite any given keyword arguments</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pulse2percept.retina.BaseModel.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#BaseModel.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.BaseModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.BaseModel.model_cascade">
+<code class="descname">model_cascade</code><span class="sig-paren">(</span><em>in_arr</em>, <em>pt_list</em>, <em>layers</em>, <em>use_jit</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#BaseModel.model_cascade"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.BaseModel.model_cascade" title="Permalink to this definition">¶</a></dt>
+<dd><p>Abstract base ganglion cell model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>in_arr: array - like</strong></p>
+<blockquote>
+<div><p>A 2D array specifying the effective current values at a particular
+spatial location(pixel); one value per retinal layer and
+electrode. Dimensions: &lt;  # layers x #electrodes&gt;</p>
+</div></blockquote>
+<p><strong>pt_list: list</strong></p>
+<blockquote>
+<div><p>List of pulse train ‘data’ containers.
+Dimensions: &lt;  # electrodes x #time points&gt;</p>
+</div></blockquote>
+<p><strong>layers: list</strong></p>
+<blockquote>
+<div><p>List of retinal layers to simulate.
+Choose from:
+- ‘OFL’: optic fiber layer
+- ‘GCL’: ganglion cell layer
+- ‘INL’: inner nuclear layer</p>
+</div></blockquote>
+<p><strong>use_jit: bool</strong></p>
+<blockquote class="last">
+<div><p>If True, applies just - in-time(JIT) compilation to expensive
+computations for additional speed - up(requires Numba).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.BaseModel.set_kwargs">
+<code class="descname">set_kwargs</code><span class="sig-paren">(</span><em>warn_inexistent</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#BaseModel.set_kwargs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.BaseModel.set_kwargs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Overwrite any given keyword arguments</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>warn_inexistent: bool</strong></p>
+<blockquote class="last">
+<div><p>If True, displays a warning message if a keyword is provided that
+is not recognized by the temporal model.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pulse2percept.retina.BaseModel.tsample">
+<code class="descname">tsample</code><em class="property"> = 5e-06</em><a class="headerlink" href="#pulse2percept.retina.BaseModel.tsample" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="grid">
+<h2><a class="reference internal" href="#pulse2percept.retina.Grid" title="pulse2percept.retina.Grid"><code class="xref py py-class docutils literal"><span class="pre">Grid</span></code></a><a class="headerlink" href="#grid" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pulse2percept.retina.Grid">
+<em class="property">class </em><code class="descclassname">pulse2percept.retina.</code><code class="descname">Grid</code><span class="sig-paren">(</span><em>x_range=(-1000.0</em>, <em>1000.0)</em>, <em>y_range=(-1000.0</em>, <em>1000.0)</em>, <em>eye=’RE’</em>, <em>sampling=25</em>, <em>n_axons=501</em>, <em>phi_range=(-180.0</em>, <em>180.0)</em>, <em>n_rho=801</em>, <em>rho_range=(4.0</em>, <em>45.0)</em>, <em>loc_od=(15.5</em>, <em>1.5)</em>, <em>sensitivity_rule=’decay’</em>, <em>contribution_rule=’max’</em>, <em>decay_const=2.0</em>, <em>powermean_exp=None</em>, <em>datapath=’.’</em>, <em>save_data=True</em>, <em>engine=’joblib’</em>, <em>scheduler=’threading’</em>, <em>n_jobs=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p>Represent the retinal coordinate frame</p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.Grid.current2effectivecurrent" title="pulse2percept.retina.Grid.current2effectivecurrent"><code class="xref py py-obj docutils literal"><span class="pre">current2effectivecurrent</span></code></a>(current_spread)</td>
+<td>Converts a current spread map to an ‘effective’ current spread map, by passing the map through a mapping of axon streaks.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.Grid.electrode_ecs" title="pulse2percept.retina.Grid.electrode_ecs"><code class="xref py py-obj docutils literal"><span class="pre">electrode_ecs</span></code></a>(implant[,&nbsp;alpha,&nbsp;n])</td>
+<td>Gather current spread and effective current spread for each electrode</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pulse2percept.retina.Grid.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>x_range=(-1000.0</em>, <em>1000.0)</em>, <em>y_range=(-1000.0</em>, <em>1000.0)</em>, <em>eye=’RE’</em>, <em>sampling=25</em>, <em>n_axons=501</em>, <em>phi_range=(-180.0</em>, <em>180.0)</em>, <em>n_rho=801</em>, <em>rho_range=(4.0</em>, <em>45.0)</em>, <em>loc_od=(15.5</em>, <em>1.5)</em>, <em>sensitivity_rule=’decay’</em>, <em>contribution_rule=’max’</em>, <em>decay_const=2.0</em>, <em>powermean_exp=None</em>, <em>datapath=’.’</em>, <em>save_data=True</em>, <em>engine=’joblib’</em>, <em>scheduler=’threading’</em>, <em>n_jobs=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Grid.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Grid.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a spatial grid representing the retinal coordinate frame</p>
+<p>This function generates the coordinate system for the retina
+and an axon map. As this can take a while, the function will
+first look for an already existing file in the directory <cite>datapath</cite>
+that was automatically created from an earlier call to this function,
+before it attempts to generate new grid from scratch.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x_range</strong> : (xlo, xhi), optional, default: xlo=-1000, xhi=1000</p>
+<blockquote>
+<div><p>Extent of the retinal coverage (microns) in horizontal dimension.</p>
+</div></blockquote>
+<p><strong>y_range</strong> : (ylo, yhi), optional, default: ylo=-1000, ylo=1000</p>
+<blockquote>
+<div><p>Extent of the retinal coverage (microns) in vertical dimension.</p>
+</div></blockquote>
+<p><strong>eye</strong> : {‘LE’, ‘RE’}, optional, default: ‘RE’</p>
+<blockquote>
+<div><p>Which eye to simulate (left/right). The optic disc is at (15, 2)
+deg in a right eye, and at (-15, 2) deg in a left eye.</p>
+</div></blockquote>
+<p><strong>sampling</strong> : float, optional, default: 25</p>
+<blockquote>
+<div><p>Spatial sampling step (microns) for the grid.</p>
+</div></blockquote>
+<p><strong>n_axons</strong> : int, optional, default: 501</p>
+<blockquote>
+<div><p>The number of axons to generate. Their start orientations <cite>phi0</cite>
+(in modified polar coordinates) will be sampled uniformly from
+<cite>phi_range</cite>.</p>
+</div></blockquote>
+<p><strong>phi_range</strong> : (lophi, hiphi), optional, default: (-180, 180)</p>
+<blockquote>
+<div><p>Range of angular positions of axon fibers at their starting points
+(polar coordinates, degrees) to be sampled uniformly with <cite>n_axons</cite>
+samples. Must be within [-180, 180].</p>
+</div></blockquote>
+<p><strong>n_rho: int, optional, default: 801</strong></p>
+<blockquote>
+<div><p>Number of sampling points along the radial axis(polar coordinates).</p>
+</div></blockquote>
+<p><strong>rho_range: (rho_min, rho_max), optional, default: (4.0, 45.0)</strong></p>
+<blockquote>
+<div><p>Lower and upper bounds for the radial position values(polar
+coordinates).</p>
+</div></blockquote>
+<p><strong>loc_od: (x_od, y_od), optional, default: (15.0, 2.0)</strong></p>
+<blockquote>
+<div><p>Location of the center of the optic disc(x, y) in Cartesian
+coordinates.</p>
+</div></blockquote>
+<p><strong>sensitivity_rule</strong> : {‘decay’, ‘Jeng2011’}, optional, default: ‘decay’</p>
+<blockquote>
+<div><p>This rule specifies how the activation of the axon differs as a
+function of distance from the soma. The following options are
+available:
+- ‘decay’:</p>
+<blockquote>
+<div><p>Axon sensitivity decays exponentially with distance. Specify
+<cite>decay_const</cite> to change the steepness of the fall-off with
+distance.</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>‘Jeng2011’:</dt>
+<dd><p class="first last">Axon sensitivity peaks near the sodium band (50um from the
+soma), then plateaus on the distal axon at roughly half of the
+peak sensitivity. See Figure 2 in Jeng, Tang, Molnar, Desai,
+and Fried (2011). The sodium channel band shapes the response
+to electric stimulation in retinal ganglion cells. J Neural Eng
+8 (036022).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>contribution_rule</strong> : {‘max’, ‘sum’, ‘mean’}, optional, default: ‘max’</p>
+<blockquote>
+<div><p>This rule specifies how the activation thresholds across all axon
+segments are combined to determine the contribution of the axon to
+the current spread. The following options are available:
+- ‘max’:</p>
+<blockquote>
+<div><p>The axon’s contribution to the current spread is equal to the
+max. sensitivity across all axon segments.</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>‘sum’:</dt>
+<dd><p class="first last">The axon’s contribution to the current spread is equal to the
+sum sensitivity across all axon segments.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>‘mean’:</dt>
+<dd><p class="first last">The axon’s contribution to the current spread is equal to the
+mean sensitivity across all axon segments. Specify
+<cite>powermean_exp</cite> to change the exponent of the generalized
+(power) mean, calculated as np.mean(x ** powermean_exp) **
+(1.0 / powermean_exp).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>decay_const</strong> : float, optional, default: 2.0</p>
+<blockquote>
+<div><p>When <cite>sensitivity_rule</cite> is set to ‘decay’, specifies the decay
+constant of the exponential fall-off.</p>
+</div></blockquote>
+<p><strong>powermean_exp</strong> : float, optional, default: None</p>
+<blockquote>
+<div><p>When <cite>sensitivity_rule</cite> is set to ‘mean’, specifies the exponent of
+the generalized (power) mean function. The power mean is calculated
+as np.mean(x ** powermean_exp) ** (1.0 / powermean_exp).</p>
+</div></blockquote>
+<p><strong>datapath</strong> : str, optional, default: current directory</p>
+<blockquote>
+<div><p>Relative path where to look for existing retina files, and where to
+store new files.</p>
+</div></blockquote>
+<p><strong>save_data</strong> : bool, optional, default: True</p>
+<blockquote>
+<div><p>Flag whether to save the data to a new file (True) or not (False).
+The file name is automatically generated from all specified input
+arguments.</p>
+</div></blockquote>
+<p><strong>engine</strong> : str, optional, default: ‘joblib’</p>
+<blockquote>
+<div><p>Which computational back end to use:
+- ‘serial’: Single-core computation
+- ‘joblib’: Parallelization via joblib (requires <a href="#id1"><span class="problematic" id="id2">`</span></a>pip install</p>
+<blockquote>
+<div><p>joblib`)</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>‘dask’: Parallelization via dask (requires <cite>pip install dask</cite>).</dt>
+<dd><p class="first last">Dask backend can be specified via <cite>threading</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>scheduler</strong> : str, optional, default: ‘threading’</p>
+<blockquote>
+<div><p>Which scheduler to use (irrelevant for ‘serial’ engine):
+- ‘threading’: a scheduler backed by a thread pool
+- ‘multiprocessing’: a scheduler backed by a process pool</p>
+</div></blockquote>
+<p><strong>n_jobs</strong> : int, optional, default: -1</p>
+<blockquote class="last">
+<div><p>Number of cores (threads) to run the model on in parallel.
+Specify -1 to use as many cores as available.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.Grid.current2effectivecurrent">
+<code class="descname">current2effectivecurrent</code><span class="sig-paren">(</span><em>current_spread</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Grid.current2effectivecurrent"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Grid.current2effectivecurrent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts a current spread map to an ‘effective’ current spread map, by
+passing the map through a mapping of axon streaks.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>cs: array</strong></p>
+<blockquote>
+<div><p>The 2D spread map in retinal space</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ecm: array</p>
+<blockquote class="last">
+<div><p>The effective current spread, a time series of the same size as
+the current map, where each pixel is the dot product of the pixel
+values in ecm along the pixels in the list in axon_map, weighted
+by the weights axon map.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.Grid.electrode_ecs">
+<code class="descname">electrode_ecs</code><span class="sig-paren">(</span><em>implant</em>, <em>alpha=14000</em>, <em>n=1.69</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Grid.electrode_ecs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Grid.electrode_ecs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gather current spread and effective current spread for each electrode
+within both the bipolar and the ganglion cell layer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>implant: implants.ElectrodeArray</strong></p>
+<blockquote>
+<div><p>An implants.ElectrodeArray instance describing the implant.</p>
+</div></blockquote>
+<p><strong>alpha: float</strong></p>
+<blockquote>
+<div><p>Current spread parameter</p>
+</div></blockquote>
+<p><strong>n: float</strong></p>
+<blockquote>
+<div><p>Current spread parameter</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ecs: contains n arrays containing the the effective current</p>
+<blockquote class="last">
+<div><p>spread within various layers
+for each electrode in the array respectively.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><code class="xref py py-obj docutils literal"><span class="pre">Electrode.current_spread</span></code></p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="horsager2009">
+<h2><a class="reference internal" href="#pulse2percept.retina.Horsager2009" title="pulse2percept.retina.Horsager2009"><code class="xref py py-class docutils literal"><span class="pre">Horsager2009</span></code></a><a class="headerlink" href="#horsager2009" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pulse2percept.retina.Horsager2009">
+<em class="property">class </em><code class="descclassname">pulse2percept.retina.</code><code class="descname">Horsager2009</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Horsager2009"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Horsager2009" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pulse2percept.retina.BaseModel" title="pulse2percept.retina.BaseModel"><code class="xref py py-class docutils literal"><span class="pre">pulse2percept.retina.BaseModel</span></code></a></p>
+<p>Model of temporal sensitivity (Horsager et al. 2009)</p>
+<p>This class implements the model of temporal sensitivty as described in:
+&gt; A Horsager, SH Greenwald, JD Weiland, MS Humayun, RJ Greenberg,
+&gt; MJ McMahon, GM Boynton, and I Fine(2009). Predicting visual sensitivity
+&gt; in retinal prosthesis patients. Investigative Ophthalmology &amp; Visual
+&gt; Science, 50(4): 1483.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tsample: float, optional, default: 0.005 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Sampling time step(seconds).</p>
+</div></blockquote>
+<p><strong>tau1: float, optional, default: 0.42 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Time decay constant for the fast leaky integrater of the ganglion
+cell layer(GCL).</p>
+</div></blockquote>
+<p><strong>tau2: float, optional, default: 45.25 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Time decay constant for the charge accumulation, has values
+between 38 - 57 ms.</p>
+</div></blockquote>
+<p><strong>tau3: float, optional, default: 26.25 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Time decay constant for the slow leaky integrator.
+Default: 26.25 / 1000 s.</p>
+</div></blockquote>
+<p><strong>epsilon: float, optional, default: 8.73</strong></p>
+<blockquote>
+<div><p>Scaling factor applied to charge accumulation(used to be called
+epsilon).</p>
+</div></blockquote>
+<p><strong>beta: float, optional, default: 3.43</strong></p>
+<blockquote class="last">
+<div><p>Power nonlinearity applied after half - rectification. The original model
+used two different values, depending on whether an experiment is at
+threshold(<a href="#id3"><span class="problematic" id="id4">`</span></a>beta`=3.43) or above threshold(<a href="#id5"><span class="problematic" id="id6">`</span></a>beta`=0.83).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.Horsager2009.calc_layer_current" title="pulse2percept.retina.Horsager2009.calc_layer_current"><code class="xref py py-obj docutils literal"><span class="pre">calc_layer_current</span></code></a>(in_arr,&nbsp;pt_list,&nbsp;layers)</td>
+<td>Calculates the effective current map of a given layer</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.Horsager2009.model_cascade" title="pulse2percept.retina.Horsager2009.model_cascade"><code class="xref py py-obj docutils literal"><span class="pre">model_cascade</span></code></a>(in_arr,&nbsp;pt_list,&nbsp;layers,&nbsp;use_jit)</td>
+<td>Horsager model cascade</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">set_kwargs</span></code>(warn_inexistent,&nbsp;**kwargs)</td>
+<td>Overwrite any given keyword arguments</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pulse2percept.retina.Horsager2009.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Horsager2009.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Horsager2009.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.Horsager2009.calc_layer_current">
+<code class="descname">calc_layer_current</code><span class="sig-paren">(</span><em>in_arr</em>, <em>pt_list</em>, <em>layers</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Horsager2009.calc_layer_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Horsager2009.calc_layer_current" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the effective current map of a given layer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>in_arr: array - like</strong></p>
+<blockquote>
+<div><p>A 2D array specifying the effective current values
+at a particular spatial location(pixel); one value
+per retinal layer and electrode.
+Dimensions: &lt;  # layers x #electrodes&gt;</p>
+</div></blockquote>
+<p><strong>pt_list: list</strong></p>
+<blockquote>
+<div><p>List of pulse train ‘data’ containers.
+Dimensions: &lt;  # electrodes x #time points&gt;</p>
+</div></blockquote>
+<p><strong>layers: list</strong></p>
+<blockquote class="last">
+<div><p>List of retinal layers to simulate.
+Choose from:
+- ‘OFL’: optic fiber layer
+- ‘GCL’: ganglion cell layer</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.Horsager2009.model_cascade">
+<code class="descname">model_cascade</code><span class="sig-paren">(</span><em>in_arr</em>, <em>pt_list</em>, <em>layers</em>, <em>use_jit</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Horsager2009.model_cascade"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Horsager2009.model_cascade" title="Permalink to this definition">¶</a></dt>
+<dd><p>Horsager model cascade</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>in_arr: array - like</strong></p>
+<blockquote>
+<div><p>A 2D array specifying the effective current values
+at a particular spatial location(pixel); one value
+per retinal layer and electrode.
+Dimensions: &lt;  # layers x #electrodes&gt;</p>
+</div></blockquote>
+<p><strong>pt_list: list</strong></p>
+<blockquote>
+<div><p>List of pulse train ‘data’ containers.
+Dimensions: &lt;  # electrodes x #time points&gt;</p>
+</div></blockquote>
+<p><strong>layers: list</strong></p>
+<blockquote>
+<div><p>List of retinal layers to simulate.
+Choose from:
+- ‘OFL’: optic fiber layer
+- ‘GCL’: ganglion cell layer</p>
+</div></blockquote>
+<p><strong>use_jit: bool</strong></p>
+<blockquote class="last">
+<div><p>If True, applies just - in-time(JIT) compilation to
+expensive computations for additional speed - up
+(requires Numba).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="nanduri2012">
+<h2><a class="reference internal" href="#pulse2percept.retina.Nanduri2012" title="pulse2percept.retina.Nanduri2012"><code class="xref py py-class docutils literal"><span class="pre">Nanduri2012</span></code></a><a class="headerlink" href="#nanduri2012" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pulse2percept.retina.Nanduri2012">
+<em class="property">class </em><code class="descclassname">pulse2percept.retina.</code><code class="descname">Nanduri2012</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Nanduri2012"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Nanduri2012" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pulse2percept.retina.BaseModel" title="pulse2percept.retina.BaseModel"><code class="xref py py-class docutils literal"><span class="pre">pulse2percept.retina.BaseModel</span></code></a></p>
+<p>Model of temporal sensitivity (Nanduri et al. 2012)</p>
+<p>This class implements the model of temporal sensitivity as described in:
+&gt; Nanduri, Fine, Horsager, Boynton, Humayun, Greenberg, Weiland(2012).
+&gt; Frequency and Amplitude Modulation Have Different Effects on the Percepts
+&gt; Elicited by Retinal Stimulation. Investigative Ophthalmology &amp; Visual
+&gt; Science January 2012, Vol.53, 205 - 214. doi: 10.1167 / iovs.11 - 8401.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tsample: float, optional, default: 0.005 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Sampling time step(seconds).</p>
+</div></blockquote>
+<p><strong>tau1: float, optional, default: 0.42 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Time decay constant for the fast leaky integrater of the ganglion
+cell layer(GCL).</p>
+</div></blockquote>
+<p><strong>tau2: float, optional, default: 45.25 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Time decay constant for the charge accumulation, has values
+between 38 - 57 ms.</p>
+</div></blockquote>
+<p><strong>tau3: float, optional, default: 26.25 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Time decay constant for the slow leaky integrator.
+Default: 26.25 / 1000 s.</p>
+</div></blockquote>
+<p><strong>eps: float, optional, default: 8.73</strong></p>
+<blockquote>
+<div><p>Scaling factor applied to charge accumulation(used to be called
+epsilon).</p>
+</div></blockquote>
+<p><strong>asymptote: float, optional, default: 14.0</strong></p>
+<blockquote>
+<div><p>Asymptote of the logistic function used in the stationary
+nonlinearity stage.</p>
+</div></blockquote>
+<p><strong>slope: float, optional, default: 3.0</strong></p>
+<blockquote>
+<div><p>Slope of the logistic function in the stationary nonlinearity
+stage.</p>
+</div></blockquote>
+<p><strong>shift: float, optional, default: 16.0</strong></p>
+<blockquote class="last">
+<div><p>Shift of the logistic function in the stationary nonlinearity
+stage.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.Nanduri2012.calc_layer_current" title="pulse2percept.retina.Nanduri2012.calc_layer_current"><code class="xref py py-obj docutils literal"><span class="pre">calc_layer_current</span></code></a>(in_arr,&nbsp;pt_list)</td>
+<td>Calculates the effective current map of a given layer</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.Nanduri2012.model_cascade" title="pulse2percept.retina.Nanduri2012.model_cascade"><code class="xref py py-obj docutils literal"><span class="pre">model_cascade</span></code></a>(in_arr,&nbsp;pt_list,&nbsp;layers,&nbsp;use_jit)</td>
+<td>Nanduri model cascade</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">set_kwargs</span></code>(warn_inexistent,&nbsp;**kwargs)</td>
+<td>Overwrite any given keyword arguments</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pulse2percept.retina.Nanduri2012.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Nanduri2012.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Nanduri2012.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.Nanduri2012.calc_layer_current">
+<code class="descname">calc_layer_current</code><span class="sig-paren">(</span><em>in_arr</em>, <em>pt_list</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Nanduri2012.calc_layer_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Nanduri2012.calc_layer_current" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the effective current map of a given layer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>in_arr: array - like</strong></p>
+<blockquote>
+<div><p>A 2D array specifying the effective current values
+at a particular spatial location(pixel); one value
+per retinal layer and electrode.
+Dimensions: &lt;  # layers x #electrodes&gt;</p>
+</div></blockquote>
+<p><strong>pt_list: list</strong></p>
+<blockquote class="last">
+<div><p>List of pulse train ‘data’ containers.
+Dimensions: &lt;  # electrodes x #time points&gt;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.Nanduri2012.model_cascade">
+<code class="descname">model_cascade</code><span class="sig-paren">(</span><em>in_arr</em>, <em>pt_list</em>, <em>layers</em>, <em>use_jit</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#Nanduri2012.model_cascade"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.Nanduri2012.model_cascade" title="Permalink to this definition">¶</a></dt>
+<dd><p>Nanduri model cascade</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>in_arr: array - like</strong></p>
+<blockquote>
+<div><p>A 2D array specifying the effective current values
+at a particular spatial location(pixel); one value
+per retinal layer and electrode.
+Dimensions: &lt; #layers x #electrodes&gt;</p>
+</div></blockquote>
+<p><strong>pt_list: list</strong></p>
+<blockquote>
+<div><p>List of pulse train ‘data’ containers.
+Dimensions: &lt; #electrodes &lt; #time points &gt; &gt;</p>
+</div></blockquote>
+<p><strong>layers: list</strong></p>
+<blockquote>
+<div><p>List of retinal layers to simulate.
+Choose from:
+- ‘OFL’: optic fiber layer
+- ‘GCL’: ganglion cell layer</p>
+</div></blockquote>
+<p><strong>use_jit: bool</strong></p>
+<blockquote class="last">
+<div><p>If True, applies just - in-time(JIT) compilation to
+expensive computations for additional speed - up
+(requires Numba).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="temporalmodel">
+<h2><a class="reference internal" href="#pulse2percept.retina.TemporalModel" title="pulse2percept.retina.TemporalModel"><code class="xref py py-class docutils literal"><span class="pre">TemporalModel</span></code></a><a class="headerlink" href="#temporalmodel" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pulse2percept.retina.TemporalModel">
+<em class="property">class </em><code class="descclassname">pulse2percept.retina.</code><code class="descname">TemporalModel</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#TemporalModel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.TemporalModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pulse2percept.retina.BaseModel" title="pulse2percept.retina.BaseModel"><code class="xref py py-class docutils literal"><span class="pre">pulse2percept.retina.BaseModel</span></code></a></p>
+<p>Latest edition of the temporal sensitivity model (experimental)</p>
+<p>This class implements the latest version of the temporal sensitivity
+model(experimental). As such, the model might still change from version
+to version. For more stable implementations, please refer to other,
+published models(see <cite>p2p.retina.SUPPORTED_TEMPORAL_MODELS</cite>).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tsample: float, optional, default: 0.005 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Sampling time step(seconds).</p>
+</div></blockquote>
+<p><strong>tau_gcl: float, optional, default: 45.25 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Time decay constant for the fast leaky integrater of the ganglion
+cell layer(GCL).
+This is only important in combination with epiretinal electrode
+arrays.</p>
+</div></blockquote>
+<p><strong>tau_inl: float, optional, default: 18.0 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Time decay constant for the fast leaky integrater of the inner
+nuclear layer(INL); i.e., bipolar cell layer.
+This is only important in combination with subretinal electrode
+arrays.</p>
+</div></blockquote>
+<p><strong>tau_ca: float, optional, default: 45.25 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Time decay constant for the charge accumulation, has values
+between 38 - 57 ms.</p>
+</div></blockquote>
+<p><strong>scale_ca: float, optional, default: 42.1</strong></p>
+<blockquote>
+<div><p>Scaling factor applied to charge accumulation(used to be called
+epsilon).</p>
+</div></blockquote>
+<p><strong>tau_slow: float, optional, default: 26.25 / 1000 seconds</strong></p>
+<blockquote>
+<div><p>Time decay constant for the slow leaky integrator.</p>
+</div></blockquote>
+<p><strong>scale_slow: float, optional, default: 1150.0</strong></p>
+<blockquote>
+<div><p>Scaling factor applied to the output of the cascade, to make
+output values interpretable brightness values &gt;= 0.</p>
+</div></blockquote>
+<p><strong>lweight: float, optional, default: 0.636</strong></p>
+<blockquote>
+<div><p>Relative weight applied to responses from bipolar cells(weight
+of ganglion cells is 1).</p>
+</div></blockquote>
+<p><strong>aweight: float, optional, default: 0.5</strong></p>
+<blockquote>
+<div><p>Relative weight applied to anodic charges(weight of cathodic
+charges is 1).</p>
+</div></blockquote>
+<p><strong>slope: float, optional, default: 3.0</strong></p>
+<blockquote>
+<div><p>Slope of the logistic function in the stationary nonlinearity
+stage.</p>
+</div></blockquote>
+<p><strong>shift: float, optional, default: 15.0</strong></p>
+<blockquote class="last">
+<div><p>Shift of the logistic function in the stationary nonlinearity
+stage.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.TemporalModel.calc_layer_current" title="pulse2percept.retina.TemporalModel.calc_layer_current"><code class="xref py py-obj docutils literal"><span class="pre">calc_layer_current</span></code></a>(ecs_item,&nbsp;pt_list,&nbsp;layers)</td>
+<td>For a given pixel, calculates the effective current for each retinal</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.TemporalModel.charge_accumulation" title="pulse2percept.retina.TemporalModel.charge_accumulation"><code class="xref py py-obj docutils literal"><span class="pre">charge_accumulation</span></code></a>(ecm)</td>
+<td>Calculates the charge accumulation</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.TemporalModel.fast_response" title="pulse2percept.retina.TemporalModel.fast_response"><code class="xref py py-obj docutils literal"><span class="pre">fast_response</span></code></a>(stim,&nbsp;gamma,&nbsp;method[,&nbsp;use_jit])</td>
+<td>Fast response function</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.TemporalModel.model_cascade" title="pulse2percept.retina.TemporalModel.model_cascade"><code class="xref py py-obj docutils literal"><span class="pre">model_cascade</span></code></a>(ecs_item,&nbsp;pt_list,&nbsp;layers,&nbsp;use_jit)</td>
+<td>The Temporal Sensitivity model</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">set_kwargs</span></code>(warn_inexistent,&nbsp;**kwargs)</td>
+<td>Overwrite any given keyword arguments</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.retina.TemporalModel.slow_response" title="pulse2percept.retina.TemporalModel.slow_response"><code class="xref py py-obj docutils literal"><span class="pre">slow_response</span></code></a>(stim)</td>
+<td>Slow response function</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.retina.TemporalModel.stationary_nonlinearity" title="pulse2percept.retina.TemporalModel.stationary_nonlinearity"><code class="xref py py-obj docutils literal"><span class="pre">stationary_nonlinearity</span></code></a>(stim)</td>
+<td>Stationary nonlinearity</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pulse2percept.retina.TemporalModel.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#TemporalModel.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.TemporalModel.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.TemporalModel.calc_layer_current">
+<code class="descname">calc_layer_current</code><span class="sig-paren">(</span><em>ecs_item</em>, <em>pt_list</em>, <em>layers</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#TemporalModel.calc_layer_current"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.TemporalModel.calc_layer_current" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>For a given pixel, calculates the effective current for each retinal</dt>
+<dd>layer over time</dd>
+</dl>
+<p>This function operates at a single - pixel level: It calculates the
+combined current from all electrodes through a spatial location
+over time. This calculation is performed per retinal layer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ecs_item: array - like</strong></p>
+<blockquote>
+<div><p>A 2D array specifying the effective current values at a
+particular spatial location(pixel); one value per retinal
+layer and electrode.
+Dimensions: &lt;  # layers x #electrodes&gt;</p>
+</div></blockquote>
+<p><strong>pt_list: list</strong></p>
+<blockquote>
+<div><p>A list of PulseTrain <cite>data</cite> containers.
+Dimensions: &lt;  # electrodes x #time points&gt;</p>
+</div></blockquote>
+<p><strong>layers: list</strong></p>
+<blockquote class="last">
+<div><p>List of retinal layers to simulate. Choose from:
+- ‘OFL’: optic fiber layer
+- ‘GCL’: ganglion cell layer
+- ‘INL’: inner nuclear layer</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.TemporalModel.charge_accumulation">
+<code class="descname">charge_accumulation</code><span class="sig-paren">(</span><em>ecm</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#TemporalModel.charge_accumulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.TemporalModel.charge_accumulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the charge accumulation</p>
+<p>Charge accumulation is calculated on the effective input current
+<cite>ecm</cite>, as opposed to the output of the fast response stage.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ecm: array - like</strong></p>
+<blockquote class="last">
+<div><p>A 2D array specifying the effective current values at a particular
+spatial location(pixel); one value per retinal layer, averaged
+over all electrodes through that pixel.
+Dimensions: &lt;  # layers x #time points&gt;</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.TemporalModel.fast_response">
+<code class="descname">fast_response</code><span class="sig-paren">(</span><em>stim</em>, <em>gamma</em>, <em>method</em>, <em>use_jit=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#TemporalModel.fast_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.TemporalModel.fast_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Fast response function</p>
+<p>Convolve a stimulus <cite>stim</cite> with a temporal low - pass filter <cite>gamma</cite>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>stim: array</strong></p>
+<blockquote>
+<div><p>Temporal signal to process, stim(r, t) in Nanduri et al. (2012).</p>
+</div></blockquote>
+<p><strong>use_jit: bool, optional</strong></p>
+<blockquote>
+<div><p>If True (default), use numba just - in-time compilation.</p>
+</div></blockquote>
+<p><strong>usefft: bool, optional</strong></p>
+<blockquote>
+<div><p>If False (default), use sparseconv, else fftconvolve.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Fast response, b2(r, t) in Nanduri et al. (2012).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The function utils.sparseconv can be much faster than np.convolve and
+signal.fftconvolve if <cite>stim</cite> is sparse and much longer than the
+convolution kernel.
+The output is not converted to a TimeSeries object for speedup.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.TemporalModel.model_cascade">
+<code class="descname">model_cascade</code><span class="sig-paren">(</span><em>ecs_item</em>, <em>pt_list</em>, <em>layers</em>, <em>use_jit</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#TemporalModel.model_cascade"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.TemporalModel.model_cascade" title="Permalink to this definition">¶</a></dt>
+<dd><p>The Temporal Sensitivity model</p>
+<p>This function applies the model of temporal sensitivity to a single
+retinal cell(i.e., a pixel). The model is inspired by Nanduri
+et al. (2012), with some extended functionality.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>ecs_item: array - like</strong></p>
+<blockquote>
+<div><p>A 2D array specifying the effective current values at a particular
+spatial location(pixel); one value per retinal layer and
+electrode.
+Dimensions: &lt;  # layers x #electrodes&gt;</p>
+</div></blockquote>
+<p><strong>pt_list: list</strong></p>
+<blockquote>
+<div><p>A list of PulseTrain <cite>data</cite> containers.
+Dimensions: &lt;  # electrodes x #time points&gt;</p>
+</div></blockquote>
+<p><strong>layers: list</strong></p>
+<blockquote>
+<div><p>List of retinal layers to simulate. Choose from:
+- ‘OFL’: optic fiber layer
+- ‘GCL’: ganglion cell layer
+- ‘INL’: inner nuclear layer</p>
+</div></blockquote>
+<p><strong>use_jit: bool</strong></p>
+<blockquote>
+<div><p>If True, applies just - in-time(JIT) compilation to expensive
+computations for additional speed - up(requires Numba).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Brightness response over time. In Nanduri et al. (2012), the</p>
+<p>maximum value of this signal was used to represent the perceptual</p>
+<p class="last">brightness of a particular location in space, B(r).</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.TemporalModel.slow_response">
+<code class="descname">slow_response</code><span class="sig-paren">(</span><em>stim</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#TemporalModel.slow_response"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.TemporalModel.slow_response" title="Permalink to this definition">¶</a></dt>
+<dd><p>Slow response function</p>
+<p>Convolve a stimulus <cite>stim</cite> with a low - pass filter(3 - stage gamma)
+with time constant self.tau_slow.
+This is Box 5 in Nanduri et al. (2012).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>stim: array</strong></p>
+<blockquote>
+<div><p>Temporal signal to process, stim(r, t) in Nanduri et al. (2012)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Slow response, b5(r, t) in Nanduri et al. (2012).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>This is by far the most computationally involved part of the perceptual
+sensitivity model.
+Conversion to TimeSeries is avoided for the sake of speedup.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.retina.TemporalModel.stationary_nonlinearity">
+<code class="descname">stationary_nonlinearity</code><span class="sig-paren">(</span><em>stim</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#TemporalModel.stationary_nonlinearity"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.TemporalModel.stationary_nonlinearity" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stationary nonlinearity</p>
+<p>Nonlinearly rescale a temporal signal <cite>stim</cite> across space and time,
+based on a sigmoidal function dependent on the maximum value of <cite>stim</cite>.
+This is Box 4 in Nanduri et al. (2012).
+The parameter values of the asymptote, slope, and shift of the logistic
+function are given by self.asymptote, self.slope, and self.shift,
+respectively.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>stim: array</strong></p>
+<blockquote>
+<div><p>Temporal signal to process, stim(r, t) in Nanduri et al. (2012).</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Rescaled signal, b4(r, t) in Nanduri et al. (2012).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>Conversion to TimeSeries is avoided for the sake of speedup.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="axon-contribution">
+<h2>axon_contribution<a class="headerlink" href="#axon-contribution" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.retina.axon_contribution">
+<code class="descclassname">pulse2percept.retina.</code><code class="descname">axon_contribution</code><span class="sig-paren">(</span><em>axon_dist</em>, <em>current_spread</em>, <em>sensitivity_rule=’decay’</em>, <em>contribution_rule=’max’</em>, <em>min_contribution=0.01</em>, <em>decay_const=2.0</em>, <em>powermean_exp=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#axon_contribution"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.axon_contribution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines the contribution of a single axon to the current map</p>
+<p>This function determines the contribution of a single axon to the current
+map based on a sensitivity rule (i.e., how the activation threshold of the
+axon differs as a function of distance from the soma), and an contribution
+rule (i.e., how the different activation thresholds along the axon are
+combined to determine the axon contribution).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>axon_dist</strong> : tuple (indices, distances)</p>
+<blockquote>
+<div><p>A tuple containing a list of coordinates (indices into the retinal
+coordinates mesh grid) and distances for each axon segment.</p>
+</div></blockquote>
+<p><strong>current_spread</strong> : 2D array</p>
+<blockquote>
+<div><p>A 2D current spread map that must have the same dimensions as the
+<cite>xg</cite>, <cite>yg</cite> meshgrid.</p>
+</div></blockquote>
+<p><strong>sensitivity_rule</strong> : {‘decay’, ‘Jeng2011’}, optional, default: ‘decay’</p>
+<blockquote>
+<div><p>This rule specifies how the activation of the axon differs as a
+function of distance from the soma. The following options are
+available:
+- ‘decay’:</p>
+<blockquote>
+<div><p>Axon sensitivity decays exponentially with distance. Specify
+<cite>decay_const</cite> to change the steepness of the fall-off with
+distance.</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>‘Jeng2011’:</dt>
+<dd><p class="first last">Axon sensitivity peaks near the sodium band (50um from the soma),
+then plateaus on the distal axon at roughly half of the peak
+sensitivity. See Figure 2 in Jeng, Tang, Molnar, Desai, and Fried
+(2011). The sodium channel band shapes the response to electric
+stimulation in retinal ganglion cells. J Neural Eng 8 (036022).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>contribution_rule</strong> : {‘max’, ‘sum’, ‘power-mean’}, optional, default: ‘max’</p>
+<blockquote>
+<div><p>This rule specifies how the activation thresholds across all axon
+segments are combined to determine the contribution of the axon to the
+current spread. The following options are available:
+- ‘max’:</p>
+<blockquote>
+<div><p>The axon’s contribution to the current spread is equal to the max.
+sensitivity across all axon segments.</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>‘sum’:</dt>
+<dd><p class="first last">The axon’s contribution to the current spread is equal to the sum
+sensitivity across all axon segments.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>‘mean’:</dt>
+<dd><p class="first last">The axon’s contribution to the current spread is equal to the mean
+sensitivity across all axon segments. Specify <cite>powermean_exp</cite> to
+change the exponent of the generalized (power) mean, calculated as
+np.mean(x ** powermean_exp) ** (1.0 / powermean_exp).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>min_contribution</strong> : float, optional, default: 0.01</p>
+<blockquote>
+<div><p>Current contributions below this value will not be counted.</p>
+</div></blockquote>
+<p><strong>decay_const</strong> : float, optional, default: 2.0</p>
+<blockquote>
+<div><p>When <cite>sensitivity_rule</cite> is set to ‘decay’, specifies the decay constant
+of the exponential fall-off.</p>
+</div></blockquote>
+<p><strong>powermean_exp</strong> : float, optional, default: None</p>
+<blockquote class="last">
+<div><p>When <cite>sensitivity_rule</cite> is set to ‘mean’, specifies the exponent of the
+generalized (power) mean function. The power mean is calculated as
+np.mean(x ** powermean_exp) ** (1.0 / powermean_exp).</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="axon-dist-from-soma">
+<h2>axon_dist_from_soma<a class="headerlink" href="#axon-dist-from-soma" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.retina.axon_dist_from_soma">
+<code class="descclassname">pulse2percept.retina.</code><code class="descname">axon_dist_from_soma</code><span class="sig-paren">(</span><em>axon</em>, <em>xg</em>, <em>yg</em>, <em>tree=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#axon_dist_from_soma"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.axon_dist_from_soma" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates the distance to soma for every axon segment</p>
+<p>For every segment of an axon, this function calculates the distance to the
+soma. The 2D coordinates of the axon are snapped to the grid using a
+nearest-neighbor tree structure.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>axon: Nx2 array</strong></p>
+<blockquote>
+<div><p>A single axon, where axon[0, :] contains the (x, y) coordinates of the
+location closest to the soma, and all subsequent rows move the axon
+away from the soma towards the optic disc.</p>
+</div></blockquote>
+<p><strong>xg, yg: array</strong></p>
+<blockquote>
+<div><p>meshgrid of pixel locations in units of visual angle sp</p>
+</div></blockquote>
+<p><strong>tree</strong> : spat.cKDTree class instance, optional, default: train on <cite>xg</cite>, <cite>yg</cite></p>
+<blockquote>
+<div><p>A kd-tree trained on <cite>xg</cite>, <cite>yg</cite> for quick nearest-neighbor lookup.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>idx_cs</strong> : list</p>
+<blockquote>
+<div><p>Axon segment locations snapped to the grid, returned as a list of
+indices into the flat <cite>xg</cite>, <cite>yg</cite> meshgrid.</p>
+</div></blockquote>
+<p><strong>dist</strong> : list</p>
+<blockquote class="last">
+<div><p>Axon segment distances to the soma</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="dva2ret">
+<h2>dva2ret<a class="headerlink" href="#dva2ret" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.retina.dva2ret">
+<code class="descclassname">pulse2percept.retina.</code><code class="descname">dva2ret</code><span class="sig-paren">(</span><em>r_deg</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#dva2ret"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.dva2ret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts visual angles (deg) into retinal distances (um)</p>
+<p>This function converts a retinal distancefrom the optic axis(um)
+into degrees of visual angle.
+Source: Eq. A5 in Watson(2014), J Vis 14(7): 15, 1 - 17</p>
+</dd></dl>
+
+</div>
+<div class="section" id="find-closest-axon">
+<h2>find_closest_axon<a class="headerlink" href="#find-closest-axon" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.retina.find_closest_axon">
+<code class="descclassname">pulse2percept.retina.</code><code class="descname">find_closest_axon</code><span class="sig-paren">(</span><em>pos_xy</em>, <em>axon_bundles</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#find_closest_axon"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.find_closest_axon" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finds the closest axon to a 2D point</p>
+<p>This function finds the axon bundle closest to a 2D point <cite>pos_xy</cite> on the
+retina, and returns an axon that originates in <cite>pos_xy</cite> and projects to
+the optic disc.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>pos_xy: (x, y)</strong></p>
+<blockquote>
+<div><p>2D Cartesian coordinates of a location on the retina.</p>
+</div></blockquote>
+<p><strong>axon_bundles: list of Nx2 arrays</strong></p>
+<blockquote>
+<div><p>List of two - dimensional arrays containing the(x, y) coordinates of
+each axon bundle. The first row of each axon bundle is assumed to
+be closest to the optic disc, and subsequent row indices move the axon
+away from the optic disc.</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">axon: Nx2 array</p>
+<blockquote class="last">
+<div><p>A single axon, where axon[0, :] contains the (x, y) coordinates of the
+location closest to <cite>pos_xy</cite>, and all subsequent rows move the axon
+closer to the optic disc.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The order of axonal segments in the output argument <cite>axon</cite> is reversed
+with respect to the axonal segments in the input argument <cite>axon_bundles</cite>.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="jansonius">
+<h2>jansonius<a class="headerlink" href="#jansonius" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.retina.jansonius">
+<code class="descclassname">pulse2percept.retina.</code><code class="descname">jansonius</code><span class="sig-paren">(</span><em>num_cells=500</em>, <em>num_samples=801</em>, <em>center=array([15</em>, <em>2])</em>, <em>rot=0.0</em>, <em>scale=1</em>, <em>bs=-1.9</em>, <em>bi=0.5</em>, <em>r0=4</em>, <em>max_samples=45</em>, <em>ang_range=60</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#jansonius"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.jansonius" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Deprecated function</strong>. Use <code class="docutils literal"><span class="pre">p2p.retina.jansonius2009</span></code> instead.</p>
+<p>Function <code class="docutils literal"><span class="pre">jansonius</span></code> is deprecated since version 0.3, and will be removed in version 0.4. Use <code class="docutils literal"><span class="pre">p2p.retina.jansonius2009</span></code> instead.</p>
+<p>Implements the model of retinal axonal pathways by generating a
+matrix of(x, y) positions.</p>
+<p>Assumes that the fovea is at[0, 0]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>num_cells: int</strong></p>
+<blockquote>
+<div><p>Number of axons(cells).</p>
+</div></blockquote>
+<p><strong>num_samples: int</strong></p>
+<blockquote>
+<div><p>Number of samples per axon(spatial resolution).</p>
+</div></blockquote>
+<p><strong>Center: 2 item array</strong></p>
+<blockquote>
+<div><p>The location of the optic disk in dva.</p>
+</div></blockquote>
+<p><strong>See:</strong></p>
+<p><strong>Jansonius et al., 2009, A mathematical description of nerve fiber bundle</strong></p>
+<p class="last"><strong>trajectories and their variability in the human retina, Vision Research</strong></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="jansonius2009">
+<h2>jansonius2009<a class="headerlink" href="#jansonius2009" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.retina.jansonius2009">
+<code class="descclassname">pulse2percept.retina.</code><code class="descname">jansonius2009</code><span class="sig-paren">(</span><em>phi0</em>, <em>n_rho=801</em>, <em>rho_range=(4.0</em>, <em>45.0)</em>, <em>eye=’RE’</em>, <em>loc_od=(15.5</em>, <em>1.5)</em>, <em>beta_sup=-1.9</em>, <em>beta_inf=0.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#jansonius2009"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.jansonius2009" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grows a single axon bundle based on the model by Jansonius et al. (2009)</p>
+<p>This function generates the trajectory of a single nerve fiber bundle
+based on the mathematical model described in <a class="reference internal" href="#r14" id="id7">[R14]</a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>phi0: float</strong></p>
+<blockquote>
+<div><p>Angular position of the axon at its starting point(polar
+coordinates, degrees). Must be within[-180, 180].</p>
+</div></blockquote>
+<p><strong>n_rho: int, optional, default: 801</strong></p>
+<blockquote>
+<div><p>Number of sampling points along the radial axis(polar coordinates).</p>
+</div></blockquote>
+<p><strong>rho_range: (rho_min, rho_max), optional, default: (4.0, 45.0)</strong></p>
+<blockquote>
+<div><p>Lower and upper bounds for the radial position values(polar
+coordinates).</p>
+</div></blockquote>
+<p><strong>loc_od: (x_od, y_od), optional, default: (15.5, 1.5)</strong></p>
+<blockquote>
+<div><p>Location of the center of the optic disc(x, y) in Cartesian
+coordinates. In a right (left) eye, we should have x &gt; 0 (x &lt; 0).</p>
+</div></blockquote>
+<p><strong>beta_sup: float, optional, default: -1.9</strong></p>
+<blockquote>
+<div><p>Scalar value for the superior retina(see Eq. 5, <cite>eta_s</cite> in the
+paper).</p>
+</div></blockquote>
+<p><strong>beta_inf: float, optional, default: 0.5</strong></p>
+<blockquote>
+<div><p>Scalar value for the inferior retina(see Eq. 6, <cite>eta_i</cite> in the
+paper.)</p>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">ax_pos: Nx2 array</p>
+<blockquote class="last">
+<div><p>Returns a two - dimensional array of axonal positions, where
+ax_pos[0, :] contains the(x, y) coordinates of the axon segment closest
+to the optic disc, and aubsequent row indices move the axon away from
+the optic disc. Number of rows is at most <cite>n_rho</cite>, but might be smaller
+if the axon crosses the meridian.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<p>The study did not include axons with phi0 in [-60, 60] deg.</p>
+<table class="docutils citation" frame="void" id="r14" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[R14]</a></td><td>N. M. Jansionus, J. Nevalainen, B. Selig, L.M. Zangwill, P.A.
+Sample, W. M. Budde, J. B. Jonas, W. A. Lagrèze, P. J. Airaksinen,
+R. Vonthein, L. A. Levin, J. Paetzold, and U. Schieferd, “A
+mathematical description of nerve fiber bundle trajectories and
+their variability in the human retina. Vision Research 49:2157-2163,
+2009.</td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="make-axon-map">
+<h2>make_axon_map<a class="headerlink" href="#make-axon-map" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.retina.make_axon_map">
+<code class="descclassname">pulse2percept.retina.</code><code class="descname">make_axon_map</code><span class="sig-paren">(</span><em>xg</em>, <em>yg</em>, <em>jan_x</em>, <em>jan_y</em>, <em>axon_lambda=1</em>, <em>min_weight=0.001</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#make_axon_map"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.make_axon_map" title="Permalink to this definition">¶</a></dt>
+<dd><p><strong>Deprecated function</strong>.</p>
+<p>Function <code class="docutils literal"><span class="pre">make_axon_map</span></code> is deprecated since version 0.3, and will be removed in version 0.4.</p>
+<p>Retinal axon map</p>
+<p>Generates a mapping of how each pixel in the retina space is affected
+by stimulation of underlying ganglion cell axons.
+Parameters
+———-
+xg, yg: array</p>
+<blockquote>
+<div>meshgrid of pixel locations in units of visual angle sp</div></blockquote>
+<dl class="docutils">
+<dt>axon_lambda: float</dt>
+<dd>space constant for how effective stimulation(or ‘weight’) falls off
+with distance from the pixel back along the axon toward the optic disc
+(default 1 degree)</dd>
+<dt>min_weight: float</dt>
+<dd>minimum weight falloff.  default .001</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">axon_id: list</p>
+<blockquote>
+<div><p>a list, for every pixel, of the index into the pixel in xg, yg space,
+along the underlying axonal pathway.</p>
+</div></blockquote>
+<p>axon_weight: list</p>
+<blockquote class="last">
+<div><p>a list, for every pixel, of the axon weight into the pixel in xg, yg
+space</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="ret2dva">
+<h2>ret2dva<a class="headerlink" href="#ret2dva" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.retina.ret2dva">
+<code class="descclassname">pulse2percept.retina.</code><code class="descname">ret2dva</code><span class="sig-paren">(</span><em>r_um</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/retina.html#ret2dva"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.retina.ret2dva" title="Permalink to this definition">¶</a></dt>
+<dd><p>Converts retinal distances (um) to visual angles (deg)</p>
+<p>This function converts an eccentricity measurement on the retinal
+surface(in micrometers), measured from the optic axis, into degrees
+of visual angle.
+Source: Eq. A6 in Watson(2014), J Vis 14(7): 15, 1 - 17</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Michael Beyeler, Ariel Rokem, Geoff Boynton, and Ione Fine, The University of Washington.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.4.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

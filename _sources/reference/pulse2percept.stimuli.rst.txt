@@ -1,0 +1,70 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+:mod:`stimuli`
+==============
+.. automodule:: pulse2percept.stimuli
+
+.. currentmodule:: pulse2percept.stimuli
+.. autosummary::
+
+   BiphasicPulse
+   MonophasicPulse
+   PulseTrain
+   image2pulsetrain
+   parse_pulse_trains
+   video2pulsetrain
+
+
+.. currentmodule:: pulse2percept.stimuli
+
+
+:class:`BiphasicPulse`
+~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. autoclass:: BiphasicPulse
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+  .. automethod:: __init__
+
+
+:class:`MonophasicPulse`
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. autoclass:: MonophasicPulse
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+  .. automethod:: __init__
+
+
+:class:`PulseTrain`
+~~~~~~~~~~~~~~~~~~~
+
+
+.. autoclass:: PulseTrain
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+  .. automethod:: __init__
+
+image2pulsetrain
+~~~~~~~~~~~~~~~~
+
+.. autofunction:: image2pulsetrain
+
+parse_pulse_trains
+~~~~~~~~~~~~~~~~~~
+
+.. autofunction:: parse_pulse_trains
+
+video2pulsetrain
+~~~~~~~~~~~~~~~~
+
+.. autofunction:: video2pulsetrain
+

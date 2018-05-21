@@ -1,0 +1,65 @@
+.. AUTO-GENERATED FILE -- DO NOT EDIT!
+
+:mod:`implants`
+===============
+.. automodule:: pulse2percept.implants
+
+.. currentmodule:: pulse2percept.implants
+.. autosummary::
+
+   ArgusI
+   ArgusII
+   Electrode
+   ElectrodeArray
+
+
+.. currentmodule:: pulse2percept.implants
+
+
+:class:`ArgusI`
+~~~~~~~~~~~~~~~
+
+
+.. autoclass:: ArgusI
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+  .. automethod:: __init__
+
+
+:class:`ArgusII`
+~~~~~~~~~~~~~~~~
+
+
+.. autoclass:: ArgusII
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+  .. automethod:: __init__
+
+
+:class:`Electrode`
+~~~~~~~~~~~~~~~~~~
+
+
+.. autoclass:: Electrode
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+  .. automethod:: __init__
+
+
+:class:`ElectrodeArray`
+~~~~~~~~~~~~~~~~~~~~~~~
+
+
+.. autoclass:: ElectrodeArray
+  :members:
+  :undoc-members:
+  :show-inheritance:
+
+  .. automethod:: __init__
+

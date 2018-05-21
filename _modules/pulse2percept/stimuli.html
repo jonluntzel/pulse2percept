@@ -1,0 +1,748 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pulse2percept.stimuli &mdash; pulse2percept 0.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../genindex.html"/>
+        <link rel="search" title="Search" href="../../search.html"/>
+    <link rel="top" title="pulse2percept 0.4.3 documentation" href="../../index.html"/>
+        <link rel="up" title="Module code" href="../index.html"/> 
+
+  
+  <script src="../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> pulse2percept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../reference/index.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">pulse2percept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+      <li>pulse2percept.stimuli</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for pulse2percept.stimuli</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*implants -*-</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="sd">Functions for creating retinal implants</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">import</span> <span class="nn">copy</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+
+<span class="kn">from</span> <span class="nn">pulse2percept</span> <span class="k">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">pulse2percept</span> <span class="k">import</span> <span class="n">implants</span>
+<span class="kn">from</span> <span class="nn">pulse2percept</span> <span class="k">import</span> <span class="n">files</span>
+
+<span class="c1"># Rather than trying to import these all over, try once and then remember</span>
+<span class="c1"># by setting a flag.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">skimage.io</span> <span class="k">as</span> <span class="nn">sio</span>
+    <span class="kn">import</span> <span class="nn">skimage.transform</span> <span class="k">as</span> <span class="nn">sit</span>
+    <span class="kn">import</span> <span class="nn">skimage.color</span> <span class="k">as</span> <span class="nn">sic</span>
+    <span class="n">has_skimage</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="k">except</span> <span class="p">(</span><span class="ne">ImportError</span><span class="p">,</span> <span class="ne">AttributeError</span><span class="p">):</span>
+    <span class="c1"># Might also raise &quot;dict object has no attribute &#39;io&#39;&quot;</span>
+    <span class="n">has_skimage</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<div class="viewcode-block" id="MonophasicPulse"><a class="viewcode-back" href="../../reference/pulse2percept.stimuli.html#pulse2percept.stimuli.MonophasicPulse">[docs]</a><span class="k">class</span> <span class="nc">MonophasicPulse</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">):</span>
+
+<div class="viewcode-block" id="MonophasicPulse.__init__"><a class="viewcode-back" href="../../reference/pulse2percept.stimuli.html#pulse2percept.stimuli.MonophasicPulse.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ptype</span><span class="p">,</span> <span class="n">pdur</span><span class="p">,</span> <span class="n">tsample</span><span class="p">,</span> <span class="n">delay_dur</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">stim_dur</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A pulse with a single phase</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ptype : {&#39;anodic&#39;, &#39;cathodic&#39;}</span>
+<span class="sd">            Pulse type. Anodic pulses have positive current amplitude,</span>
+<span class="sd">            cathodic pulses have negative amplitude.</span>
+<span class="sd">        pdur : float</span>
+<span class="sd">            Pulse duration (s).</span>
+<span class="sd">        tsample : float</span>
+<span class="sd">            Sampling time step (s).</span>
+<span class="sd">        delay_dur : float, optional</span>
+<span class="sd">            Pulse delay (s). Pulse will be zero-padded (prepended) to deliver</span>
+<span class="sd">            the pulse only after `delay_dur` milliseconds. Default: 0.</span>
+<span class="sd">        stim_dur : float, optional</span>
+<span class="sd">            Stimulus duration (ms). Pulse will be zero-padded (appended) to fit</span>
+<span class="sd">            the stimulus duration. Default: No additional zero padding,</span>
+<span class="sd">            `stim_dur` is `pdur`+`delay_dur`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">tsample</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;tsample must be a non-negative float.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">stim_dur</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stim_dur</span> <span class="o">=</span> <span class="n">pdur</span> <span class="o">+</span> <span class="n">delay_dur</span>
+
+        <span class="c1"># Convert durations to number of samples</span>
+        <span class="n">pulse_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">pdur</span> <span class="o">/</span> <span class="n">tsample</span><span class="p">))</span>
+        <span class="n">delay_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">delay_dur</span> <span class="o">/</span> <span class="n">tsample</span><span class="p">))</span>
+        <span class="n">stim_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">stim_dur</span> <span class="o">/</span> <span class="n">tsample</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">ptype</span> <span class="o">==</span> <span class="s1">&#39;cathodic&#39;</span><span class="p">:</span>
+            <span class="n">pulse</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pulse_size</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">ptype</span> <span class="o">==</span> <span class="s1">&#39;anodic&#39;</span><span class="p">:</span>
+            <span class="n">pulse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pulse_size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Acceptable values for `ptype` are &#39;anodic&#39;, &quot;</span>
+                             <span class="s2">&quot;&#39;cathodic&#39;.&quot;</span><span class="p">)</span>
+
+        <span class="n">pulse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">delay_size</span><span class="p">),</span> <span class="n">pulse</span><span class="p">,</span>
+                                <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">stim_size</span><span class="p">)))</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tsample</span><span class="p">,</span> <span class="n">pulse</span><span class="p">[:</span><span class="n">stim_size</span><span class="p">])</span></div></div>
+
+
+<div class="viewcode-block" id="BiphasicPulse"><a class="viewcode-back" href="../../reference/pulse2percept.stimuli.html#pulse2percept.stimuli.BiphasicPulse">[docs]</a><span class="k">class</span> <span class="nc">BiphasicPulse</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">):</span>
+
+<div class="viewcode-block" id="BiphasicPulse.__init__"><a class="viewcode-back" href="../../reference/pulse2percept.stimuli.html#pulse2percept.stimuli.BiphasicPulse.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ptype</span><span class="p">,</span> <span class="n">pdur</span><span class="p">,</span> <span class="n">tsample</span><span class="p">,</span> <span class="n">interphase_dur</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A charge-balanced pulse with a cathodic and anodic phase</span>
+
+<span class="sd">        A single biphasic pulse with duration `pdur` per phase,</span>
+<span class="sd">        separated by `interphase_dur` is returned.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        ptype : {&#39;cathodicfirst&#39;, &#39;anodicfirst&#39;}</span>
+<span class="sd">            A cathodic-first pulse has the negative phase first, whereas an</span>
+<span class="sd">            anodic-first pulse has the positive phase first.</span>
+<span class="sd">        pdur : float</span>
+<span class="sd">            Duration of single (positive or negative) pulse phase in seconds.</span>
+<span class="sd">        tsample : float</span>
+<span class="sd">            Sampling time step in seconds.</span>
+<span class="sd">        interphase_dur : float, optional</span>
+<span class="sd">            Duration of inter-phase interval (between positive and negative</span>
+<span class="sd">            pulse) in seconds. Default: 0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">tsample</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;tsample must be a non-negative float.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Get the two monophasic pulses</span>
+        <span class="n">on</span> <span class="o">=</span> <span class="n">MonophasicPulse</span><span class="p">(</span><span class="s1">&#39;anodic&#39;</span><span class="p">,</span> <span class="n">pdur</span><span class="p">,</span> <span class="n">tsample</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pdur</span><span class="p">)</span>
+        <span class="n">off</span> <span class="o">=</span> <span class="n">MonophasicPulse</span><span class="p">(</span><span class="s1">&#39;cathodic&#39;</span><span class="p">,</span> <span class="n">pdur</span><span class="p">,</span> <span class="n">tsample</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">pdur</span><span class="p">)</span>
+
+        <span class="c1"># Insert interphase gap if necessary</span>
+        <span class="n">gap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">interphase_dur</span> <span class="o">/</span> <span class="n">tsample</span><span class="p">)))</span>
+
+        <span class="c1"># Order the pulses</span>
+        <span class="k">if</span> <span class="n">ptype</span> <span class="o">==</span> <span class="s1">&#39;cathodicfirst&#39;</span><span class="p">:</span>
+            <span class="c1"># has negative current first</span>
+            <span class="n">pulse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">off</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">gap</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">pulse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pulse</span><span class="p">,</span> <span class="n">on</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">ptype</span> <span class="o">==</span> <span class="s1">&#39;anodicfirst&#39;</span><span class="p">:</span>
+            <span class="n">pulse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">on</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">gap</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">pulse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pulse</span><span class="p">,</span> <span class="n">off</span><span class="o">.</span><span class="n">data</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Acceptable values for `type` are &quot;</span>
+                             <span class="s2">&quot;&#39;anodicfirst&#39; or &#39;cathodicfirst&#39;&quot;</span><span class="p">)</span>
+        <span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tsample</span><span class="p">,</span> <span class="n">pulse</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="PulseTrain"><a class="viewcode-back" href="../../reference/pulse2percept.stimuli.html#pulse2percept.stimuli.PulseTrain">[docs]</a><span class="k">class</span> <span class="nc">PulseTrain</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">):</span>
+
+<div class="viewcode-block" id="PulseTrain.__init__"><a class="viewcode-back" href="../../reference/pulse2percept.stimuli.html#pulse2percept.stimuli.PulseTrain.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tsample</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">dur</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">delay</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                 <span class="n">pulse_dur</span><span class="o">=</span><span class="mf">0.45</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">interphase_dur</span><span class="o">=</span><span class="mf">0.45</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span>
+                 <span class="n">pulsetype</span><span class="o">=</span><span class="s1">&#39;cathodicfirst&#39;</span><span class="p">,</span>
+                 <span class="n">pulseorder</span><span class="o">=</span><span class="s1">&#39;pulsefirst&#39;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;A train of biphasic pulses</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        tsample : float</span>
+<span class="sd">            Sampling time step (seconds).</span>
+<span class="sd">        freq : float, optional, default: 20 Hz</span>
+<span class="sd">            Frequency of the pulse envelope (Hz).</span>
+<span class="sd">        amp : float, optional, default: 20 uA</span>
+<span class="sd">            Max amplitude of the pulse train in micro-amps.</span>
+<span class="sd">        dur : float, optional, default: 0.5 seconds</span>
+<span class="sd">            Stimulus duration in seconds.</span>
+<span class="sd">        delay : float, optional, default: 0</span>
+<span class="sd">            Delay until stimulus on-set in seconds.</span>
+<span class="sd">        pulse_dur : float, optional, default: 0.45 ms</span>
+<span class="sd">            Single-pulse duration in seconds.</span>
+<span class="sd">        interphase_duration : float, optional, default: 0.45 ms</span>
+<span class="sd">            Single-pulse interphase duration (the time between the positive</span>
+<span class="sd">            and negative phase) in seconds.</span>
+<span class="sd">        pulsetype : str, optional, default: &#39;cathodicfirst&#39;</span>
+<span class="sd">            Pulse type {&#39;cathodicfirst&#39; | &#39;anodicfirst&#39;}, where</span>
+<span class="sd">            &#39;cathodicfirst&#39; has the negative phase first.</span>
+<span class="sd">        pulseorder : str, optional, default: &#39;pulsefirst&#39;</span>
+<span class="sd">            Pulse order {&#39;gapfirst&#39; | &#39;pulsefirst&#39;}, where</span>
+<span class="sd">            &#39;pulsefirst&#39; has the pulse first, followed by the gap.</span>
+<span class="sd">            &#39;gapfirst&#39; has it the other way round.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">tsample</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;tsample must be a non-negative float.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Stimulus size given by `dur`</span>
+        <span class="n">stim_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">dur</span><span class="p">)</span> <span class="o">/</span> <span class="n">tsample</span><span class="p">))</span>
+
+        <span class="c1"># Make sure input is non-trivial, else return all zeros</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">freq</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">amp</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tsample</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">stim_size</span><span class="p">))</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Envelope size (single pulse + gap) given by `freq`</span>
+        <span class="c1"># Note that this can be larger than `stim_size`, but we will trim</span>
+        <span class="c1"># the stimulus to proper length at the very end.</span>
+        <span class="n">envelope_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span> <span class="o">/</span> <span class="n">tsample</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">envelope_size</span> <span class="o">&gt;</span> <span class="n">stim_size</span><span class="p">:</span>
+            <span class="n">debug_s</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Envelope size (</span><span class="si">%d</span><span class="s2">) clipped to &quot;</span>
+                       <span class="s2">&quot;stimulus size (</span><span class="si">%d</span><span class="s2">) for freq=</span><span class="si">%f</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">envelope_size</span><span class="p">,</span>
+                                                           <span class="n">stim_size</span><span class="p">,</span>
+                                                           <span class="n">freq</span><span class="p">))</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">debug_s</span><span class="p">)</span>
+            <span class="n">envelope_size</span> <span class="o">=</span> <span class="n">stim_size</span>
+
+        <span class="c1"># Delay given by `delay`</span>
+        <span class="n">delay_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span> <span class="o">/</span> <span class="n">tsample</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">delay_size</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Delay cannot be negative.&quot;</span><span class="p">)</span>
+        <span class="n">delay</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">delay_size</span><span class="p">)</span>
+
+        <span class="c1"># Single pulse given by `pulse_dur`</span>
+        <span class="n">pulse</span> <span class="o">=</span> <span class="n">amp</span> <span class="o">*</span> <span class="n">BiphasicPulse</span><span class="p">(</span><span class="n">pulsetype</span><span class="p">,</span> <span class="n">pulse_dur</span><span class="p">,</span> <span class="n">tsample</span><span class="p">,</span>
+                                    <span class="n">interphase_dur</span><span class="p">)</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">pulse_size</span> <span class="o">=</span> <span class="n">pulse</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">if</span> <span class="n">pulse_size</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Single pulse must fit within 1/freq interval.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Then gap is used to fill up what&#39;s left</span>
+        <span class="n">gap_size</span> <span class="o">=</span> <span class="n">envelope_size</span> <span class="o">-</span> <span class="p">(</span><span class="n">delay_size</span> <span class="o">+</span> <span class="n">pulse_size</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">gap_size</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Envelope (</span><span class="si">%d</span><span class="s2">) can&#39;t fit pulse (</span><span class="si">%d</span><span class="s2">) + delay (</span><span class="si">%d</span><span class="s2">)&quot;</span> <span class="o">%</span>
+                          <span class="p">(</span><span class="n">envelope_size</span><span class="p">,</span> <span class="n">pulse_size</span><span class="p">,</span> <span class="n">delay_size</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pulse and delay must fit within 1/freq &quot;</span>
+                             <span class="s2">&quot;interval.&quot;</span><span class="p">)</span>
+        <span class="n">gap</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">gap_size</span><span class="p">)</span>
+
+        <span class="n">pulse_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">dur</span> <span class="o">*</span> <span class="n">freq</span><span class="p">))):</span>
+            <span class="k">if</span> <span class="n">pulseorder</span> <span class="o">==</span> <span class="s1">&#39;pulsefirst&#39;</span><span class="p">:</span>
+                <span class="n">pulse_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pulse_train</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">pulse</span><span class="p">,</span>
+                                              <span class="n">gap</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">pulseorder</span> <span class="o">==</span> <span class="s1">&#39;gapfirst&#39;</span><span class="p">:</span>
+                <span class="n">pulse_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pulse_train</span><span class="p">,</span> <span class="n">delay</span><span class="p">,</span> <span class="n">gap</span><span class="p">,</span>
+                                              <span class="n">pulse</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Acceptable values for `pulseorder` are &quot;</span>
+                                 <span class="s2">&quot;&#39;pulsefirst&#39; or &#39;gapfirst&#39;&quot;</span><span class="p">)</span>
+
+        <span class="c1"># If `freq` is not a nice number, the resulting pulse train might not</span>
+        <span class="c1"># have the desired length</span>
+        <span class="k">if</span> <span class="n">pulse_train</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="n">stim_size</span><span class="p">:</span>
+            <span class="n">fill_size</span> <span class="o">=</span> <span class="n">stim_size</span> <span class="o">-</span> <span class="n">pulse_train</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">pulse_train</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">((</span><span class="n">pulse_train</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">fill_size</span><span class="p">)),</span>
+                                         <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Trim to correct length (takes care of too long arrays, too)</span>
+        <span class="n">pulse_train</span> <span class="o">=</span> <span class="n">pulse_train</span><span class="p">[:</span><span class="n">stim_size</span><span class="p">]</span>
+
+        <span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">tsample</span><span class="p">,</span> <span class="n">pulse_train</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="image2pulsetrain"><a class="viewcode-back" href="../../reference/pulse2percept.stimuli.html#pulse2percept.stimuli.image2pulsetrain">[docs]</a><span class="k">def</span> <span class="nf">image2pulsetrain</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">implant</span><span class="p">,</span> <span class="n">coding</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">,</span> <span class="n">valrange</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
+                     <span class="n">max_contrast</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">const_val</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">tsample</span><span class="o">=</span><span class="mf">0.005</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">dur</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">pulsedur</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">,</span>
+                     <span class="n">interphasedur</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">pulsetype</span><span class="o">=</span><span class="s1">&#39;cathodicfirst&#39;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts an image into a series of pulse trains</span>
+
+<span class="sd">    This function creates an input stimulus from an RGB or grayscale image.</span>
+<span class="sd">    The image is down-sampled to fit the spatial layout of the implant</span>
+<span class="sd">    (currently supported are ArgusI and ArgusII arrays).</span>
+<span class="sd">    Requires Scikit-Image.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    img : str|array_like</span>
+<span class="sd">        An input image, either a valid filename (string) or a numpy array</span>
+<span class="sd">        (row x col x channels).</span>
+<span class="sd">    implant : p2p.implants.ElectrodeArray</span>
+<span class="sd">        An ElectrodeArray object that describes the implant.</span>
+<span class="sd">    coding : {&#39;amplitude&#39;, &#39;frequency&#39;}, optional</span>
+<span class="sd">        A string describing the coding scheme:</span>
+<span class="sd">        - &#39;amplitude&#39;: Image intensity is linearly converted to a current</span>
+<span class="sd">                       amplitude between `valrange[0]` and `valrange[1]`.</span>
+<span class="sd">                       Frequency is held constant at `const_freq`.</span>
+<span class="sd">        - &#39;frequency&#39;: Image intensity is linearly converted to a pulse</span>
+<span class="sd">                       frequency between `valrange[0]` and `valrange[1]`.</span>
+<span class="sd">                       Amplitude is held constant at `const_amp`.</span>
+<span class="sd">        Default: &#39;amplitude&#39;</span>
+<span class="sd">    valrange : list, optional</span>
+<span class="sd">        Range of stimulation values to be used (If `coding` is &#39;amplitude&#39;,</span>
+<span class="sd">        specifies min and max current; if `coding` is &#39;frequency&#39;, specifies</span>
+<span class="sd">        min and max frequency).</span>
+<span class="sd">        Default: [0, 50]</span>
+<span class="sd">    max_contrast : bool, optional</span>
+<span class="sd">        Flag wether to maximize image contrast (True) or not (False).</span>
+<span class="sd">        Default: False</span>
+<span class="sd">    const_val : float, optional</span>
+<span class="sd">        For frequency coding: The constant amplitude value to be used for all</span>
+<span class="sd">        pulse trains. For amplitude coding: The constant frequency value to</span>
+<span class="sd">        be used for all pulse trains.</span>
+<span class="sd">        Default: 20</span>
+<span class="sd">    invert : bool, optional</span>
+<span class="sd">        Flag whether to invert the grayscale values of the image (True) or</span>
+<span class="sd">        not (False).</span>
+<span class="sd">        Default: False</span>
+<span class="sd">    tsample : float, optional</span>
+<span class="sd">        Sampling time step (seconds). Default: 0.005 / 1000 seconds.</span>
+<span class="sd">    dur : float, optional</span>
+<span class="sd">        Stimulus duration (seconds). Default: 0.5 seconds.</span>
+<span class="sd">    pulsedur : float, optional</span>
+<span class="sd">        Duration of single (positive or negative) pulse phase in seconds.</span>
+<span class="sd">    interphasedur : float, optional</span>
+<span class="sd">        Duration of inter-phase interval (between positive and negative</span>
+<span class="sd">        pulse) in seconds.</span>
+<span class="sd">    pulsetype : {&#39;cathodicfirst&#39;, &#39;anodicfirst&#39;}, optional</span>
+<span class="sd">        A cathodic-first pulse has the negative phase first, whereas an</span>
+<span class="sd">        anodic-first pulse has the positive phase first.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pulses : list</span>
+<span class="sd">        A list of p2p.stimuli.PulseTrain objects, one for each electrode in</span>
+<span class="sd">        the implant.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">has_skimage</span><span class="p">:</span>
+        <span class="c1"># We don&#39;t want to repeatedly import Scikit-Image. This would (e.g.)</span>
+        <span class="c1"># unnecessarily slow down `video2pulsetrain`.</span>
+        <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;You do not have scikit-image installed. &quot;</span>
+                          <span class="s2">&quot;You can install it via $ pip install scikit-image.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Make sure range of values is valid</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">valrange</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">valrange</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">valrange</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">isargus1</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">implant</span><span class="p">,</span> <span class="n">implants</span><span class="o">.</span><span class="n">ArgusI</span><span class="p">)</span>
+    <span class="n">isargus2</span> <span class="o">=</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">implant</span><span class="p">,</span> <span class="n">implants</span><span class="o">.</span><span class="n">ArgusII</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">isargus1</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">isargus2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;For now, implant must be of type implants.ArgusI or &quot;</span>
+                        <span class="s2">&quot;implants.ArgusII.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">six</span><span class="o">.</span><span class="n">string_types</span><span class="p">):</span>
+        <span class="c1"># Load image from filename</span>
+        <span class="n">img_orig</span> <span class="o">=</span> <span class="n">sio</span><span class="o">.</span><span class="n">imread</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">as_grey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Loaded file &#39;</span><span class="si">%s</span><span class="s2">&#39;.&quot;</span> <span class="o">%</span> <span class="n">img</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">img</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c1"># Grayscale</span>
+            <span class="n">img_orig</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Assume RGB, convert to grayscale</span>
+            <span class="k">assert</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span>
+            <span class="n">img_orig</span> <span class="o">=</span> <span class="n">sic</span><span class="o">.</span><span class="n">rgb2gray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">img</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+
+    <span class="c1"># Make sure all pixels are between 0 and 1</span>
+    <span class="k">if</span> <span class="n">img_orig</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">:</span>
+        <span class="n">img_orig</span> <span class="o">/=</span> <span class="mf">255.0</span>
+
+    <span class="c1"># Let Scikit-Image do the resampling: Downscale image to fit array</span>
+    <span class="c1"># Use mode &#39;reflect&#39; for np.pad: Pads with the reflection of the vector</span>
+    <span class="c1"># mirrored on the first and last values of the vector along each axis.</span>
+    <span class="k">if</span> <span class="n">isargus1</span><span class="p">:</span>
+        <span class="n">img_stim</span> <span class="o">=</span> <span class="n">sit</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img_orig</span><span class="p">,</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;reflect&#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">isargus2</span><span class="p">:</span>
+        <span class="n">img_stim</span> <span class="o">=</span> <span class="n">sit</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">img_orig</span><span class="p">,</span> <span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;reflect&#39;</span><span class="p">)</span>
+
+    <span class="c1"># If specified, invert the mapping of grayscale values:</span>
+    <span class="k">if</span> <span class="n">invert</span><span class="p">:</span>
+        <span class="n">img_stim</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">-</span> <span class="n">img_stim</span>
+
+    <span class="c1"># If specified, maximize the contrast in the image:</span>
+    <span class="k">if</span> <span class="n">max_contrast</span><span class="p">:</span>
+        <span class="n">img_stim</span> <span class="o">-=</span> <span class="n">img_stim</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">img_stim</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">img_stim</span> <span class="o">/=</span> <span class="n">img_stim</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+
+    <span class="c1"># With all pixels between 0 and 1, now scale to valrange</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">img_stim</span> <span class="o">&gt;=</span> <span class="mf">0.0</span><span class="p">)</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">img_stim</span> <span class="o">&lt;=</span> <span class="mf">1.0</span><span class="p">)</span>
+    <span class="n">img_stim</span> <span class="o">=</span> <span class="n">img_stim</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">valrange</span><span class="p">)</span> <span class="o">+</span> <span class="n">valrange</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">assert</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">img_stim</span> <span class="o">&gt;=</span> <span class="n">valrange</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="ow">and</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">img_stim</span> <span class="o">&lt;=</span> <span class="n">valrange</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">stim</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">px</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">ndenumerate</span><span class="p">(</span><span class="n">img_stim</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">coding</span> <span class="o">==</span> <span class="s1">&#39;amplitude&#39;</span><span class="p">:</span>
+            <span class="n">amp</span> <span class="o">=</span> <span class="n">px</span>
+            <span class="n">freq</span> <span class="o">=</span> <span class="n">const_val</span>
+        <span class="k">elif</span> <span class="n">coding</span> <span class="o">==</span> <span class="s1">&#39;frequency&#39;</span><span class="p">:</span>
+            <span class="n">amp</span> <span class="o">=</span> <span class="n">const_val</span>
+            <span class="n">freq</span> <span class="o">=</span> <span class="n">px</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;Acceptable values for `coding` are &#39;amplitude&#39; or&quot;</span>
+            <span class="n">e_s</span> <span class="o">+=</span> <span class="s2">&quot;&#39;frequency&#39;.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">PulseTrain</span><span class="p">(</span><span class="n">tsample</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="n">freq</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="n">amp</span><span class="p">,</span> <span class="n">dur</span><span class="o">=</span><span class="n">dur</span><span class="p">,</span>
+                        <span class="n">pulse_dur</span><span class="o">=</span><span class="n">pulsedur</span><span class="p">,</span>
+                        <span class="n">interphase_dur</span><span class="o">=</span><span class="n">interphasedur</span><span class="p">,</span>
+                        <span class="n">pulsetype</span><span class="o">=</span><span class="n">pulsetype</span><span class="p">)</span>
+        <span class="n">stim</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pt</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">stim</span></div>
+
+
+<div class="viewcode-block" id="video2pulsetrain"><a class="viewcode-back" href="../../reference/pulse2percept.stimuli.html#pulse2percept.stimuli.video2pulsetrain">[docs]</a><span class="k">def</span> <span class="nf">video2pulsetrain</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">implant</span><span class="p">,</span> <span class="n">framerate</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+                     <span class="n">coding</span><span class="o">=</span><span class="s1">&#39;amplitude&#39;</span><span class="p">,</span> <span class="n">valrange</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">50</span><span class="p">],</span>
+                     <span class="n">max_contrast</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">const_val</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">tsample</span><span class="o">=</span><span class="mf">0.005</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">pulsedur</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">,</span>
+                     <span class="n">interphasedur</span><span class="o">=</span><span class="mf">0.5</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">pulsetype</span><span class="o">=</span><span class="s1">&#39;cathodicfirst&#39;</span><span class="p">,</span>
+                     <span class="n">ffmpeg_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">libav_path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Converts a video into a series of pulse trains</span>
+
+<span class="sd">    This function creates an input stimulus from a video.</span>
+<span class="sd">    Every frame of the video is passed to `image2pulsetrain`, where it is</span>
+<span class="sd">    down-sampled to fit the spatial layout of the implant (currently supported</span>
+<span class="sd">    are ArgusI and ArgusII arrays).</span>
+<span class="sd">    In this mapping, rows of the image correspond to rows in the implant</span>
+<span class="sd">    (top row, Argus I: A1 B1 C1 D1, Argus II: A1 A2 ... A10).</span>
+
+<span class="sd">    Requires Scikit-Image and Scikit-Video.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    img : str|array_like</span>
+<span class="sd">        An input image, either a valid filename (string) or a numpy array</span>
+<span class="sd">        (row x col x channels).</span>
+<span class="sd">    implant : p2p.implants.ElectrodeArray</span>
+<span class="sd">        An ElectrodeArray object that describes the implant.</span>
+<span class="sd">    coding : {&#39;amplitude&#39;, &#39;frequency&#39;}, optional</span>
+<span class="sd">        A string describing the coding scheme:</span>
+<span class="sd">        - &#39;amplitude&#39;: Image intensity is linearly converted to a current</span>
+<span class="sd">                       amplitude between `valrange[0]` and `valrange[1]`.</span>
+<span class="sd">                       Frequency is held constant at `const_freq`.</span>
+<span class="sd">        - &#39;frequency&#39;: Image intensity is linearly converted to a pulse</span>
+<span class="sd">                       frequency between `valrange[0]` and `valrange[1]`.</span>
+<span class="sd">                       Amplitude is held constant at `const_amp`.</span>
+<span class="sd">        Default: &#39;amplitude&#39;</span>
+<span class="sd">    valrange : list, optional</span>
+<span class="sd">        Range of stimulation values to be used (If `coding` is &#39;amplitude&#39;,</span>
+<span class="sd">        specifies min and max current; if `coding` is &#39;frequency&#39;, specifies</span>
+<span class="sd">        min and max frequency).</span>
+<span class="sd">        Default: [0, 50]</span>
+<span class="sd">    max_contrast : bool, optional</span>
+<span class="sd">        Flag wether to maximize image contrast (True) or not (False).</span>
+<span class="sd">        Default: False</span>
+<span class="sd">    const_val : float, optional</span>
+<span class="sd">        For frequency coding: The constant amplitude value to be used for all</span>
+<span class="sd">        pulse trains. For amplitude coding: The constant frequency value to</span>
+<span class="sd">        be used for all pulse trains.</span>
+<span class="sd">        Default: 20</span>
+<span class="sd">    invert : bool, optional</span>
+<span class="sd">        Flag whether to invert the grayscale values of the image (True) or</span>
+<span class="sd">        not (False).</span>
+<span class="sd">        Default: False</span>
+<span class="sd">    tsample : float, optional</span>
+<span class="sd">        Sampling time step (seconds). Default: 0.005 / 1000 seconds.</span>
+<span class="sd">    dur : float, optional</span>
+<span class="sd">        Stimulus duration (seconds). Default: 0.5 seconds.</span>
+<span class="sd">    pulsedur : float, optional</span>
+<span class="sd">        Duration of single (positive or negative) pulse phase in seconds.</span>
+<span class="sd">    interphasedur : float, optional</span>
+<span class="sd">        Duration of inter-phase interval (between positive and negative</span>
+<span class="sd">        pulse) in seconds.</span>
+<span class="sd">    pulsetype : {&#39;cathodicfirst&#39;, &#39;anodicfirst&#39;}, optional</span>
+<span class="sd">        A cathodic-first pulse has the negative phase first, whereas an</span>
+<span class="sd">        anodic-first pulse has the positive phase first.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pulses : list</span>
+<span class="sd">        A list of p2p.stimuli.PulseTrain objects, one for each electrode in</span>
+<span class="sd">        the implant.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Load generator to read video frame-by-frame</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">load_video_generator</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">ffmpeg_path</span><span class="p">,</span> <span class="n">libav_path</span><span class="p">)</span>
+
+    <span class="c1"># Temporarily increase logger level to suppress info messages</span>
+    <span class="n">current_level</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">getEffectiveLevel</span><span class="p">()</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">WARN</span><span class="p">)</span>
+
+    <span class="c1"># Convert the desired framerate to a duration (seconds)</span>
+    <span class="n">dur</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">framerate</span>
+
+    <span class="c1"># Read one frame at a time, and append to previous frames</span>
+    <span class="n">video</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">img</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">nextFrame</span><span class="p">():</span>
+        <span class="n">frame</span> <span class="o">=</span> <span class="n">image2pulsetrain</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">implant</span><span class="p">,</span> <span class="n">coding</span><span class="o">=</span><span class="n">coding</span><span class="p">,</span>
+                                 <span class="n">valrange</span><span class="o">=</span><span class="n">valrange</span><span class="p">,</span> <span class="n">max_contrast</span><span class="o">=</span><span class="n">max_contrast</span><span class="p">,</span>
+                                 <span class="n">const_val</span><span class="o">=</span><span class="n">const_val</span><span class="p">,</span> <span class="n">invert</span><span class="o">=</span><span class="n">invert</span><span class="p">,</span>
+                                 <span class="n">tsample</span><span class="o">=</span><span class="n">tsample</span><span class="p">,</span> <span class="n">dur</span><span class="o">=</span><span class="n">dur</span><span class="p">,</span> <span class="n">pulsedur</span><span class="o">=</span><span class="n">pulsedur</span><span class="p">,</span>
+                                 <span class="n">interphasedur</span><span class="o">=</span><span class="n">interphasedur</span><span class="p">,</span>
+                                 <span class="n">pulsetype</span><span class="o">=</span><span class="n">pulsetype</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">video</span><span class="p">:</span>
+            <span class="c1"># List of pulse trains: Append new frame to each element</span>
+            <span class="p">[</span><span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">f</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span><span class="p">,</span> <span class="n">f</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">video</span><span class="p">,</span> <span class="n">frame</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Initialize with a list of pulse trains</span>
+            <span class="n">video</span> <span class="o">=</span> <span class="n">frame</span>
+
+    <span class="c1"># Restore logger level</span>
+    <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">current_level</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">video</span></div>
+
+
+<div class="viewcode-block" id="parse_pulse_trains"><a class="viewcode-back" href="../../reference/pulse2percept.stimuli.html#pulse2percept.stimuli.parse_pulse_trains">[docs]</a><span class="k">def</span> <span class="nf">parse_pulse_trains</span><span class="p">(</span><span class="n">stim</span><span class="p">,</span> <span class="n">implant</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Parse input stimulus and convert to list of pulse trains</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stim : utils.TimeSeries|list|dict</span>
+<span class="sd">        There are several ways to specify an input stimulus:</span>
+
+<span class="sd">        - For a single-electrode array, pass a single pulse train; i.e., a</span>
+<span class="sd">          single utils.TimeSeries object.</span>
+<span class="sd">        - For a multi-electrode array, pass a list of pulse trains, where</span>
+<span class="sd">          every pulse train is a utils.TimeSeries object; i.e., one pulse</span>
+<span class="sd">          train per electrode.</span>
+<span class="sd">        - For a multi-electrode array, specify all electrodes that should</span>
+<span class="sd">          receive non-zero pulse trains by name in a dictionary. The key</span>
+<span class="sd">          of each element is the electrode name, the value is a pulse train.</span>
+<span class="sd">          Example: stim = {&#39;E1&#39;: pt, &#39;stim&#39;: pt}, where &#39;E1&#39; and &#39;stim&#39; are</span>
+<span class="sd">          electrode names, and `pt` is a utils.TimeSeries object.</span>
+<span class="sd">    implant : p2p.implants.ElectrodeArray</span>
+<span class="sd">        A p2p.implants.ElectrodeArray object that describes the implant.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    A list of pulse trains; one pulse train per electrode.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Parse input stimulus</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stim</span><span class="p">,</span> <span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">):</span>
+        <span class="c1"># `stim` is a single object: This is only allowed if the implant</span>
+        <span class="c1"># has only one electrode</span>
+        <span class="k">if</span> <span class="n">implant</span><span class="o">.</span><span class="n">num_electrodes</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;More than 1 electrode given, use a list of pulse trains&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">stim</span><span class="p">)]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">stim</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="c1"># `stim` is a dictionary: Look up electrode names and assign pulse</span>
+        <span class="c1"># trains, fill the rest with zeros</span>
+
+        <span class="c1"># Get right size from first dict element, then generate all zeros</span>
+        <span class="n">idx0</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">stim</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">pt_zero</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">TimeSeries</span><span class="p">(</span><span class="n">stim</span><span class="p">[</span><span class="n">idx0</span><span class="p">]</span><span class="o">.</span><span class="n">tsample</span><span class="p">,</span>
+                                   <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">stim</span><span class="p">[</span><span class="n">idx0</span><span class="p">]</span><span class="o">.</span><span class="n">data</span><span class="p">))</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="p">[</span><span class="n">pt_zero</span><span class="p">]</span> <span class="o">*</span> <span class="n">implant</span><span class="o">.</span><span class="n">num_electrodes</span>
+
+        <span class="c1"># Iterate over dictionary and assign non-zero pulse trains to</span>
+        <span class="c1"># corresponding electrodes</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">stim</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">el_idx</span> <span class="o">=</span> <span class="n">implant</span><span class="o">.</span><span class="n">get_index</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">el_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">pt</span><span class="p">[</span><span class="n">el_idx</span><span class="p">]</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;Could not find electrode with name &#39;</span><span class="si">%s</span><span class="s2">&#39;&quot;</span> <span class="o">%</span> <span class="n">key</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Else, `stim` must be a list of pulse trains, one for each electrode</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">stim</span><span class="p">)</span> <span class="o">!=</span> <span class="n">implant</span><span class="o">.</span><span class="n">num_electrodes</span><span class="p">:</span>
+            <span class="n">e_s</span> <span class="o">=</span> <span class="s2">&quot;Number of pulse trains must match number of electrodes&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">e_s</span><span class="p">)</span>
+        <span class="n">pt</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">stim</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pt</span></div>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Michael Beyeler, Ariel Rokem, Geoff Boynton, and Ione Fine, The University of Washington.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../',
+            VERSION:'0.4.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

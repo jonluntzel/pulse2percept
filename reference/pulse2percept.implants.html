@@ -1,0 +1,955 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>implants &mdash; pulse2percept 0.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="pulse2percept 0.4.3 documentation" href="../index.html"/>
+        <link rel="up" title="API Reference" href="index.html"/>
+        <link rel="prev" title="files" href="pulse2percept.files.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pulse2percept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.html"><code class="docutils literal"><span class="pre">pulse2percept</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.api.html"><code class="docutils literal"><span class="pre">api</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.files.html"><code class="docutils literal"><span class="pre">files</span></code></a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">implants</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#argusi"><code class="docutils literal"><span class="pre">ArgusI</span></code></a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#argusii"><code class="docutils literal"><span class="pre">ArgusII</span></code></a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#electrode"><code class="docutils literal"><span class="pre">Electrode</span></code></a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#electrodearray"><code class="docutils literal"><span class="pre">ElectrodeArray</span></code></a><ul class="simple">
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.retina.html"><code class="docutils literal"><span class="pre">retina</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.stimuli.html"><code class="docutils literal"><span class="pre">stimuli</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pulse2percept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">API Reference</a> &raquo;</li>
+        
+      <li><code class="docutils literal"><span class="pre">implants</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/pulse2percept.implants.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pulse2percept.implants">
+<span id="implants"></span><h1><code class="xref py py-mod docutils literal"><span class="pre">implants</span></code><a class="headerlink" href="#module-pulse2percept.implants" title="Permalink to this headline">¶</a></h1>
+<p>Functions for creating retinal implants</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.implants.ArgusI" title="pulse2percept.implants.ArgusI"><code class="xref py py-obj docutils literal"><span class="pre">ArgusI</span></code></a>([x_center,&nbsp;y_center,&nbsp;h,&nbsp;rot,&nbsp;eye,&nbsp;…])</td>
+<td><p class="rubric">Attributes</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.implants.ArgusII" title="pulse2percept.implants.ArgusII"><code class="xref py py-obj docutils literal"><span class="pre">ArgusII</span></code></a>([x_center,&nbsp;y_center,&nbsp;h,&nbsp;rot,&nbsp;eye])</td>
+<td><p class="rubric">Attributes</p>
+</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.implants.Electrode" title="pulse2percept.implants.Electrode"><code class="xref py py-obj docutils literal"><span class="pre">Electrode</span></code></a>(etype,&nbsp;radius,&nbsp;x_center,&nbsp;y_center)</td>
+<td><p class="rubric">Attributes</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.implants.ElectrodeArray" title="pulse2percept.implants.ElectrodeArray"><code class="xref py py-obj docutils literal"><span class="pre">ElectrodeArray</span></code></a>(etype,&nbsp;radii,&nbsp;xs,&nbsp;ys[,&nbsp;hs,&nbsp;…])</td>
+<td><p class="rubric">Attributes</p>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="argusi">
+<h2><a class="reference internal" href="#pulse2percept.implants.ArgusI" title="pulse2percept.implants.ArgusI"><code class="xref py py-class docutils literal"><span class="pre">ArgusI</span></code></a><a class="headerlink" href="#argusi" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pulse2percept.implants.ArgusI">
+<em class="property">class </em><code class="descclassname">pulse2percept.implants.</code><code class="descname">ArgusI</code><span class="sig-paren">(</span><em>x_center=0</em>, <em>y_center=0</em>, <em>h=0</em>, <em>rot=0</em>, <em>eye=’RE’</em>, <em>use_legacy_names=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ArgusI"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ArgusI" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pulse2percept.implants.ElectrodeArray" title="pulse2percept.implants.ElectrodeArray"><code class="xref py py-class docutils literal"><span class="pre">pulse2percept.implants.ElectrodeArray</span></code></a></p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">eye</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_electrode</span></code>(electrode)</td>
+<td>Adds an electrode to an ElectrodeArray object This function adds a single electrode to an existing ElectrodeArray object.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_electrodes</span></code>(radii,&nbsp;xs,&nbsp;ys[,&nbsp;hs,&nbsp;names])</td>
+<td>Adds electrodes to an ElectrodeArray object This function adds one or more electrodes to an existing ElectrodeArray object.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_eye</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_index</span></code>(name)</td>
+<td>Returns the index of an electrode called <cite>name</cite> This function searches the electrode array for an electrode with string identifier <cite>name</cite>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.implants.ArgusI.get_new_name" title="pulse2percept.implants.ArgusI.get_new_name"><code class="xref py py-obj docutils literal"><span class="pre">get_new_name</span></code></a>(old_name)</td>
+<td>Look up the standard name of a legacy-named Argus I electrode</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.implants.ArgusI.get_old_name" title="pulse2percept.implants.ArgusI.get_old_name"><code class="xref py py-obj docutils literal"><span class="pre">get_old_name</span></code></a>(new_name)</td>
+<td>Look up the legacy name of a standard-named Argus I electrode</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">set_eye</span></code>(eye)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pulse2percept.implants.ArgusI.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>x_center=0</em>, <em>y_center=0</em>, <em>h=0</em>, <em>rot=0</em>, <em>eye=’RE’</em>, <em>use_legacy_names=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ArgusI.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ArgusI.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ArgusI array on the retina
+This function creates an ArgusI array and places it on the retina
+such that the center of the array is located at
+[<cite>x_center</cite>, <cite>y_center</cite>] (microns) and the array is rotated by
+rotation angle <cite>rot</cite> (radians).
+The array is oriented in the visual field as shown in Fig. 1 of
+Horsager et al. (2009); that is, if placed in (0,0), the top two
+rows will lie in the lower retina (upper visual field):
+.. raw:: html</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&lt;pre&gt;</dt>
+<dd>y       A1 B1 C1 D1                     260 520 260 520
+^       A2 B2 C2 D2   where electrode   520 260 520 260
+|       A3 B3 C3 D3   diameters are:    260 520 260 520
+–&gt;x    A4 B4 C4 D4                     520 260 520 260</dd>
+</dl>
+<p>&lt;/pre&gt;</p>
+</div></blockquote>
+<p>Electrode order is: A1, B1, C1, D1, A2, B2, …, D4.
+If <cite>use_legacy_names</cite> is True, electrode order is: L6, L2, M8, M4, …
+An electrode can be addressed by index (integer) or name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x_center</strong> : float, optional, default: 0</p>
+<blockquote>
+<div><p>x coordinate of the array center (um)</p>
+</div></blockquote>
+<p><strong>y_center</strong> : float, optional, default: 0</p>
+<blockquote>
+<div><p>y coordinate of the array center (um)</p>
+</div></blockquote>
+<p><strong>h</strong> : float || array_like, optional, default: 0</p>
+<blockquote>
+<div><p>Distance of the array to the retinal surface (um). Either a list
+with 16 entries or a scalar.</p>
+</div></blockquote>
+<p><strong>rot</strong> : float, optional, default: 0</p>
+<blockquote>
+<div><p>Rotation angle of the array (rad). Positive values denote
+counter-clock-wise (CCW) rotations in the retinal coordinate
+system.</p>
+</div></blockquote>
+<p><strong>eye</strong> : {‘LE’, ‘RE’}, optional, default: ‘RE’</p>
+<blockquote class="last">
+<div><p>Eye in which array is implanted.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Create an ArgusI array centered on the fovea, at 100um distance from
+the retina:
+&gt;&gt;&gt; from pulse2percept import implants
+&gt;&gt;&gt; argus = implants.ArgusI(x_center=0, y_center=0, h=100, rot=0)</p>
+<p>Get access to electrode ‘B1’:
+&gt;&gt;&gt; my_electrode = argus[‘B1’]</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.ArgusI.get_new_name">
+<code class="descname">get_new_name</code><span class="sig-paren">(</span><em>old_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ArgusI.get_new_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ArgusI.get_new_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up the standard name of a legacy-named Argus I electrode</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.ArgusI.get_old_name">
+<code class="descname">get_old_name</code><span class="sig-paren">(</span><em>new_name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ArgusI.get_old_name"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ArgusI.get_old_name" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up the legacy name of a standard-named Argus I electrode</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="argusii">
+<h2><a class="reference internal" href="#pulse2percept.implants.ArgusII" title="pulse2percept.implants.ArgusII"><code class="xref py py-class docutils literal"><span class="pre">ArgusII</span></code></a><a class="headerlink" href="#argusii" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pulse2percept.implants.ArgusII">
+<em class="property">class </em><code class="descclassname">pulse2percept.implants.</code><code class="descname">ArgusII</code><span class="sig-paren">(</span><em>x_center=0</em>, <em>y_center=0</em>, <em>h=0</em>, <em>rot=0</em>, <em>eye=’RE’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ArgusII"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ArgusII" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pulse2percept.implants.ElectrodeArray" title="pulse2percept.implants.ElectrodeArray"><code class="xref py py-class docutils literal"><span class="pre">pulse2percept.implants.ElectrodeArray</span></code></a></p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">eye</span></code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">add_electrode</span></code>(electrode)</td>
+<td>Adds an electrode to an ElectrodeArray object This function adds a single electrode to an existing ElectrodeArray object.</td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">add_electrodes</span></code>(radii,&nbsp;xs,&nbsp;ys[,&nbsp;hs,&nbsp;names])</td>
+<td>Adds electrodes to an ElectrodeArray object This function adds one or more electrodes to an existing ElectrodeArray object.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">get_eye</span></code>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><code class="xref py py-obj docutils literal"><span class="pre">get_index</span></code>(name)</td>
+<td>Returns the index of an electrode called <cite>name</cite> This function searches the electrode array for an electrode with string identifier <cite>name</cite>.</td>
+</tr>
+<tr class="row-odd"><td><code class="xref py py-obj docutils literal"><span class="pre">set_eye</span></code>(eye)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pulse2percept.implants.ArgusII.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>x_center=0</em>, <em>y_center=0</em>, <em>h=0</em>, <em>rot=0</em>, <em>eye=’RE’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ArgusII.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ArgusII.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ArgusII array on the retina
+This function creates an ArgusII array and places it on the retina
+such that the center of the array is located at
+[<cite>x_center</cite>, <cite>y_center</cite>] (microns) and the array is rotated by
+rotation angle <cite>rot</cite> (radians).
+The array is oriented upright in the visual field, such that an
+array with center (0,0) has the top three rows lie in the lower
+retina (upper visual field), as shown below:
+.. raw:: html</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>&lt;pre&gt;</dt>
+<dd><blockquote class="first">
+<div>A1 A2 A3 A4 A5 A6 A7 A8 A9 A10</div></blockquote>
+<p>y       B1 B2 B3 B4 B5 B6 B7 B8 B9 B10
+^       C1 C2 C3 C4 C5 C6 C7 C8 C9 C10
+|       D1 D2 D3 D4 D5 D6 D7 D8 D9 D10
+–&gt;x    E1 E2 E3 E4 E5 E6 E7 E8 E9 E10</p>
+<blockquote class="last">
+<div>F1 F2 F3 F4 F5 F6 F7 F8 F9 F10</div></blockquote>
+</dd>
+</dl>
+<p>&lt;/pre&gt;</p>
+</div></blockquote>
+<p>Electrode order is: A1, A2, …, A10, B1, B2, …, F10.
+An electrode can be addressed by index (integer) or name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>x_center</strong> : float</p>
+<blockquote>
+<div><p>x coordinate of the array center (um)</p>
+</div></blockquote>
+<p><strong>y_center</strong> : float</p>
+<blockquote>
+<div><p>y coordinate of the array center (um)</p>
+</div></blockquote>
+<p><strong>h</strong> : float || array_like</p>
+<blockquote>
+<div><p>Distance of the array to the retinal surface (um). Either a list
+with 60 entries or a scalar.</p>
+</div></blockquote>
+<p><strong>rot</strong> : float</p>
+<blockquote>
+<div><p>Rotation angle of the array (rad). Positive values denote
+counter-clock-wise (CCW) rotations in the retinal coordinate
+system.</p>
+</div></blockquote>
+<p><strong>eye</strong> : {‘LE’, ‘RE’}, optional, default: ‘RE’</p>
+<blockquote class="last">
+<div><p>Eye in which array is implanted.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Create an ArgusII array centered on the fovea, at 100um distance from
+the retina:
+&gt;&gt;&gt; from pulse2percept import implants
+&gt;&gt;&gt; argus = implants.ArgusII(x_center=0, y_center=0, h=100, rot=0)</p>
+<p>Get access to electrode ‘E7’:
+&gt;&gt;&gt; my_electrode = argus[‘E7’]</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="electrode">
+<h2><a class="reference internal" href="#pulse2percept.implants.Electrode" title="pulse2percept.implants.Electrode"><code class="xref py py-class docutils literal"><span class="pre">Electrode</span></code></a><a class="headerlink" href="#electrode" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pulse2percept.implants.Electrode">
+<em class="property">class </em><code class="descclassname">pulse2percept.implants.</code><code class="descname">Electrode</code><span class="sig-paren">(</span><em>etype</em>, <em>radius</em>, <em>x_center</em>, <em>y_center</em>, <em>height=0</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#Electrode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.Electrode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.implants.Electrode.height" title="pulse2percept.implants.Electrode.height"><code class="xref py py-obj docutils literal"><span class="pre">height</span></code></a></td>
+<td>Returns the electrode-retina distance</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.implants.Electrode.current_spread" title="pulse2percept.implants.Electrode.current_spread"><code class="xref py py-obj docutils literal"><span class="pre">current_spread</span></code></a>(xg,&nbsp;yg,&nbsp;layer[,&nbsp;alpha,&nbsp;n])</td>
+<td>The current spread due to a current pulse through an electrode, reflecting the fall-off of the current as a function of distance from the electrode center.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.implants.Electrode.get_height" title="pulse2percept.implants.Electrode.get_height"><code class="xref py py-obj docutils literal"><span class="pre">get_height</span></code></a>()</td>
+<td>Returns the electrode-retina distance</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.implants.Electrode.receptive_field" title="pulse2percept.implants.Electrode.receptive_field"><code class="xref py py-obj docutils literal"><span class="pre">receptive_field</span></code></a>(xg,&nbsp;yg[,&nbsp;rftype,&nbsp;size])</td>
+<td>An electrode’s receptive field</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.implants.Electrode.set_height" title="pulse2percept.implants.Electrode.set_height"><code class="xref py py-obj docutils literal"><span class="pre">set_height</span></code></a>(height)</td>
+<td>Sets the electrode-to-retina distance</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pulse2percept.implants.Electrode.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>etype</em>, <em>radius</em>, <em>x_center</em>, <em>y_center</em>, <em>height=0</em>, <em>name=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#Electrode.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.Electrode.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an electrode on the retina</p>
+<p>This function creates a disk electrode of type <cite>etype</cite> and places it
+on the retina at location (<cite>xs</cite>, <cite>ys</cite>) in microns. The electrode has
+radius <cite>radius</cite> (microns) and sits a distance <cite>height</cite> away from the
+retinal surface.
+The coordinate system is anchored around the fovea at (0, 0).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>etype</strong> : str</p>
+<blockquote>
+<div><p>Electrode type, {‘epiretinal’, ‘subretinal’}</p>
+</div></blockquote>
+<p><strong>radius</strong> : float</p>
+<blockquote>
+<div><p>The radius of the electrode (in microns).</p>
+</div></blockquote>
+<p><strong>x_center</strong> : float</p>
+<blockquote>
+<div><p>The x coordinate of the electrode center (in microns) from the
+fovea.</p>
+</div></blockquote>
+<p><strong>y_center</strong> : float</p>
+<blockquote>
+<div><p>The y location of the electrode (in microns) from the fovea</p>
+</div></blockquote>
+<p><strong>height</strong> : float</p>
+<blockquote>
+<div><p>The height of the electrode from the retinal surface:</p>
+<ul class="simple">
+<li>epiretinal array: distance to the ganglion layer</li>
+<li>subretinal array: distance to the bipolar layer</li>
+</ul>
+</div></blockquote>
+<p><strong>name</strong> : string</p>
+<blockquote class="last">
+<div><p>Electrode name</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.Electrode.current_spread">
+<code class="descname">current_spread</code><span class="sig-paren">(</span><em>xg</em>, <em>yg</em>, <em>layer</em>, <em>alpha=14000</em>, <em>n=1.69</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#Electrode.current_spread"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.Electrode.current_spread" title="Permalink to this definition">¶</a></dt>
+<dd><p>The current spread due to a current pulse through an electrode,
+reflecting the fall-off of the current as a function of distance from
+the electrode center. This can be calculated for any layer in the
+retina.
+Based on equation 2 in Nanduri et al [1].</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xg</strong> : array</p>
+<blockquote>
+<div><p>x-coordinates of the retinal grid</p>
+</div></blockquote>
+<p><strong>yg</strong> : array</p>
+<blockquote>
+<div><p>y-coordinates of the retinal grid</p>
+</div></blockquote>
+<p><strong>layer: str</strong></p>
+<blockquote>
+<div><p>Layer for which to calculate the current spread:</p>
+<ul class="simple">
+<li>‘OFL’: optic fiber layer, ganglion axons</li>
+<li>‘INL’: inner nuclear layer, containing the bipolars</li>
+</ul>
+</div></blockquote>
+<p><strong>alpha</strong> : float</p>
+<blockquote>
+<div><p>A constant to do with the spatial fall-off.</p>
+</div></blockquote>
+<p><strong>n</strong> : float</p>
+<blockquote class="last">
+<div><p>A constant to do with the spatial fall-off (Default: 1.69, based
+on Ahuja et al. [2]  An In Vitro Model of a Retinal Prosthesis.
+Ashish K. Ahuja, Matthew R. Behrend, Masako Kuroda, Mark S.
+Humayun, and James D. Weiland (2008). IEEE Trans Biomed Eng 55.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.Electrode.get_height">
+<code class="descname">get_height</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#Electrode.get_height"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.Electrode.get_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the electrode-retina distance</p>
+<p>For epiretinal electrodes, this returns the distance to the ganglion
+cell layer.
+For subretinal electrodes, this returns the distance to the bipolar
+layer.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pulse2percept.implants.Electrode.height">
+<code class="descname">height</code><a class="headerlink" href="#pulse2percept.implants.Electrode.height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the electrode-retina distance</p>
+<p>For epiretinal electrodes, this returns the distance to the ganglion
+cell layer.
+For subretinal electrodes, this returns the distance to the bipolar
+layer.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.Electrode.receptive_field">
+<code class="descname">receptive_field</code><span class="sig-paren">(</span><em>xg</em>, <em>yg</em>, <em>rftype=’square’</em>, <em>size=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#Electrode.receptive_field"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.Electrode.receptive_field" title="Permalink to this definition">¶</a></dt>
+<dd><p>An electrode’s receptive field</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>xg</strong> : array_like</p>
+<blockquote>
+<div><p>Array of all x coordinates</p>
+</div></blockquote>
+<p><strong>yg</strong> : array_like</p>
+<blockquote>
+<div><p>Array of all y coordinates</p>
+</div></blockquote>
+<p><strong>rftype</strong> : {‘square’, ‘gaussian’}</p>
+<blockquote>
+<div><p>The type of receptive field.
+- ‘square’: A simple square box receptive field with side length</p>
+<blockquote>
+<div><p><cite>size</cite>.</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>‘gaussian’: A Gaussian receptive field where the weight drops off</dt>
+<dd><p class="first last">as a function of distance from the electrode center.
+The standard deviation of the Gaussian is <cite>size</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>size</strong> : float, optional</p>
+<blockquote class="last">
+<div><p>Parameter describing the size of the receptive field. For square
+receptive fields, this corresponds to the side length of the
+square.
+For Gaussian receptive fields, this corresponds to the standard
+deviation of the Gaussian.
+Default: Twice the electrode radius.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.Electrode.set_height">
+<code class="descname">set_height</code><span class="sig-paren">(</span><em>height</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#Electrode.set_height"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.Electrode.set_height" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets the electrode-to-retina distance</p>
+<p>This function sets the electrode-to-retina distance according to
+<cite>height</cite>. For an epiretinal device, we calculate the distance to
+the ganglion cell layer (layer thickness depends on retinal location).
+For a subretinal device, we calculate the distance to the bipolar
+layer (layer thickness again depends on retinal location).</p>
+<p>Estimates of layer thickness based on:
+LoDuca et al. Am J. Ophthalmology 2011
+Thickness Mapping of Retinal Layers by Spectral Domain Optical
+Coherence Tomography
+Note that this is for normal retinal, so may overestimate thickness.
+Thickness from their paper (averaged across quadrants):</p>
+<blockquote>
+<div><blockquote>
+<div><p>0-600 um radius (from fovea):</p>
+<ul class="simple">
+<li>Layer 1. (Nerve fiber layer) = 4</li>
+<li>Layer 2. (Ganglion cell bodies + inner plexiform) = 56</li>
+<li>Layer 3. (Bipolar bodies, inner nuclear layer) = 23</li>
+</ul>
+</div></blockquote>
+<p>600-1550 um radius:</p>
+<blockquote>
+<div><ul class="simple">
+<li>Layer 1. 34</li>
+<li>Layer 2. 87</li>
+<li>Layer 3. 37.5</li>
+</ul>
+</div></blockquote>
+<dl class="docutils">
+<dt>1550-3000 um radius:</dt>
+<dd><ul class="first last simple">
+<li>Layer 1. 45.5</li>
+<li>Layer 2. 58.2</li>
+<li>Layer 3. 30.75</li>
+</ul>
+</dd>
+</dl>
+</div></blockquote>
+<p>We place our ganglion axon surface on the inner side of the nerve fiber
+layer.
+We place our bipolar surface 1/2 way through the inner nuclear layer.
+So for an epiretinal array the bipolar layer is L1 + L2 + 0.5 * L3.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="electrodearray">
+<h2><a class="reference internal" href="#pulse2percept.implants.ElectrodeArray" title="pulse2percept.implants.ElectrodeArray"><code class="xref py py-class docutils literal"><span class="pre">ElectrodeArray</span></code></a><a class="headerlink" href="#electrodearray" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pulse2percept.implants.ElectrodeArray">
+<em class="property">class </em><code class="descclassname">pulse2percept.implants.</code><code class="descname">ElectrodeArray</code><span class="sig-paren">(</span><em>etype</em>, <em>radii</em>, <em>xs</em>, <em>ys</em>, <em>hs=0</em>, <em>names=None</em>, <em>eye=’RE’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ElectrodeArray"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ElectrodeArray" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p class="rubric">Attributes</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.implants.ElectrodeArray.eye" title="pulse2percept.implants.ElectrodeArray.eye"><code class="xref py py-obj docutils literal"><span class="pre">eye</span></code></a></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.implants.ElectrodeArray.add_electrode" title="pulse2percept.implants.ElectrodeArray.add_electrode"><code class="xref py py-obj docutils literal"><span class="pre">add_electrode</span></code></a>(electrode)</td>
+<td>Adds an electrode to an ElectrodeArray object This function adds a single electrode to an existing ElectrodeArray object.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.implants.ElectrodeArray.add_electrodes" title="pulse2percept.implants.ElectrodeArray.add_electrodes"><code class="xref py py-obj docutils literal"><span class="pre">add_electrodes</span></code></a>(radii,&nbsp;xs,&nbsp;ys[,&nbsp;hs,&nbsp;names])</td>
+<td>Adds electrodes to an ElectrodeArray object This function adds one or more electrodes to an existing ElectrodeArray object.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.implants.ElectrodeArray.get_eye" title="pulse2percept.implants.ElectrodeArray.get_eye"><code class="xref py py-obj docutils literal"><span class="pre">get_eye</span></code></a>()</td>
+<td></td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.implants.ElectrodeArray.get_index" title="pulse2percept.implants.ElectrodeArray.get_index"><code class="xref py py-obj docutils literal"><span class="pre">get_index</span></code></a>(name)</td>
+<td>Returns the index of an electrode called <cite>name</cite> This function searches the electrode array for an electrode with string identifier <cite>name</cite>.</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.implants.ElectrodeArray.set_eye" title="pulse2percept.implants.ElectrodeArray.set_eye"><code class="xref py py-obj docutils literal"><span class="pre">set_eye</span></code></a>(eye)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pulse2percept.implants.ElectrodeArray.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>etype</em>, <em>radii</em>, <em>xs</em>, <em>ys</em>, <em>hs=0</em>, <em>names=None</em>, <em>eye=’RE’</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ElectrodeArray.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ElectrodeArray.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create an ElectrodeArray on the retina
+This function creates an electrode array of type <cite>etype</cite> and places it
+on the retina. Lists should specify, for each electrode, its size
+(<cite>radii</cite>), location on the retina (<cite>xs</cite> and <cite>ys</cite>), distance to the
+retina (height, <cite>hs</cite>), and a string identifier (<cite>names</cite>, optional).
+Array location should be given in microns, where the fovea is located
+at (0, 0).
+Single electrodes in the array can be addressed by index (integer)
+or name.
+Parameters
+———-
+radii : array_like</p>
+<blockquote>
+<div>List of electrode radii.</div></blockquote>
+<dl class="docutils">
+<dt>xs <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>List of x-coordinates for the center of the electrodes (microns).</dd>
+<dt>ys <span class="classifier-delimiter">:</span> <span class="classifier">array_like</span></dt>
+<dd>List of y-coordinates for the center of the electrodes (microns).</dd>
+<dt>hs <span class="classifier-delimiter">:</span> <span class="classifier">float | array_like, optional, default: 0</span></dt>
+<dd>List of electrode heights (distance from the retinal surface).</dd>
+<dt>names <span class="classifier-delimiter">:</span> <span class="classifier">array_like, optional, default: None</span></dt>
+<dd>List of names (string identifiers) for each eletrode.</dd>
+<dt>eye <span class="classifier-delimiter">:</span> <span class="classifier">{‘LE’, ‘RE’}, optional, default: ‘RE’</span></dt>
+<dd>Eye in which array is implanted.</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>A single epiretinal electrode called ‘A1’, with radius 100um, sitting
+at retinal location (0, 0), 10um away from the retina:
+&gt;&gt;&gt; from pulse2percept import implants
+&gt;&gt;&gt; implant0 = implants.ElectrodeArray(‘epiretinal’, 100, 0, 0, hs=10,
+…                                    names=’A1’)</p>
+<p>Get access to the electrode with name ‘A1’ in the first array:
+&gt;&gt;&gt; my_electrode = implant0[‘A1’]</p>
+<p>An array with two electrodes of size 100um, one sitting at
+(-100, -100), the other sitting at (0, 0), with 0 distance from the
+retina, of type ‘subretinal’:
+&gt;&gt;&gt; implant1 = implants.ElectrodeArray(‘subretinal’, [100, 100],
+…                                    [-100, 0], [-100, 0], hs=[0, 0])</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.ElectrodeArray.add_electrode">
+<code class="descname">add_electrode</code><span class="sig-paren">(</span><em>electrode</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ElectrodeArray.add_electrode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ElectrodeArray.add_electrode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds an electrode to an ElectrodeArray object
+This function adds a single electrode to an existing ElectrodeArray
+object. The electrode must have the same type as the array
+(see implants.SUPPORTED_IMPLANT_TYPES).
+Parameters
+———-
+electrode : implants.Electrode</p>
+<blockquote>
+<div>An electrode object specifying type, size, and location of the
+electrode on the retina.</div></blockquote>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.ElectrodeArray.add_electrodes">
+<code class="descname">add_electrodes</code><span class="sig-paren">(</span><em>radii</em>, <em>xs</em>, <em>ys</em>, <em>hs=0</em>, <em>names=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ElectrodeArray.add_electrodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ElectrodeArray.add_electrodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adds electrodes to an ElectrodeArray object
+This function adds one or more electrodes to an existing ElectrodeArray
+object. Lists should specify, for each electrode to be added, the size
+(<cite>radii</cite>), location on the retina (<cite>xs</cite> and <cite>ys</cite>), distance to the
+retina (height, <cite>hs</cite>), and a string identifier (<cite>names</cite>, optional).
+Array location should be given in microns, where the fovea is located
+at (0, 0).
+Single electrodes in the array can be addressed by index (integer)
+or name.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>radii</strong> : array_like</p>
+<blockquote>
+<div><p>List of electrode radii.</p>
+</div></blockquote>
+<p><strong>xs</strong> : array_like</p>
+<blockquote>
+<div><p>List of x-coordinates for the center of the electrodes (microns).</p>
+</div></blockquote>
+<p><strong>ys</strong> : array_like</p>
+<blockquote>
+<div><p>List of y-coordinates for the center of the electrodes (microns).</p>
+</div></blockquote>
+<p><strong>hs</strong> : float | array_like, optional, default: 0</p>
+<blockquote>
+<div><p>List of electrode heights (distance from the retinal surface).</p>
+</div></blockquote>
+<p><strong>names</strong> : array_like, optional, default: None</p>
+<blockquote class="last">
+<div><p>List of names (string identifiers) for each eletrode.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Adding a single electrode of radius 50um sitting at (0, 0) to an
+existing ElectrodeArray object:
+&gt;&gt;&gt; implant = ElectrodeArray(‘epiretinal’, 100, 100, 100)
+&gt;&gt;&gt; implant.add_electrodes(50, 0, 0)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pulse2percept.implants.ElectrodeArray.eye">
+<code class="descname">eye</code><a class="headerlink" href="#pulse2percept.implants.ElectrodeArray.eye" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.ElectrodeArray.get_eye">
+<code class="descname">get_eye</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ElectrodeArray.get_eye"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ElectrodeArray.get_eye" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.ElectrodeArray.get_index">
+<code class="descname">get_index</code><span class="sig-paren">(</span><em>name</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ElectrodeArray.get_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ElectrodeArray.get_index" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the index of an electrode called <cite>name</cite>
+This function searches the electrode array for an electrode with
+string identifier <cite>name</cite>. If found, the index of that electrode is
+returned, else None.
+Parameters
+———-
+name : str</p>
+<blockquote>
+<div>An electrode name (string identifier).</div></blockquote>
+<p>A valid electrode index or None.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.implants.ElectrodeArray.set_eye">
+<code class="descname">set_eye</code><span class="sig-paren">(</span><em>eye</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/implants.html#ElectrodeArray.set_eye"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.implants.ElectrodeArray.set_eye" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="pulse2percept.files.html" class="btn btn-neutral" title="files" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Michael Beyeler, Ariel Rokem, Geoff Boynton, and Ione Fine, The University of Washington.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.4.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

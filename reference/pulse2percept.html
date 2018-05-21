@@ -1,0 +1,690 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>pulse2percept &mdash; pulse2percept 0.4.3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="pulse2percept 0.4.3 documentation" href="../index.html"/>
+        <link rel="up" title="API Reference" href="index.html"/>
+        <link rel="prev" title="API Reference" href="index.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> pulse2percept
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#"><code class="docutils literal"><span class="pre">pulse2percept</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#simulation"><code class="docutils literal"><span class="pre">Simulation</span></code></a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#get-brightest-frame">get_brightest_frame</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.api.html"><code class="docutils literal"><span class="pre">api</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.files.html"><code class="docutils literal"><span class="pre">files</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.implants.html"><code class="docutils literal"><span class="pre">implants</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.retina.html"><code class="docutils literal"><span class="pre">retina</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pulse2percept.stimuli.html"><code class="docutils literal"><span class="pre">stimuli</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">pulse2percept</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="index.html">API Reference</a> &raquo;</li>
+        
+      <li><code class="docutils literal"><span class="pre">pulse2percept</span></code></li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/reference/pulse2percept.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-pulse2percept">
+<span id="pulse2percept"></span><h1><a class="reference internal" href="#module-pulse2percept" title="pulse2percept"><code class="xref py py-mod docutils literal"><span class="pre">pulse2percept</span></code></a><a class="headerlink" href="#module-pulse2percept" title="Permalink to this headline">¶</a></h1>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.Simulation" title="pulse2percept.Simulation"><code class="xref py py-obj docutils literal"><span class="pre">Simulation</span></code></a>(implant[,&nbsp;engine,&nbsp;scheduler,&nbsp;…])</td>
+<td><p class="rubric">Methods</p>
+</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.get_brightest_frame" title="pulse2percept.get_brightest_frame"><code class="xref py py-obj docutils literal"><span class="pre">get_brightest_frame</span></code></a>(percept)</td>
+<td>Returns the brightest frame of a percept</td>
+</tr>
+</tbody>
+</table>
+<div class="section" id="simulation">
+<h2><a class="reference internal" href="#pulse2percept.Simulation" title="pulse2percept.Simulation"><code class="xref py py-class docutils literal"><span class="pre">Simulation</span></code></a><a class="headerlink" href="#simulation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pulse2percept.Simulation">
+<em class="property">class </em><code class="descclassname">pulse2percept.</code><code class="descname">Simulation</code><span class="sig-paren">(</span><em>implant</em>, <em>engine=’joblib’</em>, <em>scheduler=’threading’</em>, <em>use_jit=True</em>, <em>n_jobs=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/api.html#Simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.Simulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.6)"><code class="xref py py-class docutils literal"><span class="pre">object</span></code></a></p>
+<p class="rubric">Methods</p>
+<table border="1" class="longtable docutils">
+<colgroup>
+<col width="10%" />
+<col width="90%" />
+</colgroup>
+<tbody valign="top">
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.Simulation.plot_fundus" title="pulse2percept.Simulation.plot_fundus"><code class="xref py py-obj docutils literal"><span class="pre">plot_fundus</span></code></a>([stim,&nbsp;ax,&nbsp;n_axons,&nbsp;…])</td>
+<td>Plot the implant on the retinal surface akin to a fundus photopgraph This function plots an electrode array on top of the axon streak map of the retina, akin to a fundus photograph.</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.Simulation.pulse2percept" title="pulse2percept.Simulation.pulse2percept"><code class="xref py py-obj docutils literal"><span class="pre">pulse2percept</span></code></a>(stim[,&nbsp;t_percept,&nbsp;tol,&nbsp;layers])</td>
+<td>Transforms an input stimulus to a percept</td>
+</tr>
+<tr class="row-odd"><td><a class="reference internal" href="#pulse2percept.Simulation.set_ganglion_cell_layer" title="pulse2percept.Simulation.set_ganglion_cell_layer"><code class="xref py py-obj docutils literal"><span class="pre">set_ganglion_cell_layer</span></code></a>(model,&nbsp;**kwargs)</td>
+<td>Sets parameters of the ganglion cell layer (GCL)</td>
+</tr>
+<tr class="row-even"><td><a class="reference internal" href="#pulse2percept.Simulation.set_optic_fiber_layer" title="pulse2percept.Simulation.set_optic_fiber_layer"><code class="xref py py-obj docutils literal"><span class="pre">set_optic_fiber_layer</span></code></a>([sampling,&nbsp;x_range,&nbsp;…])</td>
+<td>Sets parameters of the optic fiber layer (OFL)</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="pulse2percept.Simulation.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>implant</em>, <em>engine=’joblib’</em>, <em>scheduler=’threading’</em>, <em>use_jit=True</em>, <em>n_jobs=-1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/api.html#Simulation.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.Simulation.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates a simulation framework</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>implant</strong> : implants.ElectrodeArray</p>
+<blockquote>
+<div><p>An implants.ElectrodeArray object that describes the implant.</p>
+</div></blockquote>
+<p><strong>engine</strong> : str, optional, default: ‘joblib’</p>
+<blockquote>
+<div><p>Which computational back end to use:
+- ‘serial’: Single-core computation
+- ‘joblib’: Parallelization via joblib (requires <a href="#id1"><span class="problematic" id="id2">`</span></a>pip install</p>
+<blockquote>
+<div><p>joblib`)</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>‘dask’: Parallelization via dask (requires <cite>pip install dask</cite>).</dt>
+<dd><p class="first last">Dask backend can be specified via <cite>threading</cite>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>scheduler</strong> : str, optional, default: ‘threading’</p>
+<blockquote>
+<div><p>Which scheduler to use (irrelevant for ‘serial’ engine):
+- ‘threading’: a scheduler backed by a thread pool
+- ‘multiprocessing’: a scheduler backed by a process pool</p>
+</div></blockquote>
+<p><strong>use_jit</strong> : bool, optional, default: True</p>
+<blockquote>
+<div><p>Whether to use just-in-time (JIT) compilation to speed up
+computation.</p>
+</div></blockquote>
+<p><strong>n_jobs</strong> : int, optional, default: -1</p>
+<blockquote class="last">
+<div><p>Number of cores (threads) to run the model on in parallel.
+Specify -1 to use as many cores as available.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.Simulation.plot_fundus">
+<code class="descname">plot_fundus</code><span class="sig-paren">(</span><em>stim=None</em>, <em>ax=None</em>, <em>n_axons=100</em>, <em>upside_down=False</em>, <em>annotate=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/api.html#Simulation.plot_fundus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.Simulation.plot_fundus" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot the implant on the retinal surface akin to a fundus photopgraph
+This function plots an electrode array on top of the axon streak map
+of the retina, akin to a fundus photograph. A blue rectangle highlights
+the area of the retinal surface that is being simulated.
+If <cite>stim</cite> is passed, activated electrodes will be highlighted.
+Parameters
+———-
+stim : utils.TimeSeries|list|dict, optional</p>
+<blockquote>
+<div>An input stimulus, as passed to <code class="docutils literal"><span class="pre">p2p.pulse2percept</span></code>. If given,
+activated electrodes will be highlighted in the plot.
+Default: None</div></blockquote>
+<dl class="docutils">
+<dt>ax <span class="classifier-delimiter">:</span> <span class="classifier">matplotlib.axes._subplots.AxesSubplot, optional</span></dt>
+<dd>A Matplotlib axes object. If None given, a new one will be created.
+Default: None</dd>
+<dt>n_axons <span class="classifier-delimiter">:</span> <span class="classifier">int, optional, default: 100</span></dt>
+<dd>Number of axons to plot.</dd>
+<dt>upside_down <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional, default: False</span></dt>
+<dd>Flag whether to plot the retina upside-down, such that the upper
+half of the plot corresponds to the upper visual field. In general,
+inferior retina == upper visual field (and superior == lower).</dd>
+<dt>annotate <span class="classifier-delimiter">:</span> <span class="classifier">bool, optional, default: True</span></dt>
+<dd>Flag whether to annotate the four retinal quadrants
+(inferior/superior x temporal/nasal).</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">Returns a handle to the created figure (<cite>fig</cite>) and axes element (<cite>ax</cite>).</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.Simulation.pulse2percept">
+<code class="descname">pulse2percept</code><span class="sig-paren">(</span><em>stim, t_percept=None, tol=0.05, layers=[‘OFL’, ‘GCL’, ‘INL’]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/api.html#Simulation.pulse2percept"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.Simulation.pulse2percept" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transforms an input stimulus to a percept</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>stim</strong> : utils.TimeSeries|list|dict</p>
+<blockquote>
+<div><p>There are several ways to specify an input stimulus:</p>
+<ul class="simple">
+<li>For a single-electrode array, pass a single pulse train; i.e.,
+a single utils.TimeSeries object.</li>
+<li>For a multi-electrode array, pass a list of pulse trains; i.e.,
+one pulse train per electrode.</li>
+<li>For a multi-electrode array, specify all electrodes that should
+receive non-zero pulse trains by name.</li>
+</ul>
+</div></blockquote>
+<p><strong>t_percept</strong> : float, optional, default: inherit from <cite>stim</cite> object</p>
+<blockquote>
+<div><p>The desired time sampling of the output (seconds).</p>
+</div></blockquote>
+<p><strong>tol</strong> : float, optional, default: 0.05</p>
+<blockquote>
+<div><p>Ignore pixels whose effective current is smaller than a fraction
+<cite>tol</cite> of the max value.</p>
+</div></blockquote>
+<p><strong>layers</strong> : list, optional, default: [‘OFL’, ‘GCL’, ‘INL’]</p>
+<blockquote>
+<div><p>A list of retina layers to simulate (order does not matter):
+- ‘OFL’: Includes the optic fiber layer in the simulation.</p>
+<blockquote>
+<div><p>If omitted, the tissue activation map will not account
+for axon streaks.</p>
+</div></blockquote>
+<ul>
+<li><p class="first">‘GCL’: Includes the ganglion cell layer in the simulation.</p>
+</li>
+<li><dl class="first docutils">
+<dt>‘INL’: Includes the inner nuclear layer in the simulation.</dt>
+<dd><p class="first last">If omitted, bipolar cell activity does not contribute
+to ganglion cell activity.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A utils.TimeSeries object whose data container comprises the predicted</p>
+<p>brightness over time at each retinal location (x, y), with the last</p>
+<p class="last">dimension of the container representing time (t).</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Examples</p>
+<p>Simulate a single-electrode array:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pulse2percept</span> <span class="k">as</span> <span class="nn">p2p</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">implant</span> <span class="o">=</span> <span class="n">p2p</span><span class="o">.</span><span class="n">implants</span><span class="o">.</span><span class="n">ElectrodeArray</span><span class="p">(</span><span class="s1">&#39;subretinal&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stim</span> <span class="o">=</span> <span class="n">p2p</span><span class="o">.</span><span class="n">stimuli</span><span class="o">.</span><span class="n">PulseTrain</span><span class="p">(</span><span class="n">tsample</span><span class="o">=</span><span class="mf">5e-6</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span> <span class="n">amp</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">p2p</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span><span class="n">implant</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">percept</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">pulse2percept</span><span class="p">(</span><span class="n">stim</span><span class="p">)</span>  
+</pre></div>
+</div>
+<p>Simulate an Argus I array centered on the fovea, where a single
+electrode is being stimulated (‘C3’):</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pulse2percept</span> <span class="k">as</span> <span class="nn">p2p</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">implant</span> <span class="o">=</span> <span class="n">p2p</span><span class="o">.</span><span class="n">implants</span><span class="o">.</span><span class="n">ArgusI</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">stim</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;C3&#39;</span><span class="p">:</span> <span class="n">stimuli</span><span class="o">.</span><span class="n">PulseTrain</span><span class="p">(</span><span class="n">tsample</span><span class="o">=</span><span class="mf">5e-6</span><span class="p">,</span> <span class="n">freq</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+<span class="gp">... </span>                                             <span class="n">amp</span><span class="o">=</span><span class="mi">20</span><span class="p">)}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">p2p</span><span class="o">.</span><span class="n">Simulation</span><span class="p">(</span><span class="n">implant</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">resp</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">pulse2percept</span><span class="p">(</span><span class="n">stim</span><span class="p">,</span> <span class="n">implant</span><span class="p">)</span>  
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.Simulation.set_ganglion_cell_layer">
+<code class="descname">set_ganglion_cell_layer</code><span class="sig-paren">(</span><em>model</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/api.html#Simulation.set_ganglion_cell_layer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.Simulation.set_ganglion_cell_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets parameters of the ganglion cell layer (GCL)</p>
+<p>Select from pre-existing ganglion cell models or specify a custom one.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>tsample</strong> : float, optional, default: 0.005 / 1000 seconds</p>
+<blockquote class="last">
+<div><blockquote>
+<div><p>Sampling time step (seconds).</p>
+</div></blockquote>
+<dl class="docutils">
+<dt>tau1 <span class="classifier-delimiter">:</span> <span class="classifier">float, optional, default: 0.42 / 1000 seconds</span></dt>
+<dd><p class="first last">Time decay constant for the fast leaky integrater of the
+ganglion cell layer (GCL).</p>
+</dd>
+<dt>tau2 <span class="classifier-delimiter">:</span> <span class="classifier">float, optional, default: 45.25 / 1000 seconds</span></dt>
+<dd><p class="first last">Time decay constant for the charge accumulation, has values
+between 38 - 57 ms.</p>
+</dd>
+<dt>tau3 <span class="classifier-delimiter">:</span> <span class="classifier">float, optional, default: 26.25 / 1000 seconds</span></dt>
+<dd><p class="first last">Time decay constant for the slow leaky integrator.
+Default: 26.25 / 1000 s.</p>
+</dd>
+<dt>eps <span class="classifier-delimiter">:</span> <span class="classifier">float, optional, default: 8.73</span></dt>
+<dd><p class="first last">Scaling factor applied to charge accumulation (used to be
+called epsilon).</p>
+</dd>
+<dt>beta <span class="classifier-delimiter">:</span> <span class="classifier">float, optional, default: 3.43</span></dt>
+<dd><p class="first last">Power nonlinearity applied after half-rectification. The
+original model used two different values, depending on
+whether an experiment is at threshold (<a href="#id3"><span class="problematic" id="id4">`</span></a>beta`=3.43) or
+above threshold (<a href="#id5"><span class="problematic" id="id6">`</span></a>beta`=0.83).</p>
+</dd>
+</dl>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<table class="docutils citation" frame="void" id="r1" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R1]</td><td>D. Nanduri, I. Fine, A. Horsager, G. M. Boynton, M. S. Humayun,
+R. Greenberg, J. D. Weiland, “Frequency and Amplitude Modulation
+Have Different Effects on the Percepts Elicited by Retinal
+Stimulation”, Investigative Ophthalmology &amp; Visual Science 53,
+205-214, 2012.</td></tr>
+</tbody>
+</table>
+<table class="docutils citation" frame="void" id="r2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[R2]</td><td>A. Horsager, S. H. Greenwald, J. D. Weiland, M. S. Humayun,
+R. J. Greenberg, M. J. McMahon, G. M. Boynton, and I. Fine,
+“Predicting visual sensitivity in retinal prosthesis patients”,
+Investigative Ophthalmology &amp; Visual Science, 50(4):1483, 2009.</td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="pulse2percept.Simulation.set_optic_fiber_layer">
+<code class="descname">set_optic_fiber_layer</code><span class="sig-paren">(</span><em>sampling=100</em>, <em>x_range=None</em>, <em>y_range=None</em>, <em>n_axons=501</em>, <em>phi_range=(-180.0</em>, <em>180.0)</em>, <em>n_rho=801</em>, <em>rho_range=(4.0</em>, <em>45.0)</em>, <em>loc_od=(15.5</em>, <em>1.5)</em>, <em>sensitivity_rule=’decay’</em>, <em>decay_const=1.0</em>, <em>contribution_rule=’max’</em>, <em>powermean_exp=None</em>, <em>datapath=’.’</em>, <em>save_data=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/api.html#Simulation.set_optic_fiber_layer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.Simulation.set_optic_fiber_layer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Sets parameters of the optic fiber layer (OFL)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>sampling</strong> : float, optional, default: 100 microns</p>
+<blockquote>
+<div><p>Microns per grid cell.</p>
+</div></blockquote>
+<p><strong>x_range</strong> : (xlo, xhi)|None, default: None</p>
+<blockquote>
+<div><p>Lower and upper bound of the retinal grid (microns) in horizontal
+dimension. Either a tuple (xlo, xhi) or None. If None, the
+generated grid will be just big enough to fit the implant.</p>
+</div></blockquote>
+<p><strong>y_range</strong> : (ylo, yhi)|None, default: None</p>
+<blockquote>
+<div><p>Lower and upper bound of the retinal grid (microns) in vertical
+dimension. Either a tuple (ylo, yhi) or None. If None, the
+generated grid will be just big enough to fit the implant.</p>
+</div></blockquote>
+<p><strong>n_axons</strong> : int, optional, default: 501</p>
+<blockquote>
+<div><p>The number of axons to generate. Their start orientations <cite>phi0</cite>
+(in modified polar coordinates) will be sampled uniformly from
+<cite>phi_range</cite>.</p>
+</div></blockquote>
+<p><strong>phi_range</strong> : (lophi, hiphi), optional, default: (-180, 180)</p>
+<blockquote>
+<div><p>Range of angular positions of axon fibers at their starting points
+(polar coordinates, degrees) to be sampled uniformly with <cite>n_axons</cite>
+samples. Must be within [-180, 180].</p>
+</div></blockquote>
+<p><strong>n_rho: int, optional, default: 801</strong></p>
+<blockquote>
+<div><p>Number of sampling points along the radial axis(polar coordinates).</p>
+</div></blockquote>
+<p><strong>rho_range: (rho_min, rho_max), optional, default: (4.0, 45.0)</strong></p>
+<blockquote>
+<div><p>Lower and upper bounds for the radial position values(polar
+coordinates).</p>
+</div></blockquote>
+<p><strong>loc_od: (x_od, y_od), optional, default: (15.5 1.5)</strong></p>
+<blockquote>
+<div><p>Location of the center of the optic disc (x, y) in Cartesian
+coordinates. In a right (left) eye, we should have x &gt; 0 (x &lt; 0).</p>
+</div></blockquote>
+<p><strong>sensitivity_rule</strong> : {‘decay’, ‘Jeng2011’}, optional, default: ‘decay’</p>
+<blockquote>
+<div><p>This rule specifies how the activation of the axon differs as a
+function of distance from the soma. The following options are
+available:
+- ‘decay’:</p>
+<blockquote>
+<div><p>Axon sensitivity decays exponentially with distance. Specify
+<cite>decay_const</cite> to change the steepness of the fall-off with
+distance.</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>‘Jeng2011’:</dt>
+<dd><p class="first last">Axon sensitivity peaks near the sodium band (50um from the
+soma), then plateaus on the distal axon at roughly half of the
+peak sensitivity (see Fig. 2 in <a class="reference internal" href="#r3" id="id7">[R3]</a>).</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>contribution_rule</strong> : {‘max’, ‘sum’, ‘mean’}, optional, default: ‘max’</p>
+<blockquote>
+<div><p>This rule specifies how the activation thresholds across all axon
+segments are combined to determine the contribution of the axon to
+the current spread. The following options are available:
+- ‘max’:</p>
+<blockquote>
+<div><p>The axon’s contribution to the current spread is equal to the
+max. sensitivity across all axon segments.</p>
+</div></blockquote>
+<ul>
+<li><dl class="first docutils">
+<dt>‘sum’:</dt>
+<dd><p class="first last">The axon’s contribution to the current spread is equal to the
+sum sensitivity across all axon segments.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="first docutils">
+<dt>‘mean’:</dt>
+<dd><p class="first last">The axon’s contribution to the current spread is equal to the
+mean sensitivity across all axon segments. Specify
+<cite>powermean_exp</cite> to change the exponent of the generalized
+(power) mean, calculated as np.mean(x ** powermean_exp) **
+(1.0 / powermean_exp). Default is 1, which is equal to the
+arithmetic mean.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</div></blockquote>
+<p><strong>decay_const</strong> : float, optional, default: 2.0</p>
+<blockquote>
+<div><p>When <cite>sensitivity_rule</cite> is set to ‘decay’, specifies the decay
+constant of the exponential fall-off.</p>
+</div></blockquote>
+<p><strong>powermean_exp</strong> : float, optional, default: 1.0</p>
+<blockquote>
+<div><p>When <cite>sensitivity_rule</cite> is set to ‘mean’, specifies the exponent of
+the generalized (power) mean function. The power mean is calculated
+as np.mean(x ** powermean_exp) ** (1.0 / powermean_exp).</p>
+</div></blockquote>
+<p><strong>datapath</strong> : str, default: current directory</p>
+<blockquote>
+<div><p>Relative path where to look for existing retina files, and where to
+store new retina files.</p>
+</div></blockquote>
+<p><strong>save_data</strong> : bool, default: True</p>
+<blockquote class="last">
+<div><p>Flag whether to save the data to a new retina file (True) or not
+(False). The file name is automatically generated from all
+specified input arguments.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Notes</p>
+<table class="docutils citation" frame="void" id="r3" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id7">[R3]</a></td><td>J. Jeng, S. Tang, A. Molnar, N. J. Desai, and S. I. Fried, “The
+sodium channel band shapes the response to electric stimulation in
+retinal ganglion cells”, J Neural Eng 8 (036022), 2011.</td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="get-brightest-frame">
+<h2>get_brightest_frame<a class="headerlink" href="#get-brightest-frame" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="pulse2percept.get_brightest_frame">
+<code class="descclassname">pulse2percept.</code><code class="descname">get_brightest_frame</code><span class="sig-paren">(</span><em>percept</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pulse2percept/api.html#get_brightest_frame"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pulse2percept.get_brightest_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the brightest frame of a percept</p>
+<p>This function returns the frame of a percept (brightness over time) that
+contains the brightest pixel.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>percept</strong> : TimeSeries</p>
+<blockquote class="last">
+<div><p>The brightness movie as a TimeSeries object.</p>
+</div></blockquote>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Michael Beyeler, Ariel Rokem, Geoff Boynton, and Ione Fine, The University of Washington.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.4.3',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

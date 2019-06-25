@@ -18,7 +18,7 @@ SUPPORTED_TEMPORAL_MODELS = ['latest', 'Nanduri2012', 'Horsager2009']
 class Grid(object):
     """Represent the retinal coordinate frame"""
 
-    def __init__(self, x_range=(-1000.0, 1000.0), y_range=(-1000.0, 1000.0),
+    def __init__(self, x_range=(-100000.0, 100000.0), y_range=(-1000.0, 1000.0),
                  eye='RE', sampling=25, n_axons=501, phi_range=(-180.0, 180.0),
                  n_rho=801, rho_range=(4.0, 45.0), loc_od=(15.5, 1.5),
                  sensitivity_rule='decay', contribution_rule='max',
